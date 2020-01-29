@@ -1,0 +1,17 @@
+### Pages to build
+- [ ] Login/Register
+- [ ] View addresses/search
+    - [ ] create address popup
+- [ ] View Address
+    - [ ] add tag
+        - [ ] camera
+        - [ ] upload
+        - [ ] upload later(offline)
+            - guessing reference to photos in file system
+    - [ ] delete tag
+        - [ ] display
+        - [ ] delete with prompt
+- [ ] Owner info
+    - [ ] Building info
+- [ ] Tag info
+    - [ ] tag info
