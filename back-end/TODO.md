@@ -1,0 +1,2 @@
+- [ ] add image downsizing, looks like `jimp` is good, for thumbnails
+    - need naming convention so can quickly find thumbnails, reduces bandwidth too
