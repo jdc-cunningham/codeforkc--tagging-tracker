@@ -31,7 +31,33 @@
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	height: 300px;
-	min-width: auto;
 	transform: translate(-50%, -50%);
+
+	&.portrait {
+		height: 300px;
+		width: auto;
+	}
+
+	&.landscape {
+		height: auto;
+		width: 300px;
+	}
+}
+
+.App__image-save {
+	margin-top: 0.25rem;
+
+	&.hidden {
+		display: none;
+	}
+}
+
+.App__loaded-string-img {
+	margin-top: 0.25rem;
+	width: 300px;
+	height: 300px;
+
+	&.hidden {
+		display: none;
+	}
 }
