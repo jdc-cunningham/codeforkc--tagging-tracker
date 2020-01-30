@@ -22,7 +22,11 @@ The front end is built with `create-react-app`, it's all ReactJS with SCSS. All 
 ### Auth
 Intending to use JWT with the Node backend. No free sign up yet, will be added though with Mailgun for emails and all that. Some demo accounts will be generated initially.
 
+### Development
+note the `npm run build-dev` command, you will have to update the package.json `PUBLIC_URL` value for your local dev environment. I was using a local server so it's a `192` type address. You will probably just use `http://localhost` or don't use it/use live dev eg. `npm start`
+
 ### Deployment
-run `npm run build` to generate static files then upload to a static host
+run `npm run build` to generate static files then upload contents of build to a static host
+remember to match home directory in `package.json` in case of subdirectory/multi-domain host type
 
 Built with create-react-app

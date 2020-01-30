@@ -16,6 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-dev": "set PUBLIC_URL=http://192.168.1.144/tagging-tracker-pwa&& react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -34,5 +35,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "/test-pwa/"
+  "homepage": "/"
 }
