@@ -80,8 +80,20 @@ const App = () => {
 		setOfflineStorage(db);
 	};
 
+	// lol these work wow
+	const deviceOffline = () => {
+		alert('offline');
+	}
+
+	const deviceOnline = () => {
+		alert('online');
+	}
+
 	// check local storage eg. dexie on first run
 	useEffect(() => {
+		// bind online/offline listeners
+		window.addEventListener('online', deviceOnline);
+		window.addEventListener('offline', deviceOffline);
 		setupOfflineStorage();
 	}, []);
 
