@@ -17,7 +17,7 @@ const App = () => {
 		fileInput.current.click();
 	}
 
-	// https://stackoverflow.com/questions/18457340/how-to-preview-selected-image-in-input-type-file-in-popup-using-jquery
+	// [REF App1]
 	const previewPhoto = (fileInput) => {
 		const reader = new FileReader();
 
@@ -28,25 +28,6 @@ const App = () => {
 
         reader.readAsDataURL(fileInput.files[0]);
 	}
-
-	// this code will load the image in the background to get meta eg. size, width, height
-	// then the promise is resolved/returned for saving process of photo, skipping for now for mvp test
-	// this is for getting image dimensions
-	// const getImageMeta = new Promise(fileInput) => {
-	// 	const reader = new FileReader();
-
-    //     reader.onload = function (e) {
-	// 		// file size fileInput.files[0].size
-	// 		photoPreview.current.src = e.target.result;
-	// 		setPhoto({ src: e.target.result });
-    //     }
-
-    //     reader.readAsDataURL(fileInput.files[0])
-	// }
-
-	
-
-
 
 	const cameraCallback = (fileInput) => {
 		if (fileInput.files.length) {
@@ -60,19 +41,6 @@ const App = () => {
 	const loadImage = () => {
 
 	}
-
-	// const getImageMeta = (file) => {
-	// 	const reader = new FileReader();
-
-    //     reader.onload = function (e) {
-	// 		console.log(e);
-	// 		return {
-	// 			width: e.
-	// 		}
-    //     }
-
-	// 	reader.readAsDataURL(file);
-	// };
 
 	const saveImage = async () => {
 		const file = fileInput.current.files[0];
@@ -117,22 +85,12 @@ const App = () => {
 		setupOfflineStorage();
 	}, []);
 
-	// const getOfflineStoragePhotos = async () => {
-	// 	const deviceStoredImages = await offlineStorage.images.toArray();
-	// 	return deviceStoredImages;
-	// };
-
 	// // when db set
-	useEffect(() => {
-	// 	console.log('os', offlineStorage);
-	// 	console.log(getOfflineStoragePhotos());
-	// 	// savedPhotos
-	
-	// pull an image from storage
+	// useEffect(() => {
 
-	console.log(savedPhotos.length);
+	// console.log(savedPhotos.length);
 
-	}, [offlineStorage]); // listen to this change
+	// }, [offlineStorage]); // listen to this change
 
 	const setLoadedImageMeta = (loadedImage) => {
 		setLoadedPhoto({ 
@@ -158,7 +116,7 @@ const App = () => {
 
 	const getSourceFromStorage = () => {
 		console.log(savedPhotos);
-		return savedPhotos.length ? savedPhotos[1].src : "";
+		return savedPhotos.length ? savedPhotos[0].src : ""; // designed for just 1 for now
 	}
 
 	return (
@@ -171,7 +129,7 @@ const App = () => {
 			<button type="button" className={ loadedPhoto.src ? "App__image-save" : "App__image-save hidden" } onClick={ savedPhotos.length ? loadImage : saveImage }>{
 				savedPhotos.length ? "Load image" : "Save Image To Device"
 			}</button>
-			<img class={ savedPhotos.length ? "App__loaded-string-img" : "App__loaded-string-img hidden"} src={ getSourceFromStorage() } />
+			<img className={ savedPhotos.length ? "App__loaded-string-img" : "App__loaded-string-img hidden"} src={ getSourceFromStorage() } />
 		</div>
 	);
 }
