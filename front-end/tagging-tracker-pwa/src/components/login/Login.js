@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import './Login.scss';
 import taggingTrackerLogo from './../../assets/images/tagging-tracker-logo.PNG';
 
@@ -6,9 +7,10 @@ const Login = () => {
     const usernameInput = useRef(null);
     const passwordInput = useRef(null);
     const loginBtn = useRef(null);
+    const history = useHistory();
 
     const login = () => {
-
+        history.push("/addresses"); // as if you logged in
     }
 
     return(

@@ -4,3 +4,8 @@
     justify-content: center;
     flex-direction: column;
 }
+
+@mixin flex-hor-row-ali-str {
+    display: flex;
+    align-items: stretch;
+}

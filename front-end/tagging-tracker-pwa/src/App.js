@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import logo from './logo.svg';
-import './App.scss';
+// import './App.scss';
 // import Dexie from 'dexie';
 // import axios from 'axios';
 
@@ -16,27 +15,32 @@ import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 
 const App = () => {
 	return (
-		<Router>
-			<Navbar />
-			<Switch>
-				<Route exact path="/">
-					<Login />
-				</Route>
-				<Route path="/addresses">
-					<Addresses />
-				</Route>
-				<Route path="/view-address">
-					<ViewAddress />
-				</Route>
-				<Route path="/manage-address">
-					<ManageAddress />
-				</Route>
-				<Route path="/manage-tags">
-					<ManageTags />
-				</Route>
-			</Switch>
-			<BottomNavbar />
-		</Router>
+		<div className="tagging-tracker">
+			<Router>
+				{/* <Route render={(props) => (
+					<Navbar />
+				)} /> */}
+				<Route component={Navbar} />
+				<Switch>
+					<Route exact path="/">
+						<Login />
+					</Route>
+					<Route path="/addresses">
+						<Addresses />
+					</Route>
+					<Route path="/view-address">
+						<ViewAddress />
+					</Route>
+					<Route path="/manage-address">
+						<ManageAddress />
+					</Route>
+					<Route path="/manage-tags">
+						<ManageTags />
+					</Route>
+				</Switch>
+				<BottomNavbar />
+			</Router>
+		</div>
 	)
 }
 
