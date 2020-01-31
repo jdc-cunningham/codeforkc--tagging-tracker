@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.scss';
 import Dexie from 'dexie';
+import axios from 'axios';
 
 const App = () => {
 	const [camera, setCamera] = useState({ enabled: false }); // not sure if needed
@@ -86,6 +87,7 @@ const App = () => {
 	}
 
 	const deviceOnline = () => {
+		// need to ping some remote ip to confirm not just connected to AP
 		alert('online');
 	}
 
@@ -131,17 +133,34 @@ const App = () => {
 		return savedPhotos.length ? savedPhotos[0].src : ""; // designed for just 1 for now
 	}
 
+	const uploadImage = () => {
+		const postUrl = 'http://localhost:5000/upload-tag';
+		const formData = new FormData();
+		formData.append("image", fileInput.current.files[0]);
+		axios.post(postUrl, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}).then((res) => {
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log('err', err);
+		});
+	}
+
 	return (
 		<div className="App">
 			<div className={ loadedPhoto.src ? "App__image-preview-wrapper" : "App__image-preview-wrapper hidden"}>
 				<img className={ getImagePreviewAspectRatioClass() } ref={ photoPreview } onLoad={ () => setLoadedImageMeta(photoPreview.current) } />
 			</div>
-			<input type="file" ref={ fileInput } onChange={ () => { cameraCallback(fileInput.current) } } id="test-camera" />
+			<input type="file" name="image" ref={ fileInput } onChange={ () => { cameraCallback(fileInput.current) } } id="test-camera" />
 			<button type="button" onClick={ openCamera }>Take Picture</button>
 			<button type="button" className={ loadedPhoto.src ? "App__image-save" : "App__image-save hidden" } onClick={ savedPhotos.length ? loadImage : saveImage }>{
 				savedPhotos.length ? "Load image" : "Save Image To Device"
 			}</button>
 			<img className={ savedPhotos.length ? "App__loaded-string-img" : "App__loaded-string-img hidden"} src={ getSourceFromStorage() } />
+			<button type="button" onClick={ uploadImage }>Upload Image</button>
 		</div>
 	);
 }
