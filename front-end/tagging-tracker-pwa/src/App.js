@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
-// import Dexie from 'dexie';
+import Dexie from 'dexie';
 // import axios from 'axios';
 
 import Navbar from './components/navbar/Navbar';
@@ -19,6 +19,7 @@ const App = () => {
 	const [searchedAddress, updateSearchedAddress] = useState("");
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [appOnline, setAppOnline] = useState(true);
+	const [offlineStorage, setOfflineStorage] = useState(null);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -53,8 +54,18 @@ const App = () => {
 		};
 	}
 
+	const setupOfflineStorage = () => {
+		const db = new Dexie("LocalImageDatabase");
+		db.version(1).stores({ images: "++id,name,fileSize,width,height" });
+		setOfflineStorage(db);
+	};
+
 	useEffect(() => {
 		checkOnlineStatus();
+
+		if (!offlineStorage) {
+			setupOfflineStorage();
+		}
 	}, []);
 
 	return (
@@ -84,7 +95,8 @@ const App = () => {
 								: <Redirect to="/" /> } />
 						<Route path={"/view-address"} component={ (props) =>
 							true
-								? <ViewAddress {...props} />
+								? <ViewAddress {...props}
+									offlineStorage={offlineStorage} />
 								: <Redirect to="/" /> } />
 						<Route path="/manage-address">
 							token

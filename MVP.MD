@@ -10,6 +10,10 @@
     - it's not impossible, just not sure how you would architect that eg. copy locally a database of hashes/verify against that but more than likely what would actualy happen is the app is meant to work without auth and you use internet to sync data/back up, however storage limitation would be an issue eventually native or not
     - you would login to interface with the remote api
 
+#### local/s3 storage workflow
+- use local images to render(pre-upload and generally)
+- when uploaded to s3, replace sources in local db with remote thumbnails(so they're cached/no loading by image for base64)
+
 
 ### Want
 - [ ] add online/offline button toggling for sync/upload
