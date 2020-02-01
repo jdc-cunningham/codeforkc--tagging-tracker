@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import './BottomNavbar.scss';
 
-const BottomNavbar = () => {
+import sync from './../../assets/icons/svgs/upload.svg';
+import logout from './../../assets/icons/svgs/switch.svg';
+
+const BottomNavbar = (props) => {
+    const syncBtn = useRef(null);
+
+    const renderBottomNavbar = (routeLocation) => {
+        switch(routeLocation.pathname) {
+            case '/huh':
+                return <>
+                </>;
+            default:
+                return <>
+                    <button className="bottom-navbar__btn half sync" type="button">
+                        <img src={ sync } alt="sync button" />
+                        <span>Sync</span>
+                    </button>
+                    <button className="bottom-navbar__btn half sync" type="button">
+                        <img src={ logout } alt="logout button" />
+                        <span>Logout</span>
+                    </button>
+                </>;
+        }
+    }
+
     return(
-        <div className="tagging-tracker__bottom-navbar"></div>
+        <div className="tagging-tracker__bottom-navbar">
+            { renderBottomNavbar(props.location) }
+        </div>
     )
 }
 

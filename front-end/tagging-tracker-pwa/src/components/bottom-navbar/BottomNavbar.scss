@@ -1,0 +1,36 @@
+@import './../../assets/styles/flex-rules.scss';
+
+.tagging-tracker__bottom-navbar {
+    @include flex-hor-row-ali-str;
+    flex: 0;
+    background-color: #F9F9F9;
+    border-top: 1px solid #EEEEEE;
+    width: 100%;
+
+    .bottom-navbar__btn {@include flex-hor-row-ali-str;
+        justify-content: center;
+        background-color: transparent;
+        border: 0;
+        padding: 1em 2rem;
+
+        &.half {
+            width: 50%;
+        }
+
+        &.third {
+            width: calc(100% / 3);
+        }
+
+        img {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+
+        span {
+            @include flex-center;
+            font-family: 'Roboto Bold', sans-serif;
+            font-size: 1rem;
+        }
+    }
+}
