@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
 // import Dexie from 'dexie';
 // import axios from 'axios';
@@ -11,6 +11,7 @@ import ViewAddress from './components/view-address/ViewAddress';
 import ManageAddress from './components/manage-address/ManageAddress';
 import ManageTags from './components/manage-tags/ManageTags';
 import BottomNavbar from './components/bottom-navbar/BottomNavbar';
+import Page404 from './pages/page404/Page404';
 
 
 const App = () => {
@@ -48,12 +49,12 @@ const App = () => {
 							<Login {...props} updateToken={updateToken} token={token} />
 						} />
 						<Route path="/addresses" component={ (props) =>
-							<Addresses {...props}
+							false ? <Addresses {...props}
 								searchedAddress={searchedAddress}
 								showAddressModal={showAddressModal}
 								toggleAddressModal={toggleAddressModal}
 								clearSearchAddress={clearSearchedAddress}
-								token={token} />} />
+								token={token} /> : <Redirect to="/" /> } />
 						<Route path={"/view-address"} component={ (props) =>
 							<ViewAddress {...props} /> } />
 						<Route path="/manage-address">
@@ -61,6 +62,9 @@ const App = () => {
 						</Route>
 						<Route path="/manage-tags">
 							<ManageTags />
+						</Route>
+						<Route>
+							<Page404 />
 						</Route>
 					</Switch>
 				</div>
