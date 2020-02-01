@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
 // import Dexie from 'dexie';
 // import axios from 'axios';
@@ -14,15 +14,19 @@ import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 
 
 const App = () => {
-	const [searchedAddress, updateSearchedAddress] = useState({ value: "" });
+	const [searchedAddress, updateSearchedAddress] = useState("");
 	const [showAddressModal, setShowAddressModal] = useState(false);
 
 	const searchAddress = (searchStr) => {
-		updateSearchedAddress({ value: searchStr });
+		updateSearchedAddress(searchStr);
 	}
 
 	const toggleAddressModal = (show) => {
 		setShowAddressModal(show);
+	}
+
+	const clearSearchedAddress = () => {
+		updateSearchedAddress("");
 	}
 
 	return (
@@ -42,10 +46,10 @@ const App = () => {
 							<Addresses {...props}
 								searchedAddress={searchedAddress}
 								showAddressModal={showAddressModal}
-								toggleAddressModal={toggleAddressModal} />} />
-						<Route path="/view-address">
-							<ViewAddress />
-						</Route>
+								toggleAddressModal={toggleAddressModal}
+								clearSearchAddress={clearSearchedAddress} />} />
+						<Route path={"/view-address"} component={ (props) =>
+							<ViewAddress {...props} /> } />
 						<Route path="/manage-address">
 							<ManageAddress />
 						</Route>

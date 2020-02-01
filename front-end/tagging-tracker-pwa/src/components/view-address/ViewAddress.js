@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import './ViewAddress.scss';
 
-const Login = () => {
+const ViewAddress = (props) => {
+    const history = useHistory();
+    
+    if (typeof props.location.state === "undefined") {
+        history.push("/addresses");
+    }
+
     return(
-        <div className="tagging-tracker__login"></div>
+        <div className="tagging-tracker__view-address"></div>
     )
 }
 
-export default Login;
+export default ViewAddress;

@@ -10,6 +10,8 @@
     justify-content: flex-start;
     padding: 0.5rem 1rem;
     border-bottom: 1px solid #F3F3F5;
+    text-decoration: none;
+    color: #282828;
 
     h4 {
         @include flex-left;

@@ -6,6 +6,7 @@ import logout from './../../assets/icons/svgs/switch.svg';
 
 const BottomNavbar = (props) => {
     const syncBtn = useRef(null);
+    const logoutBtn = useRef(null);
 
     const renderBottomNavbar = (routeLocation) => {
         switch(routeLocation.pathname) {
@@ -14,11 +15,11 @@ const BottomNavbar = (props) => {
                 </>;
             default:
                 return <>
-                    <button className="bottom-navbar__btn half sync" type="button">
+                    <button ref={ syncBtn } className="bottom-navbar__btn half sync" type="button">
                         <img src={ sync } alt="sync button" />
                         <span>Sync</span>
                     </button>
-                    <button className="bottom-navbar__btn half sync" type="button">
+                    <button ref={ logoutBtn } className="bottom-navbar__btn half sync" type="button">
                         <img src={ logout } alt="logout button" />
                         <span>Logout</span>
                     </button>
