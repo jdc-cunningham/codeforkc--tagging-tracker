@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Navbar.scss';
 
 import backArrow from './../../assets/icons/svgs/chevron-blue.svg'; // rotated by CSS
@@ -17,6 +17,8 @@ const Navbar = (props) => {
     }
 
     const renderNavbar = (routeLocation) => {
+        const isEditTagsPath = props.location.pathname.indexOf('edit') !== -1;
+
         switch(routeLocation.pathname) {
             case '/addresses':
                 return <>
@@ -27,12 +29,19 @@ const Navbar = (props) => {
                     <input type="text" value={props.searchedAddress} placeholder="search" ref={ searchAddressInput } onChange={ (e) => { searchAddresses(e.target.value)} }></input>
                 </>;
             case '/view-address':
+            case '/edit-tags':
+            case '/add-tags':
                 return <>
-                    <div className="tagging-tracker__navbar-top view-address">
-                        <Link to={{ pathname: "/addresses", state: { clearSearch: true }}} className="view-address__back">
+                    <div className="tagging-tracker__navbar-top view-address edit-tags add-tags">
+                        <Link to={{ pathname: "/addresses", state: { clearSearch: true }}} className="manage-address__back">
                             <img src={ backArrow } alt="back arrow" />
                             <h4>Addresses</h4>
                         </Link>
+                        <h2 className="manage-address__name">{ props.location.state.address }</h2>
+                        <Link to={{ pathname: isEditTagsPath ? "view-address" : "/edit-tags", state: { 
+                            address: props.location.state.address,
+                            addressId: props.location.state.addressId
+                        }}} className="manage-address__edit-cancel">{ isEditTagsPath ? "Cancel" : "Edit" }</Link>
                     </div>
                 </>;
             default:
@@ -42,7 +51,6 @@ const Navbar = (props) => {
 
     // focus
     useEffect(() => {
-        console.log('n', props);
         if (!props.showAddressModal && props.location.pathname === "/addresses") {
             searchAddressInput.current.focus();
         }

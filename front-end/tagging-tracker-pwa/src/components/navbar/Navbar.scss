@@ -47,12 +47,18 @@
 }
 
 .tagging-tracker__navbar-top.view-address {
+    position: relative;
     @include flex-hor-row-ali-str;
     justify-content: space-between;
 
-    .view-address__back {
+    @media screen and (max-width: 500px) {
+        display: block;
+    }
+
+    .manage-address__back {
         @include flex-hor-row-ali-str;
         text-decoration: none;
+        flex: 1;
 
         h4 {
             @include flex-center;
@@ -64,6 +70,39 @@
             transform: rotate(180deg);
             width: 1.25rem;
             height: 1.25rem;
+        }
+
+        @media screen and (max-width: 500px) {
+            width: 100%;
+        }
+    }
+
+    .manage-address__name {
+        @include flex-center;
+        flex: 4;
+        text-align: center;
+        font-family: 'Roboto Bold', sans-serif;
+        font-weight: bold;
+
+        @media screen and (max-width: 500px) {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+    }
+
+    .manage-address__edit-cancel {
+        @include flex-center;
+        flex: 1;
+        text-align: right;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: #1B89FD;
+
+        @media screen and (max-width: 500px) {
+            position: absolute; // this is funky responsive to fit the content
+            top: 0;
+            right: 0;
+            width: auto;
         }
     }
 }
