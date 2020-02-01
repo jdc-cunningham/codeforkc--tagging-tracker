@@ -52,7 +52,8 @@ const Addresses = (props) => {
 
         // this detects when route changed from a single address back to addresses and clears the search input
         // there are no hard routes eg. using Link so the parent state does not change
-        if (typeof props.location.state.clearSearch !== "undefined") {
+        if (typeof props.location.state !== "undefined" &&
+            typeof props.location.state.clearSearch !== "undefined") {
             delete props.location.state.clearSearch; // lol without this non-ending loop
             props.clearSearchAddress();
         }

@@ -13,7 +13,7 @@ const BottomNavbar = (props) => {
             case '/huh':
                 return <>
                 </>;
-            default:
+            case "/addresses":
                 return <>
                     <button ref={ syncBtn } className="bottom-navbar__btn half sync" type="button">
                         <img src={ sync } alt="sync button" />
@@ -23,7 +23,9 @@ const BottomNavbar = (props) => {
                         <img src={ logout } alt="logout button" />
                         <span>Logout</span>
                     </button>
-                </>;
+                </>
+            default:
+                return null;
         }
     }
 

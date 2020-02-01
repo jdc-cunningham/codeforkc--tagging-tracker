@@ -34,5 +34,9 @@
         border-radius: 6px;
         width: 100%;
         color: #282828;
+
+        &:disabled {
+            opacity: 0.6;
+        }
     }
 }

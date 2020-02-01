@@ -3,7 +3,6 @@
 .tagging-tracker__navbar {
     flex: 0;
     width: 100%;
-    padding: 1rem;
     border-bottom: 1px solid #E1E1E3;
     background-color: #fafafa;
 
@@ -21,6 +20,10 @@
         background-position: 0.5rem;
         background-repeat: no-repeat;
     }
+}
+
+.tagging-tracker__navbar-top {
+    padding: 1rem;
 }
 
 .tagging-tracker__navbar-top.addresses {

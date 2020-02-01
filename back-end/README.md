@@ -1,3 +1,7 @@
+## Local Dev
+You can use `npm run server` if you have `nodemon` installed to develop or just `node index.js`
+You should have it installed as it's part of the dependencies
+
 ## AWS S3
 You will need the `access_key_id` and `secret_access_key`, currently I own the bucket being used. The `access_key_id` and `secret_access_key` go inside the credentials file(no extension)
 These should be in your respective locations depending on platform(Windows or Linux):

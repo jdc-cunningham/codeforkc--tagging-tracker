@@ -6,8 +6,17 @@ const { pool } = require('./../../utils/db/dbConnect');
 
 const loginUser = (req, res) => {
     // get these from post params
-    const username = "test";
-    const password = "test";
+
+    if (
+        !Object.keys(req.body).length ||
+        typeof req.body.username === "undefined" ||
+        typeof req.body.password === "undefined"
+    ) {
+        res.status(401).send('No user/pass provided');
+    }
+    
+    const username = req.body.username;
+    const password = req.body.password;
     let passwordHash;
     
     pool.query(
@@ -15,12 +24,11 @@ const loginUser = (req, res) => {
         [username],
         (err, qres) => {
             if (err) {
-                // res.status(401).send('Failed to login');
-                console.log('select hash err', err);
+                res.status(401).send('Failed to login');
             } else {
                 if (qres.length && typeof qres[0].password_hash !== "undefined") {
                     passwordHash = qres[0].password_hash;
-                    comparePasswords(res, username, password, passwordHash);
+                    _comparePasswords(res, username, password, passwordHash);
                 } else {
                     res.status(401).send('Failed to login');
                 }
@@ -29,7 +37,8 @@ const loginUser = (req, res) => {
     );
 }
 
-const comparePasswords = (res, username, password, passwordHash) => {
+// private
+const _comparePasswords = (res, username, password, passwordHash) => {
     bcrypt.compare(password, passwordHash, (err, bres) => { // this is bad bres
         if (err) {
             console.log('bcrypt compare', err);
@@ -38,7 +47,7 @@ const comparePasswords = (res, username, password, passwordHash) => {
 
         jwt.sign({user: username}, process.env.JWT_SECRET_KEY, {expiresIn: "15m"}, (err,token) => {
             if (token) {
-                issueToken(res, token);
+                _issueToken(res, token);
             } else {
                 res.status(401).send('Failed to login');
             }
@@ -46,15 +55,16 @@ const comparePasswords = (res, username, password, passwordHash) => {
     });
 }
 
-const issueToken = (res, token) => {
-    console.log('it');
+// private
+const _issueToken = (res, token) => {
     if (token) {
-        res.status(200).send(`${token}`);
+        res.status(200).json({token});
     } else {
         res.status(401);
     }
 }
 
+// underscored methods(private) should not be exported
 module.exports = {
     loginUser
 }
