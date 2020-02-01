@@ -15,21 +15,34 @@ import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 
 const App = () => {
 	const [searchedAddress, updateSearchedAddress] = useState({ value: "" });
+	const [showAddressModal, setShowAddressModal] = useState(false);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress({ value: searchStr });
 	}
 
+	const toggleAddressModal = (show) => {
+		setShowAddressModal(show);
+	}
+
 	return (
 		<div className="tagging-tracker">
 			<Router>
-				<Route component={ (props) => <Navbar {...props} searchAddress={searchAddress} searchedAddress={searchedAddress} /> } />
+				<Route component={ (props) =>
+					<Navbar {...props}
+						searchAddress={searchAddress}
+						searchedAddress={searchedAddress}
+						toggleAddressModal={toggleAddressModal} /> } />
 				<div className="tagging-tracker__body">
 					<Switch>
 						<Route exact path="/">
 							<Login />
 						</Route>
-						<Route path="/addresses" component={ (props) => <Addresses {...props} searchedAddress={searchedAddress} />} />
+						<Route path="/addresses" component={ (props) =>
+							<Addresses {...props}
+								searchedAddress={searchedAddress}
+								showAddressModal={showAddressModal}
+								toggleAddressModal={toggleAddressModal} />} />
 						<Route path="/view-address">
 							<ViewAddress />
 						</Route>

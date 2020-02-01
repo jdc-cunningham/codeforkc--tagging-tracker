@@ -4,10 +4,6 @@ import './Navbar.scss';
 const Navbar = (props) => {
     const searchAddressInput = useRef(null);
 
-    const addAddress = () => {
-
-    }
-
     let searchInputTimeout;
 
     const searchAddresses = (searchStr) => {
@@ -22,7 +18,7 @@ const Navbar = (props) => {
             case '/addresses':
                 return <>
                     <div className="tagging-tracker__navbar-top">
-                        <button onClick={ addAddress } />
+                        <button onClick={  () => { props.toggleAddressModal(true)}  } />
                         <h2>Addresses</h2>
                     </div>
                     <input type="text" value={props.searchedAddress.value} placeholder="search" ref={ searchAddressInput } onChange={ (e) => { searchAddresses(e.target.value)} }></input>
@@ -34,7 +30,9 @@ const Navbar = (props) => {
 
     // focus
     useEffect(() => {
-        searchAddressInput.current.focus();
+        if (!props.showAddressModal) {
+            searchAddressInput.current.focus();
+        }
     }, []);
 
     return(
