@@ -46,22 +46,32 @@ const App = () => {
 				<div className="tagging-tracker__body">
 					<Switch>
 						<Route exact path="/" component={ (props) =>
-							<Login {...props} updateToken={updateToken} token={token} />
+							token
+							? <Redirect to="/addresses" />
+							: <Login {...props} updateToken={updateToken} token={token} />
 						} />
 						<Route path="/addresses" component={ (props) =>
-							false ? <Addresses {...props}
-								searchedAddress={searchedAddress}
-								showAddressModal={showAddressModal}
-								toggleAddressModal={toggleAddressModal}
-								clearSearchAddress={clearSearchedAddress}
-								token={token} /> : <Redirect to="/" /> } />
+							true 
+								? <Addresses {...props}
+									searchedAddress={searchedAddress}
+									showAddressModal={showAddressModal}
+									toggleAddressModal={toggleAddressModal}
+									clearSearchAddress={clearSearchedAddress}
+									token={token} />
+								: <Redirect to="/" /> } />
 						<Route path={"/view-address"} component={ (props) =>
-							<ViewAddress {...props} /> } />
+							token
+								? <ViewAddress {...props} />
+								: <Redirect to="/" /> } />
 						<Route path="/manage-address">
-							<ManageAddress />
+							token
+								? <ManageAddress />
+								: <Redirect to="/" />
 						</Route>
 						<Route path="/manage-tags">
-							<ManageTags />
+							token
+								? <ManageTags />
+								: <Redirect to="/" />
 						</Route>
 						<Route>
 							<Page404 />

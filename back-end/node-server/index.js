@@ -6,6 +6,7 @@ const { createUser, deleteUser } = require('./utils/users/userFunctions');
 const { loginUser } = require('./utils/auth/authFunctions');
 const { verifyToken } = require('./utils/middleware/jwt');
 const { testAuth } = require('./utils/misc/testAuth');
+const { addAddress } = require('./utils/address/add');
 
 // CORs
 app.use((req, res, next) => {
@@ -21,21 +22,14 @@ app.use(
     })
 );
 
+// temporary
 app.get('/', (req, res) => {
     res.status(200).send('App running');
 });
 
-// user stuff
 app.post('/login-user', loginUser);
-
-// photos stuff
-
-
-// deleteUser(pool, 2);
-// createUser(pool, 'test', 'test');
-// loginUser("", "", pool);
-
-app.post('/test-auth', verifyToken, testAuth);
+// app.post('/add-address', verifyToken, addAddress);
+app.post('/add-address', addAddress); // dev disable auth
 
 app.listen(port, () => {
     console.log(`App running... on port ${port}`);

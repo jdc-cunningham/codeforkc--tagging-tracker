@@ -29,3 +29,4 @@ I am using `jsonwebtoken` and storing it either in app state or localStorage sin
 Reading on this
 * [link 1](https://stackoverflow.com/questions/44133536/is-it-safe-to-store-a-jwt-in-localstorage-with-reactjs)
 * [link 2](https://stackoverflow.com/questions/20504846/why-is-it-common-to-put-csrf-prevention-tokens-in-cookies)
+* [link 3](https://security.stackexchange.com/questions/179498/is-it-safe-to-store-a-jwt-in-sessionstorage)

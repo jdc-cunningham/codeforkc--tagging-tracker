@@ -1,23 +1,27 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Addresses.scss';
 import rightArrow from './../../assets/icons/svgs/chevron.svg';
+import axios from 'axios';
 
 const Addresses = (props) => {
     const newAddressInput = useRef(null);
     const cancelAddAddressBtn = useRef(null);
     const createAddressBtn = useRef(null);
+    const [addAddressProcessing, setAddAddressProcessing] = useState(false);
 
     const searchAddresses = (searchStr) => {
-        return (
-            <Link to={{ pathname: "/view-address", state: {
-                    address: "2113 Prospect Ave",
-                    addressId: 1 // used for lookup
-                }}} className="tagging-tracker__address">
-                <h4>2113 Propsect Ave</h4>
-                <img src={ rightArrow } alt="right arrow" />
-            </Link>
-        )
+        return null;
+
+        // return (
+        //     <Link to={{ pathname: "/view-address", state: {
+        //             address: "2113 Prospect Ave",
+        //             addressId: 1 // used for lookup
+        //         }}} className="tagging-tracker__address">
+        //         <h4>2113 Propsect Ave</h4>
+        //         <img src={ rightArrow } alt="right arrow" />
+        //     </Link>
+        // )
 
         // if (!addresses) {
         //     return (
@@ -30,6 +34,31 @@ const Addresses = (props) => {
         // })
     }
 
+    const saveAddress = () => {
+        const addressStr = newAddressInput.current.value;
+        if (!addressStr) {
+            alert('Please enter an address');
+            return;
+        }
+
+        setAddAddressProcessing(true);
+
+        axios.post('/add-address', {
+            address: addressStr
+        })
+        .then((res) => {
+            if (res.status === 201) {
+                
+            } else {
+                alert('Failed to save address');
+            }
+        })
+        .catch((err) => {
+            alert('failed to save address'); // 401 goes through here too
+            setAddAddressProcessing(false);
+        });
+    }
+
     const addNewAddressModal = (showModal) => {
         return showModal ? (
             <div className="tagging-tracker__address-input-modal">
@@ -38,7 +67,7 @@ const Addresses = (props) => {
                 <input type="text" ref={ newAddressInput } />
                 <div className="tagging-tracker__address-input-modal-btns">
                     <button type="button" ref={ cancelAddAddressBtn } onClick={ () => {props.toggleAddressModal(false)} } >CANCEL</button>
-                    <button type="button" ref={ createAddressBtn } >CREATE</button>
+                    <button type="button" ref={ createAddressBtn } onClick={ saveAddress } disabled={ addAddressProcessing ? true : false }>CREATE</button>
                 </div>
             </div>
         ) : null;

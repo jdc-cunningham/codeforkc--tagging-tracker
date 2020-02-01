@@ -70,5 +70,9 @@
         &:last-of-type {
             border-left: 1px solid #CECDD0;
         }
+
+        &:disabled {
+            opacity: 0.6;
+        }
     }
 }

@@ -17,3 +17,4 @@
 - [ ] add pin to locate self/reverse geocode to get address not sure if available offline, the navigation part(get current lat/lng
 - [ ] refresh token(will logout in 15 minutes currently), tie it to route change maybe
 - [ ] figure out how to dynamically set the proxy based on environment, don't need one for deployment or maybe will since not a monolith/front end is separate from backend
+- [ ] rest of address eg. state/zip or just limited to KS?
