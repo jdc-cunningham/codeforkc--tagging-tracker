@@ -14,18 +14,22 @@ import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 
 
 const App = () => {
+	const [searchedAddress, updateSearchedAddress] = useState({ value: "" });
+
+	const searchAddress = (searchStr) => {
+		updateSearchedAddress({ value: searchStr });
+	}
+
 	return (
 		<div className="tagging-tracker">
 			<Router>
-				<Route component={Navbar} />
-				<Switch>
-					<div className="tagging-tracker__body">
+				<Route component={ (props) => <Navbar {...props} searchAddress={searchAddress} searchedAddress={searchedAddress} /> } />
+				<div className="tagging-tracker__body">
+					<Switch>
 						<Route exact path="/">
 							<Login />
 						</Route>
-						<Route path="/addresses">
-							<Addresses />
-						</Route>
+						<Route path="/addresses" component={ (props) => <Addresses {...props} searchedAddress={searchedAddress} />} />
 						<Route path="/view-address">
 							<ViewAddress />
 						</Route>
@@ -35,8 +39,8 @@ const App = () => {
 						<Route path="/manage-tags">
 							<ManageTags />
 						</Route>
-					</div>
-				</Switch>
+					</Switch>
+				</div>
 				<Route component={BottomNavbar} />
 			</Router>
 		</div>

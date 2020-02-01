@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import './Navbar.scss';
 
 const Navbar = (props) => {
@@ -8,20 +8,34 @@ const Navbar = (props) => {
 
     }
 
+    let searchInputTimeout;
+
+    const searchAddresses = (searchStr) => {
+        clearTimeout(searchInputTimeout);
+        searchInputTimeout = setTimeout(() => {
+            props.searchAddress(searchStr);
+        }, 80);
+    }
+
     const renderNavbar = (routeLocation) => {
         switch(routeLocation.pathname) {
             case '/addresses':
                 return <>
-                    <div class="tagging-tracker__navbar-top">
+                    <div className="tagging-tracker__navbar-top">
                         <button onClick={ addAddress } />
                         <h2>Addresses</h2>
                     </div>
-                    <input type="text" placeholder="search" ref={ searchAddressInput }></input>
+                    <input type="text" value={props.searchedAddress.value} placeholder="search" ref={ searchAddressInput } onChange={ (e) => { searchAddresses(e.target.value)} }></input>
                 </>;
             default:
                 return "";
         }
     };
+
+    // focus
+    useEffect(() => {
+        searchAddressInput.current.focus();
+    }, []);
 
     return(
         <div className="tagging-tracker__navbar">
