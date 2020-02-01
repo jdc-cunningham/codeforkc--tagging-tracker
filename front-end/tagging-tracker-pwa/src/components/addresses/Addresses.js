@@ -9,6 +9,7 @@ const Addresses = (props) => {
     const cancelAddAddressBtn = useRef(null);
     const createAddressBtn = useRef(null);
     const [addAddressProcessing, setAddAddressProcessing] = useState(false);
+    const [recentAddresses, setRecentAddresses] = useState([]);
 
     const searchAddresses = (searchStr) => {
         return null;
@@ -59,6 +60,36 @@ const Addresses = (props) => {
         });
     }
 
+    const renderRecentAddresses = () => {
+        return (recentAddresses.map((address, index) => {
+            return <Link
+                key={index}
+                to={{ pathname: "/view-address", state: {
+                        address: address.address,
+                        addressId: address.id // used for lookup
+                }}}
+                className="tagging-tracker__address">
+                    <h4>{ address.address }</h4>
+                    <img src={ rightArrow } alt="right arrow" />
+            </Link>}));
+    }
+
+    const loadRecentAddresses = async () => {
+        // returns last 10 addresses used by updated date sorted descending
+        await axios.get('/get-recent-addresses')
+            .then((res) => {
+                if (res.status === 200) {
+                    setRecentAddresses(res.data);
+                } else {
+                    alert('Failed to load recent addresses');
+                }
+            })
+            .catch((err) => {
+                alert('failed to load recent addresses'); // 401 goes through here too
+                setAddAddressProcessing(false);
+            });
+    }
+
     const addNewAddressModal = (showModal) => {
         return showModal ? (
             <div className="tagging-tracker__address-input-modal">
@@ -75,6 +106,8 @@ const Addresses = (props) => {
 
     // focus
     useEffect(() => {
+        console.log(props);
+
         if (props.showAddressModal) {
             newAddressInput.current.focus();
         }
@@ -86,11 +119,16 @@ const Addresses = (props) => {
             delete props.location.state.clearSearch; // lol without this non-ending loop
             props.clearSearchAddress();
         }
+
+        if (!props.searchedAddress && !recentAddresses.length) {
+            loadRecentAddresses();
+        }
     });
 
     return(
         <div className="tagging-tracker__addresses">
-            { searchAddresses(props.searchAddres) }
+            { renderRecentAddresses() }
+            { searchAddresses(props.searchedAddres) }
             { addNewAddressModal(props.showAddressModal) }
         </div>
     )

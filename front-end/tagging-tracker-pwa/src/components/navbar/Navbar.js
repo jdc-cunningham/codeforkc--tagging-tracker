@@ -54,6 +54,9 @@ const Navbar = (props) => {
         if (!props.showAddressModal && props.location.pathname === "/addresses") {
             searchAddressInput.current.focus();
         }
+
+        // update online/offline status
+        props.checkOnlineStatus();
     });
 
     return(

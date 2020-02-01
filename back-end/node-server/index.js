@@ -7,6 +7,7 @@ const { loginUser } = require('./utils/auth/authFunctions');
 const { verifyToken } = require('./utils/middleware/jwt');
 const { testAuth } = require('./utils/misc/testAuth');
 const { addAddress } = require('./utils/address/add');
+const { getRecentAddresses } = require('./utils/address/get');
 
 // CORs
 app.use((req, res, next) => {
@@ -26,6 +27,8 @@ app.use(
 app.get('/', (req, res) => {
     res.status(200).send('App running');
 });
+
+app.get('/get-recent-addresses', getRecentAddresses);
 
 app.post('/login-user', loginUser);
 // app.post('/add-address', verifyToken, addAddress);

@@ -1,6 +1,6 @@
 const getDateTime = () => {
     // from https://stackoverflow.com/questions/8083410/how-can-i-set-the-default-timezone-in-node-js
-    // process.env.TZ = "America/Chicago";
+    process.env.TZ = "America/Chicago";
     let date_ob = new Date();
 
     // current date

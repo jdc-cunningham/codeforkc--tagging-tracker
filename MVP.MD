@@ -1,4 +1,15 @@
 ### Tasks
+- [ ] test online/offline behavior on deployed app
+
+### Online/offline workflow
+- have to be online to login, if no login can access stuff locally/on device... I guess that's fine?
+    - but user info vulnerable
+    - so the offline workflow is not completely offline just preventing images from uploading(bandwidth)?
+- for now will build with original thought of "offline capability is with regard to storing pictures locally"
+  - "you can't" login if you don't have a remote connection(many native apps flat out don't work without internet connection)
+    - it's not impossible, just not sure how you would architect that eg. copy locally a database of hashes/verify against that but more than likely what would actualy happen is the app is meant to work without auth and you use internet to sync data/back up, however storage limitation would be an issue eventually native or not
+    - you would login to interface with the remote api
+
 
 ### Want
 - [ ] add online/offline button toggling for sync/upload
@@ -15,6 +26,6 @@
 - [ ] figure out max connectionLimit for MySQL has math regarding RAM/buffer/etc...
 - [ ] add in way to register accounts, I think may need email(mailgun) for email validation
 - [ ] add pin to locate self/reverse geocode to get address not sure if available offline, the navigation part(get current lat/lng
-- [ ] refresh token(will logout in 15 minutes currently), tie it to route change maybe
+- [ ] refresh token(will logout in 30 minutes currently), tie it to route change maybe
 - [ ] figure out how to dynamically set the proxy based on environment, don't need one for deployment or maybe will since not a monolith/front end is separate from backend
 - [ ] rest of address eg. state/zip or just limited to KS?

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
 // import Dexie from 'dexie';
@@ -18,6 +18,7 @@ const App = () => {
 	const [token, setToken] = useState("");
 	const [searchedAddress, updateSearchedAddress] = useState("");
 	const [showAddressModal, setShowAddressModal] = useState(false);
+	const [appOnline, setAppOnline] = useState(true);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -35,6 +36,27 @@ const App = () => {
 		setToken(token);
 	}
 
+	const updateAppOnlineState = (event) => {
+		const online = event.type === "online";
+		if (appOnline !== online) {
+			console.log('update online state', !appOnline);
+			setAppOnline(!appOnline);
+		}
+	}
+
+	const checkOnlineStatus = () => {
+		window.addEventListener('online', updateAppOnlineState);
+		window.addEventListener('offline', updateAppOnlineState);
+		return () => {
+			window.removeEventListener('online', updateAppOnlineState);
+			window.removeEventListener('offline', updateAppOnlineState);
+		};
+	}
+
+	useEffect(() => {
+		checkOnlineStatus();
+	}, []);
+
 	return (
 		<div className="tagging-tracker">
 			<Router>
@@ -42,7 +64,8 @@ const App = () => {
 					<Navbar {...props}
 						searchAddress={searchAddress}
 						searchedAddress={searchedAddress}
-						toggleAddressModal={toggleAddressModal} /> } />
+						toggleAddressModal={toggleAddressModal}
+						checkOnlineStatus={checkOnlineStatus} /> } />
 				<div className="tagging-tracker__body">
 					<Switch>
 						<Route exact path="/" component={ (props) =>
@@ -60,7 +83,7 @@ const App = () => {
 									token={token} />
 								: <Redirect to="/" /> } />
 						<Route path={"/view-address"} component={ (props) =>
-							token
+							true
 								? <ViewAddress {...props} />
 								: <Redirect to="/" /> } />
 						<Route path="/manage-address">

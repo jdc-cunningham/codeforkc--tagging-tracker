@@ -45,7 +45,7 @@ const _comparePasswords = (res, username, password, passwordHash) => {
             res.status(401).send('Failed to login');
         }
 
-        jwt.sign({user: username}, process.env.JWT_SECRET_KEY, {expiresIn: "15m"}, (err,token) => {
+        jwt.sign({user: username}, process.env.JWT_SECRET_KEY, {expiresIn: process.env.JWT_EXPIRES}, (err,token) => {
             if (token) {
                 _issueToken(res, token);
             } else {
