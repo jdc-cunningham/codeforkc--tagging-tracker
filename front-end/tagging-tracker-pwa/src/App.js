@@ -12,6 +12,7 @@ import ManageAddress from './components/manage-address/ManageAddress';
 import ManageTags from './components/manage-tags/ManageTags';
 import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 import Page404 from './pages/page404/Page404';
+import AddTags from './components/add-tags/AddTags';
 
 
 const App = () => {
@@ -66,7 +67,7 @@ const App = () => {
 		if (!offlineStorage) {
 			setupOfflineStorage();
 		}
-	}, []);
+	});
 
 	return (
 		<div className="tagging-tracker">
@@ -108,6 +109,11 @@ const App = () => {
 								? <ManageTags />
 								: <Redirect to="/" />
 						</Route>
+						<Route path="/add-tags" component={ (props) =>
+								token
+									? <AddTags />
+									: <Redirect to="/" />
+							}/>
 						<Route>
 							<Page404 />
 						</Route>

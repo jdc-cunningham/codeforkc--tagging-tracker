@@ -14,6 +14,8 @@
 - use local images to render(pre-upload and generally)
 - when uploaded to s3, replace sources in local db with remote thumbnails(so they're cached/no loading by image for base64)
 
+### Note
+- when API doesn't match client side, does client side have priorty eg. client deletes address... guess that could be a direct request to API
 
 ### Want
 - [ ] add online/offline button toggling for sync/upload

@@ -4,7 +4,7 @@ import './ViewAddress.scss';
 
 const ViewAddress = (props) => {
     const history = useHistory();
-    const [localImages, setLocalImages] = useState([]);
+    const [localImages, setLocalImages] = useState(null);
     
     if (typeof props.location.state === "undefined") {
         history.push("/addresses");
@@ -14,7 +14,7 @@ const ViewAddress = (props) => {
         console.log(props);
         const db = props.offlineStorage;
 
-        if (db && !localImages.length) {
+        if (db && !localImages) {
             db.open().then(function (db) {
                 db.images.toArray().then((images) => {
                     setLocalImages(images);
@@ -26,11 +26,13 @@ const ViewAddress = (props) => {
 
         }
         
-        return localImages.map((image, index) => {
-            return <div key={ index } style={{
-                backgroundImage: `url(${image.src})`
-            }} alt="address thumbnail" className="address__tag-image" />
-        });
+        if (Array.isArray(localImages)) {
+            return localImages.map((image, index) => {
+                return <div key={ index } style={{
+                    backgroundImage: `url(${image.src})`
+                }} alt="address thumbnail" className="address__tag-image" />
+            });
+        }
     }
 
     return(

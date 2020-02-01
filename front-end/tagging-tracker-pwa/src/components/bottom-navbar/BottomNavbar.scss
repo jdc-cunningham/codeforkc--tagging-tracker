@@ -12,7 +12,9 @@
         justify-content: center;
         background-color: transparent;
         border: 0;
+        text-decoration: none;
         padding: 1em 2rem;
+        text-decoration: none;
 
         &.half {
             width: 50%;
@@ -20,6 +22,7 @@
 
         &.third {
             width: calc(100% / 3);
+            padding: 1em 0;
         }
 
         img {
@@ -32,6 +35,7 @@
             @include flex-center;
             font-family: 'Roboto Bold', sans-serif;
             font-size: 1rem;
+            color: #383838;
         }
         
         @media screen and (max-width: 500px) {

@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import './BottomNavbar.scss';
 
 import sync from './../../assets/icons/svgs/upload.svg';
@@ -12,6 +13,8 @@ const BottomNavbar = (props) => {
     const logoutBtn = useRef(null);
 
     const renderBottomNavbar = (routeLocation) => {
+        const address = props;
+        console.log(props);
         switch(routeLocation.pathname) {
             case '/huh':
                 return <>
@@ -28,6 +31,36 @@ const BottomNavbar = (props) => {
                     </button>
                 </>
             case "/view-address":
+                return <>
+                    <Link
+                        to={{ pathname: "/owner-info", state: {
+                                address: address.address,
+                                addressId: address.id // used for lookup
+                        }}}
+                        className="bottom-navbar__btn third">
+                        <img src={ property } alt="home owner button" />
+                        <span>Owner Info</span>
+                    </Link>
+                    <Link
+                        to={{ pathname: "/tag-info", state: {
+                                address: address.address,
+                                addressId: address.id // used for lookup
+                        }}}
+                        className="bottom-navbar__btn third">
+                        <img src={ textDocument } alt="tag info button" />
+                        <span>Tag Info</span>
+                    </Link>
+                    <Link
+                        to={{ pathname: "/add-tag", state: {
+                            address: address.address,
+                            addressId: address.id // used for lookup
+                        }}}
+                        className="bottom-navbar__btn third">
+                        <img src={ addSquare } alt="add tag" />
+                        <span>Add Tag</span>
+                    </Link>
+                </>
+            case "/add-tags":
                 return <>
                     <button ref={ syncBtn } className="bottom-navbar__btn third" type="button">
                         <img src={ property } alt="home owner button" />
