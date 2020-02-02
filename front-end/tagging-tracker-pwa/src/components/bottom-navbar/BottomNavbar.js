@@ -18,6 +18,10 @@ const BottomNavbar = (props) => {
         window.location.href = "/"; // token is wiped out as it's set by state not in storage
     }
 
+    const saveToDevice = () => {
+
+    }
+
     const renderBottomNavbar = (routeLocation) => {
         const address = props.location.state;
 
@@ -68,18 +72,21 @@ const BottomNavbar = (props) => {
                 </>
             case "/add-tag":
                 return <>
-                    <button ref={ cameraBtn } className="bottom-navbar__btn third caps-blue" type="button">
+                    <button ref={ cameraBtn } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
                         <span>Use Camera</span>
                     </button>
-                    <button ref={ uploadBtn } className="bottom-navbar__btn third caps-blue" type="button">
+                    <button ref={ uploadBtn } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
                         <span>Upload</span>
+                    </button>
+                    <button ref={ saveToDevice } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
+                        <span>Save To Device</span>
                     </button>
                     <Link
                         to={{ pathname: "/view-address", state: {
                             address: address.address,
                             addressId: address.id // used for lookup
                         }}}
-                        className="bottom-navbar__btn third caps-blue">
+                        className="bottom-navbar__btn quarter caps-blue small-font">
                         <span>Cancel</span>
                     </Link>
                 </>

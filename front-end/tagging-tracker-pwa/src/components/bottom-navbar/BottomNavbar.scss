@@ -16,6 +16,10 @@
         padding: 1em 2rem;
         text-decoration: none;
 
+        &.border {
+            border-right: 1px solid #aaa;
+        }
+
         &.half {
             width: 50%;
         }
@@ -34,6 +38,16 @@
             span {
                 color: #1B89FD;
                 text-transform: uppercase;
+            }
+        }
+
+        &.small-font {
+            span {
+                font-size: 0.55rem;
+
+                @media screen and (max-width: 400px) {
+                    font-size: 0.5rem;
+                }
             }
         }
 

@@ -72,8 +72,8 @@ const Addresses = (props) => {
             if (
                 await offlineStorage.addresses.add({
                     address: addressStr,
-                    lat: "0.0",
-                    lng: "0.0",
+                    lat: "0.0", // turn to float when uploaded
+                    lng: "0.0", // turn to float when uploaded
                     created: props.getDateTime(),
                     updated: props.getDateTime()
                 }).then((insertedId) => {
