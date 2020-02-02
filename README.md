@@ -7,5 +7,5 @@ This is just a rapid prototype to have something deployed
 ### Back end
 - Node
 - Express
-- Postgres
+- MySQL
 - S3

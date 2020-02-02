@@ -35,8 +35,10 @@ const Addresses = (props) => {
         // })
     }
 
-    const saveAddress = () => {
+    const saveAddress = async () => {
         const addressStr = newAddressInput.current.value;
+        const offlineStorage = props.offlineStorage;
+
         if (!addressStr) {
             alert('Please enter an address');
             return;
@@ -44,30 +46,54 @@ const Addresses = (props) => {
 
         setAddAddressProcessing(true);
 
-        axios.post('/add-address', {
-            address: addressStr
-        })
-        .then((res) => {
-            if (res.status === 201) {
-                console.log('create', res);
-            } else {
+        console.log(props);
+
+        offlineStorage.transaction('rw', offlineStorage.addresses, async() => {
+			if (await offlineStorage.addresses.add({
+				address: addressStr,
+                lat: "0.0",
+                lng: "0.0",
+                created: props.getDateTime(),
+                updated: props.getDateTime()
+			})) {
                 setAddAddressProcessing(false);
-            }
-        })
-        .catch((err) => {
-            alert('failed to save address'); // 401 goes through here too
-            setAddAddressProcessing(false);
-        });
+                // setRecentAddresses(recentAddresses.push({
+                //     address: addressStr,
+                //     addressId: 
+                // }));
+			}
+		})
+		.catch(e => {
+			alert('Failed to save address');
+			console.log(e);
+		});
+
+        // this is sync code, going to use Dexie to work offline primarily
+        // axios.post('/add-address', {
+        //     address: addressStr
+        // })
+        // .then((res) => {
+        //     if (res.status === 201) {
+        //         console.log('create', res);
+        //     } else {
+        //         setAddAddressProcessing(false);
+        //     }
+        // })
+        // .catch((err) => {
+        //     alert('failed to save address'); // 401 goes through here too
+        //     setAddAddressProcessing(false);
+        // });
     }
 
     const renderRecentAddresses = () => {
         if (recentAddresses) {
             return (recentAddresses.map((address, index) => {
+                console.log('render', address);
                 return <Link
                     key={index}
                     to={{ pathname: "/view-address", state: {
                             address: address.address,
-                            addressId: address.id // used for lookup
+                            addressId: address.addressId // used for lookup
                     }}}
                     className="tagging-tracker__address">
                         <h4>{ address.address }</h4>
@@ -78,18 +104,33 @@ const Addresses = (props) => {
 
     const loadRecentAddresses = () => {
         // returns last 10 addresses used by updated date sorted descending
-        if (!recentAddresses) {
-            axios.get('/get-recent-addresses')
-                .then((res) => {
-                    if (res.status === 200) {
-                        setRecentAddresses(res.data);
-                    } else {
-                        alert('Failed to load recent addresses');
-                    }
-                })
-                .catch((err) => {
-                    alert('failed to load recent addresses'); // 401 goes through here too
+        if (!recentAddresses && props.offlineStorage) {
+
+            // sync code
+            // axios.get('/get-recent-addresses')
+            //     .then((res) => {
+            //         if (res.status === 200) {
+            //             setRecentAddresses(res.data);
+            //         } else {
+            //             alert('Failed to load recent addresses');
+            //         }
+            //     })
+            //     .catch((err) => {
+            //         alert('failed to load recent addresses'); // 401 goes through here too
+            //     });
+
+            props.offlineStorage.addresses.toArray().then((addresses) => {
+                // format data
+                const addressesFormatted = addresses.map((address) => {
+                    console.log(address);
+                    return {
+                        address: address.address,
+                        addressId: address.id
+                    };
                 });
+
+				setRecentAddresses(addressesFormatted);
+			});
         }
     }
 

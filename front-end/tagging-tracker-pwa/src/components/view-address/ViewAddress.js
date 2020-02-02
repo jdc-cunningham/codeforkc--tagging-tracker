@@ -13,15 +13,23 @@ const ViewAddress = (props) => {
     const renderTags = () => {
         console.log(props);
         const db = props.offlineStorage;
+        console.log(props);
 
         if (db && !localImages) {
             db.open().then(function (db) {
-                db.images.toArray().then((images) => {
-                    setLocalImages(images);
+                db.tags.toArray().then((tags) => {
+                    !tags.length
+                        ? setLocalImages([])
+                        :  db.tags
+                        .where("addressId").equals(props.location.state.addressId)
+                        .toArray().then((tags) => {
+                            setLocalImages(tags);
+                        });
                 });
             }).catch (function (err) {
                 // handle this failure correctly
                 alert('failed to open local storage');
+                console.log(err);
             });
 
         }
