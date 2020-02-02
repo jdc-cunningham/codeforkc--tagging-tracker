@@ -29,9 +29,7 @@ const ViewAddress = (props) => {
             }).catch (function (err) {
                 // handle this failure correctly
                 alert('failed to open local storage');
-                console.log(err);
             });
-
         }
         
         if (Array.isArray(localImages)) {

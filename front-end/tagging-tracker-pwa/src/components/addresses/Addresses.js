@@ -35,8 +35,27 @@ const Addresses = (props) => {
         // })
     }
 
-    const saveAddress = async () => {
+    const checkAddressExists = () => {
         const addressStr = newAddressInput.current.value;
+        const offlineStorage = props.offlineStorage;
+
+        offlineStorage.open().then((offlineStorage) => {
+            offlineStorage.addresses.toArray().then((addresses) => {
+                !addresses.length
+                    ? saveAddress(addressStr)
+                    :  offlineStorage.addresses
+                        .where("address").equals(addressStr)
+                        .toArray().then((addresses) => {
+                            addresses.length ? alert('Address exists') : saveAddress(addressStr);
+                        });
+            });
+        }).catch (function (err) {
+            // handle this failure correctly
+            alert('failed to open local storage');
+        });
+    }
+
+    const saveAddress = async (addressStr) => {
         const offlineStorage = props.offlineStorage;
 
         if (!addressStr) {
@@ -46,27 +65,35 @@ const Addresses = (props) => {
 
         setAddAddressProcessing(true);
 
-        console.log(props);
-
+        // check if address is in table already
         offlineStorage.transaction('rw', offlineStorage.addresses, async() => {
-			if (await offlineStorage.addresses.add({
-				address: addressStr,
-                lat: "0.0",
-                lng: "0.0",
-                created: props.getDateTime(),
-                updated: props.getDateTime()
-			})) {
+            let newRowId;
+
+            if (
+                await offlineStorage.addresses.add({
+                    address: addressStr,
+                    lat: "0.0",
+                    lng: "0.0",
+                    created: props.getDateTime(),
+                    updated: props.getDateTime()
+                }).then((insertedId) => {
+                    newRowId = insertedId;
+                    return true;
+                })
+            ) {
+                setRecentAddresses(recentAddresses.concat({
+                    address: addressStr,
+                    addressId: newRowId
+                }));
                 setAddAddressProcessing(false);
-                // setRecentAddresses(recentAddresses.push({
-                //     address: addressStr,
-                //     addressId: 
-                // }));
-			}
-		})
-		.catch(e => {
-			alert('Failed to save address');
-			console.log(e);
-		});
+                props.setShowAddressModal(false);
+            } else {
+                alert('Failed to save address 1');
+            }
+        })
+        .catch(e => {
+            alert('Failed to save address 2');
+        });
 
         // this is sync code, going to use Dexie to work offline primarily
         // axios.post('/add-address', {
@@ -88,7 +115,6 @@ const Addresses = (props) => {
     const renderRecentAddresses = () => {
         if (recentAddresses) {
             return (recentAddresses.map((address, index) => {
-                console.log('render', address);
                 return <Link
                     key={index}
                     to={{ pathname: "/view-address", state: {
@@ -122,7 +148,6 @@ const Addresses = (props) => {
             props.offlineStorage.addresses.toArray().then((addresses) => {
                 // format data
                 const addressesFormatted = addresses.map((address) => {
-                    console.log(address);
                     return {
                         address: address.address,
                         addressId: address.id
@@ -142,7 +167,7 @@ const Addresses = (props) => {
                 <input type="text" ref={ newAddressInput } />
                 <div className="tagging-tracker__address-input-modal-btns">
                     <button type="button" ref={ cancelAddAddressBtn } onClick={ () => {props.toggleAddressModal(false)} } >CANCEL</button>
-                    <button type="button" ref={ createAddressBtn } onClick={ saveAddress } disabled={ addAddressProcessing ? true : false }>CREATE</button>
+                    <button type="button" ref={ createAddressBtn } onClick={ checkAddressExists } disabled={ addAddressProcessing ? true : false }>CREATE</button>
                 </div>
             </div>
         ) : null;
@@ -165,11 +190,11 @@ const Addresses = (props) => {
             delete props.location.state.clearSearch; // lol without this non-ending loop
             props.clearSearchAddress();
         }
-    });
 
-    useEffect(() => {
-        setAddAddressProcessing(false);
-    }, [addAddressProcessing]);
+        if (recentAddresses) {
+            setAddAddressProcessing(false);
+        }
+    });
 
     return(
         <div className="tagging-tracker__addresses">
