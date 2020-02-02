@@ -101,13 +101,52 @@ const BottomNavbar = (props) => {
                         <span>Cancel</span>
                     </Link>
                 </>
+            case "/tag-info":
+            case "/owner-info":
+                const tagPath = props.location.pathname === "/tag-info";
+
+                return <>
+                    <Link
+                        to={{ pathname: "/owner-info", state: {
+                                address: address.address,
+                                addressId: address.addressId // used for lookup
+                        }}}
+                        className={"bottom-navbar__btn toggled " + (!tagPath ? "active" : "") }>
+                        <img src={ property } alt="home owner button" />
+                        <span>Owner Info</span>
+                    </Link>
+                    <Link
+                        to={{ pathname: "/tag-info", state: {
+                                address: address.address,
+                                addressId: address.addressId // used for lookup
+                        }}}
+                        className={"bottom-navbar__btn toggled " + (tagPath ? "active" : "") }>
+                        <img src={ textDocument } alt="tag info button" />
+                        <span>Tag Info</span>
+                    </Link>
+                </>
             default:
                 return null;
         }
     }
 
+    const getBottomNavbarClasses = () => {
+        const floatingBtnPaths = [
+            "/owner-info",
+            "/tag-info"
+        ];
+
+        const floatingBtns = floatingBtnPaths.indexOf(props.location.pathname) !== -1;
+
+        if (floatingBtns) {
+            return "tagging-tracker__bottom-navbar floating-btns";
+        }
+
+        return "tagging-tracker__bottom-navbar";
+    }
+
     return(
-        <div className="tagging-tracker__bottom-navbar">
+        <div className={ getBottomNavbarClasses() }>
             { renderBottomNavbar(props.location) }
         </div>
     )
