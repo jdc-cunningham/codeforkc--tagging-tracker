@@ -64,8 +64,8 @@ const App = () => {
 		const db = new Dexie("LocalImageDatabase");
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
-			tags: "++id,address_id,src,thumbnail_src,meta",
-			ownerInformation: "++id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer"
+			tags: "++,address_id,src,thumbnail_src,meta",
+			ownerInfo: "++,address_id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer"
 		});
 		setOfflineStorage(db);
 	};
@@ -125,7 +125,8 @@ const App = () => {
 							component={ (props) =>
 								true
 									? <OwnerInfo {...props}
-										modifyOwnerInfo={modifyOwnerInfo} />
+										modifyOwnerInfo={modifyOwnerInfo}
+										offlineStorage={offlineStorage} />
 									: <Redirect to="/"/> }/>
 						<Route
 							path="/tag-info"

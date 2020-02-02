@@ -53,7 +53,7 @@ const Navbar = (props) => {
         }
     }
 
-    const editPage = () => {
+    const editSaveOwnerInfo = () => {
         props.toggleModifyOwnerInfo(!props.modifyOwnerInfo);
     }
 
@@ -66,8 +66,8 @@ const Navbar = (props) => {
                 <button
                     type="button"
                     className="manage-address__edit-cancel"
-                    onClick={ editPage }
-                >{ props.modifyOwnerInfo ? "CANCEL" : "EDIT" }</button>
+                    onClick={ editSaveOwnerInfo }
+                >{ props.modifyOwnerInfo ? "SAVE" : "EDIT" }</button> // TODO: this should flex between save/edit/cancel if changes occurred
             );
         } else {
             return (
