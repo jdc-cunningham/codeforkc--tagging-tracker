@@ -37,13 +37,14 @@
         &.caps-blue {
             span {
                 color: #1B89FD;
-                text-transform: uppercase;
+                font-family: 'Roboto Bold', sans-serif;
+                font-weight: bold;
             }
         }
 
         &.small-font {
             span {
-                font-size: 0.55rem;
+                font-size: 0.6rem;
 
                 @media screen and (max-width: 400px) {
                     font-size: 0.5rem;

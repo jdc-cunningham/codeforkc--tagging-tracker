@@ -22,6 +22,12 @@ const BottomNavbar = (props) => {
 
     }
 
+    // propogates upward click intent to then be received by AddTag body
+    const openCamera = () => {
+        console.log('cam btn click', props.fileUpload);
+        props.triggerFileUpload(true);
+    }
+
     const renderBottomNavbar = (routeLocation) => {
         const address = props.location.state;
 
@@ -72,7 +78,7 @@ const BottomNavbar = (props) => {
                 </>
             case "/add-tag":
                 return <>
-                    <button ref={ cameraBtn } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
+                    <button ref={ cameraBtn } onClick={ openCamera } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
                         <span>Use Camera</span>
                     </button>
                     <button ref={ uploadBtn } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">

@@ -19,6 +19,8 @@ import Page404 from './pages/page404/Page404';
 import AddTag from './components/add-tag/AddTag';
 import DeleteTag from './components/delete-tag/DeleteTag';
 
+let loadedPhotos = [];
+
 const App = () => {
 	const [token, setToken] = useState("");
 	const [searchedAddress, updateSearchedAddress] = useState("");
@@ -132,7 +134,9 @@ const App = () => {
 							path="/add-tag"
 							component={ (props) =>
 								true
-									? <AddTag />
+									? <AddTag
+										{...props}
+									/>
 									: <Redirect to="/"/> }/>
 							}/>
 						<Route
@@ -146,7 +150,16 @@ const App = () => {
 						</Route>
 					</Switch>
 				</div>
-				<Route component={BottomNavbar} />
+				{/* The explanation here is the AddTag needs to keep its own state so it doesn't
+					re-render while adding more images since the initial bridge between bottomNavbar
+					and AddTag body was causing the entire app to re-render */}
+				<Route component={ (props) =>
+					props.location.pathname !== "/add-tag" 
+						? <BottomNavbar
+							{...props}
+						/>
+						: null
+					} />
 			</Router>
 		</div>
 	)
