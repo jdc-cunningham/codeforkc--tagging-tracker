@@ -8,11 +8,12 @@ import Navbar from './components/navbar/Navbar';
 import Login from './components/login/Login';
 import Addresses from './components/addresses/Addresses';
 import ViewAddress from './components/view-address/ViewAddress';
-import ManageAddress from './components/manage-address/ManageAddress';
-import ManageTags from './components/manage-tags/ManageTags';
+import TagInfo from './components/tag-info/TagInfo';
+import OwnerInfo from './components/owner-info/OwnerInfo';
 import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 import Page404 from './pages/page404/Page404';
 import AddTag from './components/add-tag/AddTag';
+import DeleteTag from './components/delete-tag/DeleteTag';
 
 
 const App = () => {
@@ -80,40 +81,57 @@ const App = () => {
 						checkOnlineStatus={checkOnlineStatus} /> } />
 				<div className="tagging-tracker__body">
 					<Switch>
-						<Route exact path="/" component={ (props) =>
-							token
-							? <Redirect to="/addresses" />
-							: <Login {...props} updateToken={updateToken} token={token} />
+						<Route
+							exact
+							path="/"
+							component={ (props) =>
+								token
+									? <Redirect to="/addresses" />
+									: <Login {...props} updateToken={updateToken} token={token} />
 						} />
-						<Route path="/addresses" component={ (props) =>
-							true 
-								? <Addresses {...props}
-									searchedAddress={searchedAddress}
-									showAddressModal={showAddressModal}
-									toggleAddressModal={toggleAddressModal}
-									clearSearchAddress={clearSearchedAddress}
-									token={token} />
-								: <Redirect to="/" /> } />
-						<Route path={"/view-address"} component={ (props) =>
-							true
+						<Route
+							path="/addresses"
+							component={ (props) =>
+								true 
+									? <Addresses {...props}
+										searchedAddress={searchedAddress}
+										showAddressModal={showAddressModal}
+										toggleAddressModal={toggleAddressModal}
+										clearSearchAddress={clearSearchedAddress}
+										token={token} />
+									: <Redirect to="/"/> } />
+						<Route
+							path={"/view-address"}
+							component={ (props) =>
+								true
 								? <ViewAddress {...props}
 									offlineStorage={offlineStorage} />
-								: <Redirect to="/" /> } />
-						<Route path="/manage-address">
-							token
-								? <ManageAddress />
-								: <Redirect to="/" />
-						</Route>
-						<Route path="/manage-tags">
-							token
-								? <ManageTags />
-								: <Redirect to="/" />
-						</Route>
-						<Route path="/add-tag" component={ (props) =>
-								token
+								: <Redirect to="/"/> } />
+						<Route
+							path="/owner-info"
+							component={ (props) =>
+								true
+									? <OwnerInfo />
+									: <Redirect to="/"/> }/>
+						<Route
+							path="/tag-info"
+							component={ (props) =>
+								true
+									? <TagInfo />
+									: <Redirect to="/"/> }/>
+						<Route
+							path="/add-tag"
+							component={ (props) =>
+								true
 									? <AddTag />
-									: <Redirect to="/" />
+									: <Redirect to="/"/> }/>
 							}/>
+						<Route
+							path="/delete-tag"
+							component={ (props) =>
+								true
+									? <DeleteTag />
+									: <Redirect to="/"/> }/>
 						<Route>
 							<Page404 />
 						</Route>

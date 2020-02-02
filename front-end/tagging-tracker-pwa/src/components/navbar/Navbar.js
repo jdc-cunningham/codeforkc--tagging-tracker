@@ -16,6 +16,42 @@ const Navbar = (props) => {
         // }, 80);
     }
 
+    const getNavTitle = (path, address) => {
+        let navTitle = "";
+
+        if (path === "/tag-info") {
+            navTitle = "Tag Information";
+        } else if (path === "/owner-info") {
+            navTitle = "Owner Info";
+        } else {
+            navTitle = address;
+        }
+
+        return navTitle;
+    }
+
+    const getBackButtonTitle = (path, address) => {
+        if (path === "/tag-info" || path === "owner-info") {
+            let addressOutput = address.substring(0, 10);
+
+            if (address.length > 10) {
+                addressOutput += "...";
+            }
+
+            return addressOutput;
+        } else {
+            return "Addresses";
+        }
+    }
+
+    const getBackPathname = (path) => {
+        if (path === "/tag-info" || path === "owner-info") {
+            return "/view-address";
+        } else {
+            return "/addresses"
+        }
+    }
+
     const renderNavbar = (routeLocation) => {
         const isEditTagsPath = props.location.pathname.indexOf('edit') !== -1;
 
@@ -31,13 +67,17 @@ const Navbar = (props) => {
             case '/view-address':
             case '/edit-tags':
             case '/add-tag':
+            case '/tag-info':
+            case '/owner-info':
                 return <>
                     <div className="tagging-tracker__navbar-top view-address edit-tags add-tags">
-                        <Link to={{ pathname: "/addresses", state: { clearSearch: true }}} className="manage-address__back">
+                        <Link to={{ pathname: getBackPathname(routeLocation.pathname), state: { clearSearch: true }}} className="manage-address__back">
                             <img src={ backArrow } alt="back arrow" />
-                            <h4>Addresses</h4>
+                        <h4>{ getBackButtonTitle(routeLocation.pathname, props.location.state.address) }</h4>
                         </Link>
-                        <h2 className="manage-address__name">{ props.location.state.address }</h2>
+                        <h2 className="manage-address__name">
+                            { getNavTitle(routeLocation.pathname, props.location.state.address) }
+                        </h2>
                         <Link to={{ pathname: isEditTagsPath ? "view-address" : "/edit-tags", state: { 
                             address: props.location.state.address,
                             addressId: props.location.state.addressId
