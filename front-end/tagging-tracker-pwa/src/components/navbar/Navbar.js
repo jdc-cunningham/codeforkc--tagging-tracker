@@ -22,7 +22,7 @@ const Navbar = (props) => {
         if (path === "/tag-info") {
             navTitle = "Tag Information";
         } else if (path === "/owner-info") {
-            navTitle = "Owner Info";
+            navTitle = "Owner Information";
         } else {
             navTitle = address;
         }

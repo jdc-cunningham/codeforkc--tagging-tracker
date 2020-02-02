@@ -65,7 +65,8 @@ const App = () => {
 		const db = new Dexie("LocalImageDatabase");
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
-			tags: "++id,address_id,src,thumbnail_src,meta"
+			tags: "++id,address_id,src,thumbnail_src,meta",
+			ownerInformation: "++id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer"
 		});
 		setOfflineStorage(db);
 	};
