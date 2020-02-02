@@ -1,6 +1,7 @@
 import React, { useState  } from 'react';
 import { useHistory } from 'react-router-dom';
 import './ViewAddress.scss';
+import { getImagePreviewAspectRatioClass } from './../../utils/image';
 
 const ViewAddress = (props) => {
     const history = useHistory();
@@ -21,7 +22,7 @@ const ViewAddress = (props) => {
                     !tags.length
                         ? setLocalImages([])
                         :  db.tags
-                        .where("addressId").equals(props.location.state.addressId)
+                        .where("address_id").equals(props.location.state.addressId)
                         .toArray().then((tags) => {
                             setLocalImages(tags);
                         });
@@ -36,7 +37,7 @@ const ViewAddress = (props) => {
             return localImages.map((image, index) => {
                 return <div key={ index } style={{
                     backgroundImage: `url(${image.src})`
-                }} alt="address thumbnail" className="address__tag-image" />
+                }} alt="address thumbnail" className={ "address__tag-image " + getImagePreviewAspectRatioClass(localImages[index]) } />
             });
         }
     }
