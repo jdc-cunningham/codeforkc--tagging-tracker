@@ -12,7 +12,7 @@ import ManageAddress from './components/manage-address/ManageAddress';
 import ManageTags from './components/manage-tags/ManageTags';
 import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 import Page404 from './pages/page404/Page404';
-import AddTags from './components/add-tags/AddTags';
+import AddTag from './components/add-tag/AddTag';
 
 
 const App = () => {
@@ -109,9 +109,9 @@ const App = () => {
 								? <ManageTags />
 								: <Redirect to="/" />
 						</Route>
-						<Route path="/add-tags" component={ (props) =>
+						<Route path="/add-tag" component={ (props) =>
 								token
-									? <AddTags />
+									? <AddTag />
 									: <Redirect to="/" />
 							}/>
 						<Route>

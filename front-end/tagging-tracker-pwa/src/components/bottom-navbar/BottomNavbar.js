@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './BottomNavbar.scss';
 
 import sync from './../../assets/icons/svgs/upload.svg';
-import logout from './../../assets/icons/svgs/switch.svg';
+import logoutIcon from './../../assets/icons/svgs/switch.svg';
 import property from './../../assets/icons/svgs/property.svg';
 import textDocument from './../../assets/icons/svgs/text-document.svg';
 import addSquare from './../../assets/icons/svgs/add-square.svg';
@@ -11,10 +11,16 @@ import addSquare from './../../assets/icons/svgs/add-square.svg';
 const BottomNavbar = (props) => {
     const syncBtn = useRef(null);
     const logoutBtn = useRef(null);
+    const cameraBtn = useRef(null);
+    const uploadBtn = useRef(null);
+
+    const logout = () => {
+        window.location.href = "/"; // token is wiped out as it's set by state not in storage
+    }
 
     const renderBottomNavbar = (routeLocation) => {
-        const address = props;
-        console.log(props);
+        const address = props.location.state;
+
         switch(routeLocation.pathname) {
             case '/huh':
                 return <>
@@ -25,8 +31,8 @@ const BottomNavbar = (props) => {
                         <img src={ sync } alt="sync button" />
                         <span>Sync</span>
                     </button>
-                    <button ref={ logoutBtn } className="bottom-navbar__btn half" type="button">
-                        <img src={ logout } alt="logout button" />
+                    <button ref={ logoutBtn } onClick={ logout } className="bottom-navbar__btn half" type="button">
+                        <img src={ logoutIcon } alt="logout button" />
                         <span>Logout</span>
                     </button>
                 </>
@@ -60,20 +66,22 @@ const BottomNavbar = (props) => {
                         <span>Add Tag</span>
                     </Link>
                 </>
-            case "/add-tags":
+            case "/add-tag":
                 return <>
-                    <button ref={ syncBtn } className="bottom-navbar__btn third" type="button">
-                        <img src={ property } alt="home owner button" />
-                        <span>Owner Info</span>
+                    <button ref={ cameraBtn } className="bottom-navbar__btn third caps-blue" type="button">
+                        <span>Use Camera</span>
                     </button>
-                    <button ref={ logoutBtn } className="bottom-navbar__btn third" type="button">
-                        <img src={ textDocument } alt="tag info button" />
-                        <span>Tag Info</span>
+                    <button ref={ uploadBtn } className="bottom-navbar__btn third caps-blue" type="button">
+                        <span>Upload</span>
                     </button>
-                    <button ref={ syncBtn } className="bottom-navbar__btn third" type="button">
-                        <img src={ addSquare } alt="add tag" />
-                        <span>Add Tag</span>
-                    </button>
+                    <Link
+                        to={{ pathname: "/view-address", state: {
+                            address: address.address,
+                            addressId: address.id // used for lookup
+                        }}}
+                        className="bottom-navbar__btn third caps-blue">
+                        <span>Cancel</span>
+                    </Link>
                 </>
             default:
                 return null;

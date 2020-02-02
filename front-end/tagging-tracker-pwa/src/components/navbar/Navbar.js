@@ -30,7 +30,7 @@ const Navbar = (props) => {
                 </>;
             case '/view-address':
             case '/edit-tags':
-            case '/add-tags':
+            case '/add-tag':
                 return <>
                     <div className="tagging-tracker__navbar-top view-address edit-tags add-tags">
                         <Link to={{ pathname: "/addresses", state: { clearSearch: true }}} className="manage-address__back">
