@@ -16,6 +16,10 @@
         padding: 1em 2rem;
         text-decoration: none;
 
+        &:disabled {
+            opacity: 0.6;
+        }
+
         &.border {
             border-right: 1px solid #aaa;
         }

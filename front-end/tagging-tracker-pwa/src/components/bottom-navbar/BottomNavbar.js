@@ -14,17 +14,18 @@ const BottomNavbar = (props) => {
     const cameraBtn = useRef(null);
     const uploadBtn = useRef(null);
 
+    console.log(props);
+
     const logout = () => {
         window.location.href = "/"; // token is wiped out as it's set by state not in storage
     }
 
     const saveToDevice = () => {
-
+        props.saveToDevice();
     }
 
     // propogates upward click intent to then be received by AddTag body
     const openCamera = () => {
-        console.log('cam btn click', props.fileUpload);
         props.triggerFileUpload(true);
     }
 
@@ -51,7 +52,7 @@ const BottomNavbar = (props) => {
                     <Link
                         to={{ pathname: "/owner-info", state: {
                                 address: address.address,
-                                addressId: address.id // used for lookup
+                                addressId: address.addressId // used for lookup
                         }}}
                         className="bottom-navbar__btn third">
                         <img src={ property } alt="home owner button" />
@@ -60,7 +61,7 @@ const BottomNavbar = (props) => {
                     <Link
                         to={{ pathname: "/tag-info", state: {
                                 address: address.address,
-                                addressId: address.id // used for lookup
+                                addressId: address.addressId // used for lookup
                         }}}
                         className="bottom-navbar__btn third">
                         <img src={ textDocument } alt="tag info button" />
@@ -69,7 +70,7 @@ const BottomNavbar = (props) => {
                     <Link
                         to={{ pathname: "/add-tag", state: {
                             address: address.address,
-                            addressId: address.id // used for lookup
+                            addressId: address.addressId // used for lookup
                         }}}
                         className="bottom-navbar__btn third">
                         <img src={ addSquare } alt="add tag" />
@@ -84,7 +85,11 @@ const BottomNavbar = (props) => {
                     <button ref={ uploadBtn } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
                         <span>Upload</span>
                     </button>
-                    <button ref={ saveToDevice } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
+                    <button
+                        onClick={ saveToDevice }
+                        className="bottom-navbar__btn quarter caps-blue border small-font"
+                        type="button"
+                        disabled={ props.savingToDevice ? true : false }>
                         <span>Save To Device</span>
                     </button>
                     <Link

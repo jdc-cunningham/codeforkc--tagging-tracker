@@ -115,6 +115,7 @@ const Addresses = (props) => {
     const renderRecentAddresses = () => {
         if (recentAddresses) {
             return (recentAddresses.map((address, index) => {
+                console.log('address', address);
                 return <Link
                     key={index}
                     to={{ pathname: "/view-address", state: {

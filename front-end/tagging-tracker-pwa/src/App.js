@@ -93,7 +93,7 @@ const App = () => {
 							exact
 							path="/"
 							component={ (props) =>
-								token
+								true
 									? <Redirect to="/addresses" />
 									: <Login {...props} updateToken={updateToken} token={token} />
 						} />
@@ -136,6 +136,7 @@ const App = () => {
 								true
 									? <AddTag
 										{...props}
+										offlineStorage={offlineStorage}
 									/>
 									: <Redirect to="/"/> }/>
 							}/>

@@ -35,3 +35,4 @@
 - [ ] refresh token(will logout in 30 minutes currently), tie it to route change maybe
 - [ ] figure out how to dynamically set the proxy based on environment, don't need one for deployment or maybe will since not a monolith/front end is separate from backend
 - [ ] rest of address eg. state/zip or just limited to KS?
+- [ ] return thumbnail data(base64) for local preview no internet future, could possibly scale images on client side
