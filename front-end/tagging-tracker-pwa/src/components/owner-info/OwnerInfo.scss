@@ -18,6 +18,11 @@
         input {
             flex: 1;
             margin-left: 0.25rem;
+
+            &:read-only {
+                background-color: #efefef;
+                opacity: 0.6;
+            }
         }
 
         &:not(.group) {
@@ -41,6 +46,11 @@
             margin-left: 0;
             margin-top: 0.125rem;
             width: 100%;
+            
+            &:read-only {
+                background-color: #EFEFEF;
+                opacity: 0.6;
+            }
         }
 
         &:nth-of-type(even) {

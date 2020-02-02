@@ -1,7 +1,7 @@
 import React from 'react';
 import './OwnerInfo.scss';
 
-const OwnerInfo = () => {
+const OwnerInfo = (props) => {
     // TODO: this will need to be reworked the striping in particular, it's just coincidence
     // it works regarding the sub-group variant
     const formLabels = [
@@ -25,7 +25,7 @@ const OwnerInfo = () => {
             return (isString
                 ? <div key={index} className="owner-info-form__row">
                         <span>{ formField }:</span>
-                        <input type="text" readOnly />
+                        <input type="text" readOnly={ props.modifyOwnerInfo ? false : true } />
                     </div>
                 : <div className="owner-info-form__row group" key={index}>
                     <div className="owner-info-form__row white">
@@ -37,7 +37,7 @@ const OwnerInfo = () => {
                             return (
                                 <div key={subGroupIndex} className="owner-info-form__sub-row">
                                     <span>{ formField[subGroup] }</span>
-                                    <input type="text" className="full" readOnly />
+                                    <input type="text" className="full" readOnly={ props.modifyOwnerInfo ? false : true } />
                                 </div>
                             );
                         })

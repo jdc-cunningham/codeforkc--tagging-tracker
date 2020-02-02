@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.scss';
 
@@ -8,6 +8,7 @@ const Navbar = (props) => {
     const searchAddressInput = useRef(null);
 
     // let searchInputTimeout;
+    console.log(props);
 
     const searchAddresses = (searchStr) => {
         // clearTimeout(searchInputTimeout);
@@ -52,9 +53,33 @@ const Navbar = (props) => {
         }
     }
 
-    const renderNavbar = (routeLocation) => {
-        const isEditTagsPath = props.location.pathname.indexOf('edit') !== -1;
+    const editPage = () => {
+        props.toggleModifyOwnerInfo(!props.modifyOwnerInfo);
+    }
 
+    const generateEditBtn = () => {
+        const pathname = props.location.pathname;
+        const isEditTagsPath = pathname.indexOf('edit') !== -1;
+
+        if (pathname === "/owner-info") {
+            return (
+                <button
+                    type="button"
+                    className="manage-address__edit-cancel"
+                    onClick={ editPage }
+                >{ props.modifyOwnerInfo ? "CANCEL" : "EDIT" }</button>
+            );
+        } else {
+            return (
+                <Link to={{ pathname: isEditTagsPath ? "view-address" : "/edit-tags", state: { 
+                    address: props.location.state.address,
+                    addressId: props.location.state.addressId
+                }}} className="manage-address__edit-cancel">{ isEditTagsPath ? "Cancel" : "Edit" }</Link>
+            );
+        }
+    }
+
+    const renderNavbar = (routeLocation) => {
         switch(routeLocation.pathname) {
             case '/addresses':
                 return <>
@@ -78,10 +103,7 @@ const Navbar = (props) => {
                         <h2 className="manage-address__name">
                             { getNavTitle(routeLocation.pathname, props.location.state.address) }
                         </h2>
-                        <Link to={{ pathname: isEditTagsPath ? "view-address" : "/edit-tags", state: { 
-                            address: props.location.state.address,
-                            addressId: props.location.state.addressId
-                        }}} className="manage-address__edit-cancel">{ isEditTagsPath ? "Cancel" : "Edit" }</Link>
+                        { generateEditBtn() }
                     </div>
                 </>;
             default:
@@ -91,6 +113,7 @@ const Navbar = (props) => {
 
     // focus
     useEffect(() => {
+        console.log('render nav', props.modifyOwnerInfo);
         if (!props.showAddressModal && props.location.pathname === "/addresses") {
             searchAddressInput.current.focus();
         }

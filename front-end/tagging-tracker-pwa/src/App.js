@@ -19,14 +19,13 @@ import Page404 from './pages/page404/Page404';
 import AddTag from './components/add-tag/AddTag';
 import DeleteTag from './components/delete-tag/DeleteTag';
 
-let loadedPhotos = [];
-
 const App = () => {
 	const [token, setToken] = useState("");
 	const [searchedAddress, updateSearchedAddress] = useState("");
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [appOnline, setAppOnline] = useState(true);
 	const [offlineStorage, setOfflineStorage] = useState(null);
+	const [modifyOwnerInfo, toggleModifyOwnerInfo] = useState(false);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -87,7 +86,9 @@ const App = () => {
 						searchAddress={searchAddress}
 						searchedAddress={searchedAddress}
 						toggleAddressModal={toggleAddressModal}
-						checkOnlineStatus={checkOnlineStatus} /> } />
+						checkOnlineStatus={checkOnlineStatus}
+						toggleModifyOwnerInfo={toggleModifyOwnerInfo}
+						modifyOwnerInfo={modifyOwnerInfo} /> } />
 				<div className="tagging-tracker__body">
 					<Switch>
 						<Route
@@ -123,7 +124,8 @@ const App = () => {
 							path="/owner-info"
 							component={ (props) =>
 								true
-									? <OwnerInfo />
+									? <OwnerInfo {...props}
+										modifyOwnerInfo={modifyOwnerInfo} />
 									: <Redirect to="/"/> }/>
 						<Route
 							path="/tag-info"

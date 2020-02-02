@@ -102,6 +102,9 @@
         text-decoration: none;
         text-transform: uppercase;
         color: #1B89FD;
+        background-color: transparent;
+        border: 0;
+        font-size: 1rem;
 
         @media screen and (max-width: 500px) {
             position: absolute; // this is funky responsive to fit the content
