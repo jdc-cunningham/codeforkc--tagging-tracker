@@ -18,11 +18,11 @@
         background-repeat: no-repeat;
         background-position: center center;
 
-        &.landscape {
+        &.portrait {
             background-size: 300px auto;
         }
 
-        &.portrait {
+        &.landscape {
             background-size: auto 300px;
         }
 
@@ -30,11 +30,11 @@
             width: 150px;
             height: 150px;
 
-            &.landscape {
+            &.portrait {
                 background-size: 150px auto;
             }
     
-            &.portrait {
+            &.landscape {
                 background-size: auto 150px;
             }
         }

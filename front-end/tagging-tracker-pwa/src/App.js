@@ -17,7 +17,7 @@ import OwnerInfo from './components/owner-info/OwnerInfo';
 import BottomNavbar from './components/bottom-navbar/BottomNavbar';
 import Page404 from './pages/page404/Page404';
 import AddTag from './components/add-tag/AddTag';
-import DeleteTag from './components/delete-tag/DeleteTag';
+import DeleteTag from './components/edit-tags/EditTags';
 
 const App = () => {
 	const [token, setToken] = useState("");
@@ -65,7 +65,7 @@ const App = () => {
 		const db = new Dexie("LocalImageDatabase");
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
-			tags: "++,address_id,src,thumbnail_src,meta",
+			tags: "++id,address_id,src,thumbnail_src,meta",
 			ownerInfo: "++,address_id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer",
 			tagInfo: "++,address_id,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement"
 		});
@@ -149,10 +149,12 @@ const App = () => {
 									: <Redirect to="/"/> }/>
 							}/>
 						<Route
-							path="/delete-tag"
+							path="/edit-tags"
 							component={ (props) =>
 								true
-									? <DeleteTag />
+									? <DeleteTag
+										{...props}
+										offlineStorage={offlineStorage} />
 									: <Redirect to="/"/> }/>
 						<Route>
 							<Page404 />

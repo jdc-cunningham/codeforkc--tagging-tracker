@@ -32,7 +32,7 @@ const Navbar = (props) => {
     }
 
     const getBackButtonTitle = (path, address) => {
-        if (path === "/tag-info" || path === "owner-info") {
+        if (path === "/tag-info" || path === "owner-info" || path === "/add-tag" || path === "/edit-tags") {
             let addressOutput = address.substring(0, 10);
 
             if (address.length > 10) {
@@ -46,11 +46,20 @@ const Navbar = (props) => {
     }
 
     const getBackPathname = (path) => {
-        if (path === "/tag-info" || path === "owner-info") {
+        console.log(path);
+        if (path === "/tag-info" || path === "/owner-info" || path === "/edit-tags" || path === "/add-tag") {
             return "/view-address";
         } else {
             return "/addresses"
         }
+    }
+
+    const getBackState = (path) => {
+        return {
+            clearSearch: true,
+            address: props.location.state.address,
+            addressId: props.location.state.addressId
+        };
     }
 
     const editSaveOwnerInfo = () => {
@@ -64,6 +73,7 @@ const Navbar = (props) => {
     const generateEditBtn = () => {
         const pathname = props.location.pathname;
         const isEditTagsPath = pathname.indexOf('edit') !== -1;
+        const isAddTagPath = pathname.indexOf('add-tag') !== -1;
 
         if (pathname === "/owner-info") {
             return (
@@ -87,7 +97,9 @@ const Navbar = (props) => {
                 <Link to={{ pathname: isEditTagsPath ? "view-address" : "/edit-tags", state: { 
                     address: props.location.state.address,
                     addressId: props.location.state.addressId
-                }}} className="manage-address__edit-cancel">{ isEditTagsPath ? "Cancel" : "Edit" }</Link>
+                }}} className="manage-address__edit-cancel">{
+                    isAddTagPath ? "" : (isEditTagsPath ? "Cancel" : "Edit")
+                }</Link>
             );
         }
     }
@@ -109,7 +121,7 @@ const Navbar = (props) => {
             case '/owner-info':
                 return <>
                     <div className="tagging-tracker__navbar-top view-address edit-tags add-tags">
-                        <Link to={{ pathname: getBackPathname(routeLocation.pathname), state: { clearSearch: true }}} className="manage-address__back">
+                        <Link to={{ pathname: getBackPathname(routeLocation.pathname), state: getBackState(routeLocation.pathname)}} className="manage-address__back">
                             <img src={ backArrow } alt="back arrow" />
                         <h4>{ getBackButtonTitle(routeLocation.pathname, props.location.state.address) }</h4>
                         </Link>

@@ -20,6 +20,9 @@
 
 navigate by top and bottom menus
 
+##### 02/02/2020
+Did not touch any remote stuff at all(non-dev). The app has "full userflow" for the most part but some things need some tweaks.
+
 ##### 01/30/2020
 I'm deciding to use MySQL instead of Postgres for now because I had problems with systemd in the past with db permissions(wouldn't write despite no errors)
 Also since this is not-for-profit I think the whole licensing stuff is fine

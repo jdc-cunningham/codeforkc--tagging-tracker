@@ -88,11 +88,11 @@ const Addresses = (props) => {
                 setAddAddressProcessing(false);
                 props.setShowAddressModal(false);
             } else {
-                alert('Failed to save address 1');
+                alert('Failed to save address');
             }
         })
         .catch(e => {
-            alert('Failed to save address 2');
+            alert('Failed to save address');
         });
 
         // this is sync code, going to use Dexie to work offline primarily

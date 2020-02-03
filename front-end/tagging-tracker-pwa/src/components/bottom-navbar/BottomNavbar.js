@@ -48,6 +48,7 @@ const BottomNavbar = (props) => {
                     </button>
                 </>
             case "/view-address":
+            case "/edit-tags":
                 return <>
                     <Link
                         to={{ pathname: "/owner-info", state: {

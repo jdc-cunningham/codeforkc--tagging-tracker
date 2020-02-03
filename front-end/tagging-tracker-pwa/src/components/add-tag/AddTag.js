@@ -6,14 +6,9 @@ import { getImagePreviewAspectRatioClass } from './../../utils/image';
 
 const AddTag = (props) => {
     const fileInput = useRef(null);
-    const photoPreview = useRef(null);
-    const [loadedPhoto, setLoadedPhoto] = useState({ src: "", meta: {} });
 	const [fileUpload, triggerFileUpload] = useState(false);
     const [loadedPhotos, setLoadedPhotos] = useState([]);
     const [savingToDevice, setSavingToDevice] = useState(false);
-    const history = useHistory();
-
-    console.log(props);
 
     const cameraCallback = (fileInput) => {
 		if (fileInput.files.length) {
@@ -49,7 +44,6 @@ const AddTag = (props) => {
     }
 
     const renderPhotoPreviews = () => {
-        console.log(loadedPhotos);
         return loadedPhotos.map((loadedPhoto, index) => {
             return (
                 <div style={{
@@ -95,7 +89,6 @@ const AddTag = (props) => {
     }, [loadedPhotos]);
 
     const saveToDevice = () => {
-        console.log('add tag', props);
         setSavingToDevice(true);
 
         const offlineStorage = props.offlineStorage;
@@ -103,15 +96,7 @@ const AddTag = (props) => {
 
         // not going to add duplicate logic here because you can delete them somewhere else
         loadedPhotos.forEach((loadedPhoto, index) => {
-            // console.log(loadedPhoto);
-            // console.log('address_id', loadedPhoto.addressId);
-            // console.log('src', loadedPhoto.src);
-            // console.log('thumbnail_src', ""); // populated by s3
-            // console.log('meta', loadedPhoto.meta);
-
             offlineStorage.transaction('rw', offlineStorage.tags, async() => {
-                let newRowId;
-    
                 if (
                     await offlineStorage.tags.add({
                         address_id: address.addressId,
@@ -119,14 +104,12 @@ const AddTag = (props) => {
                         thumbnail_src: "",
                         meta: loadedPhoto.meta
                     }).then((insertedId) => {
-                        newRowId = insertedId;
                         return true;
                     })
                 ) {
                     if (index === loadedPhotos.length - 1) {
                         alert('Photos saved');
                         setSavingToDevice(false);
-                        // history.push("/view-address");
                     }
                 } else {
                     alert('Failed to save photos to device');
