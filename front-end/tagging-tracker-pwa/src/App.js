@@ -26,6 +26,7 @@ const App = () => {
 	const [appOnline, setAppOnline] = useState(true);
 	const [offlineStorage, setOfflineStorage] = useState(null);
 	const [modifyOwnerInfo, toggleModifyOwnerInfo] = useState(false);
+	const [modifyTagInfo, toggleModifyTagInfo] = useState(false);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -88,7 +89,9 @@ const App = () => {
 						toggleAddressModal={toggleAddressModal}
 						checkOnlineStatus={checkOnlineStatus}
 						toggleModifyOwnerInfo={toggleModifyOwnerInfo}
-						modifyOwnerInfo={modifyOwnerInfo} /> } />
+						modifyOwnerInfo={modifyOwnerInfo}
+						modifyTagInfo={modifyTagInfo}
+						toggleModifyTagInfo={modifyTagInfo} /> } />
 				<div className="tagging-tracker__body">
 					<Switch>
 						<Route
@@ -132,7 +135,7 @@ const App = () => {
 							path="/tag-info"
 							component={ (props) =>
 								true
-									? <TagInfo />
+									? <TagInfo {...props} modifyTagInfo={modifyTagInfo} />
 									: <Redirect to="/"/> }/>
 						<Route
 							path="/add-tag"

@@ -1,6 +1,10 @@
 @import './../../assets/styles/flex-rules.scss';
 
 .tagging-tracker__bottom-navbar {
+    position: fixed; // TODO: fix this layout hack
+    bottom: 0;
+    left: 0;
+    
     @include flex-hor-row-ali-str;
     flex: 0;
     background-color: #F9F9F9;

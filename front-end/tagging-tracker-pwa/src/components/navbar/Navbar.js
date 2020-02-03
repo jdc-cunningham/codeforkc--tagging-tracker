@@ -57,6 +57,10 @@ const Navbar = (props) => {
         props.toggleModifyOwnerInfo(!props.modifyOwnerInfo);
     }
 
+    const editTagInfo = () => {
+        
+    }
+
     const generateEditBtn = () => {
         const pathname = props.location.pathname;
         const isEditTagsPath = pathname.indexOf('edit') !== -1;
@@ -68,6 +72,15 @@ const Navbar = (props) => {
                     className="manage-address__edit-cancel"
                     onClick={ editSaveOwnerInfo }
                 >{ props.modifyOwnerInfo ? "SAVE" : "EDIT" }</button> // TODO: this should flex between save/edit/cancel if changes occurred
+            );
+        } 
+        else if (pathname === "/tag-info") {
+            return (
+                <button
+                    type="button"
+                    className="manage-address__edit-cancel"
+                    onClick={ editTagInfo }
+                >{ props.modifyTagInfo ? "SAVE" : "EDIT" }</button> // TODO: this should flex between save/edit/cancel if changes occurred
             );
         } else {
             return (

@@ -1,35 +1,39 @@
-@mixin flex-ver-col {
+@mixin flex {
     display: flex;
+}
+
+@mixin flex-ver-col {
+    @include flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
 @mixin flex-hor-row-ali-str {
-    display: flex;
+    @include flex;
     align-items: stretch;
 }
 
 @mixin flex-center {
-    display: flex;
+    @include flex;
     align-items: center;
     justify-content: center;
 }
 
 @mixin flex-left {
-    display: flex;
+    @include flex;
     align-items: center;
     justify-content: flex-start;
 }
 
 @mixin flex-left-start {
-    display: flex;
+    @include flex;
     align-items: flex-start;
     justify-content: flex-start;
 }
 
 @mixin flex-center-start {
-    display: flex;
+    @include flex;
     align-items: flex-start;
     justify-content: center;
 }
