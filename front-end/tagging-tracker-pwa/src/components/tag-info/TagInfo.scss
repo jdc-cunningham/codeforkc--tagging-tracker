@@ -1,8 +1,9 @@
 @import './../../assets/styles/flex-rules.scss';
 
 .tagging-tracker__tag-info {
-    padding: 1em;
-    width: 100%;
+    width: calc(100% - 2em);
+    border: 1px solid #B3B3B3;
+    margin: 1em;
 
     .tag-info-field-row {
         @include flex-hor-row-ali-str;

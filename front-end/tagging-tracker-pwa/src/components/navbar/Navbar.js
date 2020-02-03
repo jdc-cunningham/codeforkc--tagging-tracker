@@ -58,7 +58,7 @@ const Navbar = (props) => {
     }
 
     const editTagInfo = () => {
-        
+        props.toggleModifyTagInfo(!props.modifyTagInfo);
     }
 
     const generateEditBtn = () => {

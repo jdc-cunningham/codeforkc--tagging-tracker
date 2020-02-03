@@ -66,7 +66,8 @@ const App = () => {
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
 			tags: "++,address_id,src,thumbnail_src,meta",
-			ownerInfo: "++,address_id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer"
+			ownerInfo: "++,address_id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer",
+			tagInfo: "++,address_id,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement"
 		});
 		setOfflineStorage(db);
 	};
@@ -91,7 +92,7 @@ const App = () => {
 						toggleModifyOwnerInfo={toggleModifyOwnerInfo}
 						modifyOwnerInfo={modifyOwnerInfo}
 						modifyTagInfo={modifyTagInfo}
-						toggleModifyTagInfo={modifyTagInfo} /> } />
+						toggleModifyTagInfo={toggleModifyTagInfo} /> } />
 				<div className="tagging-tracker__body">
 					<Switch>
 						<Route

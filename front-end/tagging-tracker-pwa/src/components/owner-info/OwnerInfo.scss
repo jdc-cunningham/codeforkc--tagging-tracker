@@ -1,5 +1,7 @@
 .tagging-tracker__owner-info {
-    padding: 1rem;
+    width: calc(100% - 2em);
+    border: 1px solid #B3B3B3;
+    margin: 1em;    
 }
 
 .tagging-tracker__owner-info-form {
@@ -43,6 +45,8 @@
 
         &.group {
             .owner-info-form__sub-row {
+                width: 100%;
+                
                 @media screen and (max-width: 400px) {
                     flex-direction: column;
                     align-items: flex-start;
