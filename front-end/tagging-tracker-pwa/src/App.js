@@ -99,7 +99,7 @@ const App = () => {
 							exact
 							path="/"
 							component={ (props) =>
-								true
+								false // token
 									? <Redirect to="/addresses" />
 									: <Login {...props} updateToken={updateToken} token={token} />
 						} />

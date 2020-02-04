@@ -1,4 +1,8 @@
 body {
+  display: block;
+  min-height: 100vh;
+  overflow: hidden auto;
+  
   * {
     box-sizing: border-box;
   }

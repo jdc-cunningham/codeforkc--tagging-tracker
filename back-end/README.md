@@ -1,6 +1,17 @@
+## About
+The back-end is primarily used for auth(JWT) and syncing. The data sync eg. the address/tag-info/owner-info tables are held in `MySQL` and photos are stored in S3.
+
+## Dependencies
+* Node, MySQL, AWS S3 Bucket(optional -- up to you)
+
 ## Local Dev
 You can use `npm run server` if you have `nodemon` installed to develop or just `node index.js`
 You should have it installed as it's part of the dependencies
+
+## Installation
+Assuming you have node/npm installed, you should be able to install all the dependencies as they're in `package.json` through `npm install`. Then run the backend with `node index.js` or `nodemon server`
+
+The backend for dev is hosted on `localhost:5000` this only matters because the PWA react app is mapped to it through the proxy in the PWA's `package.json`
 
 ## AWS S3
 You will need the `access_key_id` and `secret_access_key`, currently I own the bucket being used. The `access_key_id` and `secret_access_key` go inside the credentials file(no extension)
