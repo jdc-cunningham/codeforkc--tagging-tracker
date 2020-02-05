@@ -41,10 +41,13 @@
 	flex-direction: column;
 	flex: 1;
 	width: 100%;
-	max-height: calc(100vh - 123px); // TODO: not good set by dynamic css js, useEffect assuming window.innerHeight works
+	max-height: calc(100% - 123px); // TODO: not good set by dynamic css js, useEffect assuming window.innerHeight works
 	overflow: hidden auto;
-	
-	&.increase-height {
-		max-height: calc(100vh - 76px);
-	}
+
+	// TODO: this is here because of the state management issues with add-tag
+    // and the image preview/relationship with bottomNavbar(what causes actions)
+    // easier to isolate state within component than to travel up/down eg. through App itself
+    &.increase-height {
+        max-height: calc(100% - 76px);
+    }
 }

@@ -27,6 +27,7 @@ const App = () => {
 	const [offlineStorage, setOfflineStorage] = useState(null);
 	const [modifyOwnerInfo, toggleModifyOwnerInfo] = useState(false);
 	const [modifyTagInfo, toggleModifyTagInfo] = useState(false);
+	const [bodyClass, setBodyClass] = useState("tagging-tracker__body");
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -80,15 +81,6 @@ const App = () => {
 		}
 	});
 
-	const checkRouteBasedClass = () => {
-		if (window.location.href.split('/')[3] === "add-tag") {
-			// this is because of a bad dom structure/state mgmt so bototmNavbar rendered as part of component
-			return " increase-height";
-		}
-
-		return "";
-	}
-
 	return (
 		<div className="tagging-tracker">
 			<Router>
@@ -102,7 +94,7 @@ const App = () => {
 						modifyOwnerInfo={modifyOwnerInfo}
 						modifyTagInfo={modifyTagInfo}
 						toggleModifyTagInfo={toggleModifyTagInfo} /> } />
-				<div className={"tagging-tracker__body" + checkRouteBasedClass()}>
+				<div className={ bodyClass }>
 					<Switch>
 						<Route
 							exact
@@ -154,6 +146,7 @@ const App = () => {
 									? <AddTag
 										{...props}
 										offlineStorage={offlineStorage}
+										setBodyClass={setBodyClass}
 									/>
 									: <Redirect to="/"/> }/>
 							}/>

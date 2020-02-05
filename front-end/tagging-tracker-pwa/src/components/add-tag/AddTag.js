@@ -127,9 +127,14 @@ const AddTag = (props) => {
         }
     }, [savingToDevice]);
 
+    // TODO this is not staying ugly flash
+    useEffect(() => {
+        props.setBodyClass("tagging-tracker__body increase-height");
+    }, []);
+
     return (
         <>
-            <div className="tagging-tracker__add-tag">
+            <div className="tagging-tracker__add-tag move-bottom-navbar-down">
                 { renderFileInput() }
                 { renderPhotoPreviews() }
             </div>
