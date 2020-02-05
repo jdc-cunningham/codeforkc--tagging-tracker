@@ -50,7 +50,7 @@ const Login = (props) => {
             <img alt="tagging tracker logo" className="tagging-tracker__login-logo" src={ taggingTrackerLogo } />
             <div className="tagging-tracker__login-fields">
                 <input type="text" name="username" placeholder="username" ref={ usernameInput } />
-                <input type="password" name="password" placeholder="passwrod" ref={ passwordInput } />
+                <input type="password" name="password" placeholder="password" ref={ passwordInput } />
                 <button type="button" onClick={ login } ref={ loginBtn } disabled={ loginProcessing ? true : false }>Login</button>
             </div>
         </div>

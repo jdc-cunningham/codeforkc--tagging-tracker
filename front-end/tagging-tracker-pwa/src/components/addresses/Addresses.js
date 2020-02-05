@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './Addresses.scss';
 import rightArrow from './../../assets/icons/svgs/chevron.svg';
 import axios from 'axios';
@@ -10,29 +10,58 @@ const Addresses = (props) => {
     const createAddressBtn = useRef(null);
     const [addAddressProcessing, setAddAddressProcessing] = useState(false);
     const [recentAddresses, setRecentAddresses] = useState(null);
-
+    const [searching, setSearching] = useState(false);
+    const [activeAddresses, setActiveAddresses] = useState(null);
+    const history = useHistory();
+    
+    // this search may need to get restructured depending on what's available/important to search against
+    // versus the obvious address field, but tag search is something based on the tag text
+    // I will implement an address-first then tag search, this is not going to be as optimized/fast as plain SQL
+    // aslso I have not done any indexing this is just using regular 
+    // more info here:
+    // https://dexie.org/docs/WhereClause/WhereClause, https://dexie.org/docs/Table/Table.filter(), https://dexie.org/docs/Table/Table.where()
     const searchAddresses = (searchStr) => {
-        return null;
+        const offlineStorage = props.offlineStorage;
+        console.log('search');
 
-        // return (
-        //     <Link to={{ pathname: "/view-address", state: {
-        //             address: "2113 Prospect Ave",
-        //             addressId: 1 // used for lookup
-        //         }}} className="tagging-tracker__address">
-        //         <h4>2113 Propsect Ave</h4>
-        //         <img src={ rightArrow } alt="right arrow" />
-        //     </Link>
-        // )
+        if (!offlineStorage) {
+            return; // offline storage not ready yet
+        }
 
-        // if (!addresses) {
-        //     return (
-        //         <div className="tagging-tracker__body-no-results">No Matching Addresses Found</div>
-        //     )
-        // }
+        setSearching(true);
 
-        // addresses.map(() => {
+        // the /string/ pattern is a regex, can't make one from concatenating plain strings
+        const regex = new RegExp(searchStr, "i"); // case insensitive
 
-        // })
+        // this is similar to a LIKE search https://github.com/dfahlander/Dexie.js/issues/146
+        // other alternatives like .where("address").startsWith(searchStr)
+        let addressesFormatted;
+        offlineStorage.addresses.filter(address => regex.test(address.address))
+            .toArray().then((addresses) => {
+                if (!addresses.length) {
+                    // try searching by tags
+                    offlineStorage.tagInfo.filter(tag => regex.test(tag.tagText)).toArray().then((tags) => {
+                        addressesFormatted = tags.map((tag) => {
+                            return {
+                                // not sure if this will work
+                                address: offlineStorage.addresses.where("id").equals(tag.address_id).toArray().then((addresses) => {
+                                        return addresses[0].id
+                                    }),
+                                addressId: tag.address_id
+                            };
+                        });
+                    });
+                }
+
+                addressesFormatted = addresses.map((address) => {
+                    return {
+                        address: address.address,
+                        addressId: address.id
+                    };
+                });
+
+				setActiveAddresses(addressesFormatted);
+            });
     }
 
     const checkAddressExists = () => {
@@ -112,23 +141,6 @@ const Addresses = (props) => {
         // });
     }
 
-    const renderRecentAddresses = () => {
-        if (recentAddresses) {
-            return (recentAddresses.map((address, index) => {
-                console.log('address', address);
-                return <Link
-                    key={index}
-                    to={{ pathname: "/view-address", state: {
-                            address: address.address,
-                            addressId: address.addressId // used for lookup
-                    }}}
-                    className="tagging-tracker__address">
-                        <h4>{ address.address }</h4>
-                        <img src={ rightArrow } alt="right arrow" />
-                </Link>}));
-        }
-    }
-
     const loadRecentAddresses = () => {
         // returns last 10 addresses used by updated date sorted descending
         if (!recentAddresses && props.offlineStorage) {
@@ -155,7 +167,7 @@ const Addresses = (props) => {
                     };
                 });
 
-				setRecentAddresses(addressesFormatted);
+				setActiveAddresses(addressesFormatted);
 			});
         }
     }
@@ -174,12 +186,26 @@ const Addresses = (props) => {
         ) : null;
     }
 
+    const renderActiveAddresses = () => {
+        if (!activeAddresses) {
+            return "";
+        } else {
+            return (activeAddresses.map((address, index) => {
+                return <Link
+                    key={index}
+                    to={{ pathname: "/view-address", state: {
+                            address: address.address,
+                            addressId: address.addressId // used for lookup
+                    }}}
+                    className="tagging-tracker__address">
+                        <h4>{ address.address }</h4>
+                        <img src={ rightArrow } alt="right arrow" />
+                </Link>}));
+        }
+    }
+
     // focus
     useEffect(() => {
-        if (!Array.isArray(recentAddresses)) {
-            loadRecentAddresses();
-        }
-
         if (props.showAddressModal) {
             newAddressInput.current.focus();
         }
@@ -197,10 +223,17 @@ const Addresses = (props) => {
         }
     });
 
+    useEffect(() => {
+        if (props.searchedAddress.length) {
+            searchAddresses(props.searchedAddress);
+        } else {
+            loadRecentAddresses();
+        }
+    }, [props.searchedAddress]);
+
     return(
         <div className="tagging-tracker__addresses">
-            { renderRecentAddresses(recentAddresses) }
-            { searchAddresses(props.searchedAddres) }
+            { renderActiveAddresses() }
             { addNewAddressModal(props.showAddressModal) }
         </div>
     )
