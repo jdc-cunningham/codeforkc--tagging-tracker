@@ -41,6 +41,10 @@
 	flex-direction: column;
 	flex: 1;
 	width: 100%;
-	max-height: calc(100vh - 124px); // TODO: not good set by dynamic css js, useEffect assuming window.innerHeight works
-    overflow: hidden auto;
+	max-height: calc(100vh - 123px); // TODO: not good set by dynamic css js, useEffect assuming window.innerHeight works
+	overflow: hidden auto;
+	
+	&.increase-height {
+		max-height: calc(100vh - 76px);
+	}
 }

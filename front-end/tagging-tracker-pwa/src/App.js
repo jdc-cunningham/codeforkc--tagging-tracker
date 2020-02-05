@@ -80,6 +80,15 @@ const App = () => {
 		}
 	});
 
+	const checkRouteBasedClass = () => {
+		if (window.location.href.split('/')[3] === "add-tag") {
+			// this is because of a bad dom structure/state mgmt so bototmNavbar rendered as part of component
+			return " increase-height";
+		}
+
+		return "";
+	}
+
 	return (
 		<div className="tagging-tracker">
 			<Router>
@@ -93,7 +102,7 @@ const App = () => {
 						modifyOwnerInfo={modifyOwnerInfo}
 						modifyTagInfo={modifyTagInfo}
 						toggleModifyTagInfo={toggleModifyTagInfo} /> } />
-				<div className="tagging-tracker__body">
+				<div className={"tagging-tracker__body" + checkRouteBasedClass()}>
 					<Switch>
 						<Route
 							exact
@@ -165,7 +174,7 @@ const App = () => {
 					re-render while adding more images since the initial bridge between bottomNavbar
 					and AddTag body was causing the entire app to re-render */}
 				<Route component={ (props) =>
-					props.location.pathname !== "/add-tag" 
+					(props.location.pathname !== "/" && props.location.pathname !== "/add-tag")
 						? <BottomNavbar
 							{...props}
 						/>
