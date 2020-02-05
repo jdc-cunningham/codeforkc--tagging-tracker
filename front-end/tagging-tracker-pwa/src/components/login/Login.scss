@@ -16,6 +16,10 @@
 .tagging-tracker__login-fields {
     @include flex-ver-col;
 
+    input, img, button {
+        max-width: 300px;
+    }
+
     input {
         text-align: center;
         background-color: #f2f2f2;

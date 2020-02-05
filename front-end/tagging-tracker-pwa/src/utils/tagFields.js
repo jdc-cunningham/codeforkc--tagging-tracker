@@ -1,8 +1,8 @@
 export const tagInfoFields = {
-    "Date of picture:": { // TODO: hese should be date time with date pickers
+    "Date of picture:": { // TODO: these should be date time with date pickers
         type: "input"
     },
-    "Date of abatement:": { // TODO: hese should be date time with date pickers
+    "Date of abatement:": { // TODO: these should be date time with date pickers
         type: "input"
     },
     "Number of tags:": {

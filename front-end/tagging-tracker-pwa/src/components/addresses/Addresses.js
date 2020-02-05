@@ -1,34 +1,28 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Addresses.scss';
 import rightArrow from './../../assets/icons/svgs/chevron.svg';
-import axios from 'axios';
 
 const Addresses = (props) => {
     const newAddressInput = useRef(null);
     const cancelAddAddressBtn = useRef(null);
     const createAddressBtn = useRef(null);
     const [addAddressProcessing, setAddAddressProcessing] = useState(false);
-    const [recentAddresses, setRecentAddresses] = useState(null);
-    const [searching, setSearching] = useState(false);
+    const [recentAddresses, setRecentAddresses] = useState([]);
     const [activeAddresses, setActiveAddresses] = useState(null);
-    const history = useHistory();
     
     // this search may need to get restructured depending on what's available/important to search against
     // versus the obvious address field, but tag search is something based on the tag text
     // I will implement an address-first then tag search, this is not going to be as optimized/fast as plain SQL
-    // aslso I have not done any indexing this is just using regular 
+    // also I have not done any indexing this is just using regular tables/main parent
     // more info here:
     // https://dexie.org/docs/WhereClause/WhereClause, https://dexie.org/docs/Table/Table.filter(), https://dexie.org/docs/Table/Table.where()
     const searchAddresses = (searchStr) => {
         const offlineStorage = props.offlineStorage;
-        console.log('search');
 
         if (!offlineStorage) {
             return; // offline storage not ready yet
         }
-
-        setSearching(true);
 
         // the /string/ pattern is a regex, can't make one from concatenating plain strings
         const regex = new RegExp(searchStr, "i"); // case insensitive
@@ -51,14 +45,14 @@ const Addresses = (props) => {
                             };
                         });
                     });
+                } else {
+                    addressesFormatted = addresses.map((address) => {
+                        return {
+                            address: address.address,
+                            addressId: address.id
+                        };
+                    });
                 }
-
-                addressesFormatted = addresses.map((address) => {
-                    return {
-                        address: address.address,
-                        addressId: address.id
-                    };
-                });
 
 				setActiveAddresses(addressesFormatted);
             });
@@ -110,7 +104,7 @@ const Addresses = (props) => {
                     return true;
                 })
             ) {
-                setRecentAddresses(recentAddresses.concat({
+                setActiveAddresses(recentAddresses.concat({
                     address: addressStr,
                     addressId: newRowId
                 }));
@@ -143,7 +137,7 @@ const Addresses = (props) => {
 
     const loadRecentAddresses = () => {
         // returns last 10 addresses used by updated date sorted descending
-        if (!recentAddresses && props.offlineStorage) {
+        if (!recentAddresses.length && props.offlineStorage) {
 
             // sync code
             // axios.get('/get-recent-addresses')
@@ -160,7 +154,7 @@ const Addresses = (props) => {
 
             props.offlineStorage.addresses.toArray().then((addresses) => {
                 // format data
-                const addressesFormatted = addresses.map((address) => {
+                const addressesFormatted = addresses.splice(0, 5).map((address) => {
                     return {
                         address: address.address,
                         addressId: address.id
@@ -222,6 +216,12 @@ const Addresses = (props) => {
             setAddAddressProcessing(false);
         }
     });
+
+    useEffect(() => {
+        if (props.offlineStorage) {
+            loadRecentAddresses();
+        }
+    }, [props.offlineStorage]);
 
     useEffect(() => {
         if (props.searchedAddress.length) {
