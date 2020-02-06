@@ -7,14 +7,8 @@ import backArrow from './../../assets/icons/svgs/chevron-blue.svg'; // rotated b
 const Navbar = (props) => {
     const searchAddressInput = useRef(null);
 
-    // let searchInputTimeout;
-    console.log(props);
-
     const searchAddresses = (searchStr) => {
-        // clearTimeout(searchInputTimeout);
-        // searchInputTimeout = setTimeout(() => { // this timeout delays state set, meant to delay search not visual
         props.searchAddress(searchStr);
-        // }, 80);
     }
 
     const getNavTitle = (path, address) => {
@@ -46,7 +40,6 @@ const Navbar = (props) => {
     }
 
     const getBackPathname = (path) => {
-        console.log(path);
         if (path === "/tag-info" || path === "/owner-info" || path === "/edit-tags" || path === "/add-tag") {
             return "/view-address";
         } else {
@@ -138,7 +131,6 @@ const Navbar = (props) => {
 
     // focus
     useEffect(() => {
-        console.log('render nav', props.modifyOwnerInfo);
         if (!props.showAddressModal && props.location.pathname === "/addresses") {
             searchAddressInput.current.focus();
         }

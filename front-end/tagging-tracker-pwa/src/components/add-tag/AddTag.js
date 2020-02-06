@@ -4,6 +4,14 @@ import './AddTag.scss';
 import BottomNavbar from './../../components/bottom-navbar/BottomNavbar';
 import { getImagePreviewAspectRatioClass } from './../../utils/image';
 
+/**
+ * Brief explanation how this works it's kind of confusing since everything is a callback of a callback
+ * The bottomNavbar starts it off by setting fileUpload to true
+ * Then that clicks on fileInput which if a device has a camera prompts to open the camera or show file upload(pc)
+ * Then when the picture loads cameraCallback is called and the previewPhoto function is called
+ * That actually renders it on page, but I'm going to resize the photo with canvas so there is a small version for previews
+ * @param {*} props 
+ */
 const AddTag = (props) => {
     const fileInput = useRef(null);
 	const [fileUpload, triggerFileUpload] = useState(false);
@@ -44,6 +52,7 @@ const AddTag = (props) => {
     }
 
     const renderPhotoPreviews = () => {
+        console.log(loadedPhotos);
         return loadedPhotos.map((loadedPhoto, index) => {
             return (
                 <div style={{
@@ -55,26 +64,51 @@ const AddTag = (props) => {
         })
     }
 
-    
+    const getResizedImageHeight = (imageWidth, imageHeight, smallerWidth) => {
+        return Math.ceil(((imageHeight * smallerWidth) / imageWidth));
+      
+    }
     
     // the meta's collected in different stages, the file itself(previewPhoto) has the name, size
     // the image that loads has the width/height
     const setLoadedImageMeta = (loadedImage, loopIndex) => {
         const loadedPhotosClone = loadedPhotos;
 		loadedPhotos.filter((loadedPhoto, index) => {
-            if (loopIndex === index) {
+            if (loopIndex === index && typeof loadedPhotos[index].meta.width === "undefined") {
                 // I think this is bad, pretty much removing original state entirely/removing
                 // with new but achieves purpose of getting the rest of meta info
                 loadedPhotosClone[index].meta['width'] = loadedImage.width;
                 loadedPhotosClone[index].meta['height'] = loadedImage.height;
-                setLoadedPhotos(loadedPhotosClone);
+
+                console.log(loadedImage.width);
+                console.log(loadedImage.height);
+
+                // this is not working, callback doesn't fire probably image disappears before it can
+                // do callback
+                // // genrate thumbnail
+                // if (loadedImage.width > 150) {
+                //     // create canvas for resizing
+                //     // https://stackoverflow.com/questions/17583984/possible-to-resize-an-image-client-side-on-an-html-form-before-upload
+                //     const img = new Image();
+                //     console.log('try');
+                //     img.onLoad = () => {
+                //         console.log('on load');
+                //         img.src = loadedImage.src;
+                //         const canvas = document.createELement('canvas');
+                //         const ctx = canvas.getContext('2d');
+                //         canvas.width = 150;
+                //         canvas.height = getResizedImageHeight(img.width, img.height, 150);
+                //         ctx.drawImage(img,0,0,img.width,img.height,0,0,canvas.width,canvas.height);
+                //         loadedPhoto.thumbnail_src = canvas.toDataURL();
+                //         console.log(canvas.toDataURL());
+                //         setLoadedPhotos(loadedPhotosClone);
+                //     };
+                // } else {
+                    setLoadedPhotos(loadedPhotosClone);
+                // }
             }
         });
     };
-
-    useEffect(() => {
-        console.log('render at');
-    });
 
     useEffect(() => {
         if (fileUpload) {
@@ -92,7 +126,7 @@ const AddTag = (props) => {
         setSavingToDevice(true);
 
         const offlineStorage = props.offlineStorage;
-        const address = props.location.state;
+        const address = props.location.state;     
 
         // not going to add duplicate logic here because you can delete them somewhere else
         loadedPhotos.forEach((loadedPhoto, index) => {

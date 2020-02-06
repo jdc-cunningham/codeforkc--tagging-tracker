@@ -95,11 +95,11 @@ const TagInfo = (props) => {
             }
         });
 
-        console.log(mappedFieldValues);
+        // console.log(mappedFieldValues);
 
         // group the mapped fields, this is kind of band I'll admit hindsight
         const groupedTagInputFields = Object.keys(mappedFieldValues).forEach((inputPair) => {
-            console.log('>>>', inputPair);
+            // console.log('>>>', inputPair);
             
         });
 

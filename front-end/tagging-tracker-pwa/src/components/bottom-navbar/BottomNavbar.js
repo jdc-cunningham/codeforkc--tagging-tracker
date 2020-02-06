@@ -14,8 +14,6 @@ const BottomNavbar = (props) => {
     const cameraBtn = useRef(null);
     const uploadBtn = useRef(null);
 
-    console.log(props);
-
     const logout = () => {
         window.location.href = "/"; // token is wiped out as it's set by state not in storage
     }

@@ -1,10 +1,12 @@
 @import './../../assets/styles/flex-rules.scss';
 
 .tagging-tracker__add-tag {
-    @include flex-left-start;
-    flex: 1;
+    position: relative;
+    display: block;
     padding-left: 0.5rem;
     padding-top: 0.5rem;
+    width: 100%;
+    height: calc(100vh - 76px); // also a no-no
 
     #add-tag-file-input {
         display: none;
@@ -17,6 +19,7 @@
         border: 1px solid #aaa;
         background-repeat: no-repeat;
         background-position: center center;
+        float: left; // oof something's wrong with this layout
 
         &.portrait {
             background-size: 300px auto;

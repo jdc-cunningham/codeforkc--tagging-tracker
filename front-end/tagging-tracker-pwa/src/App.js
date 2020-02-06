@@ -48,7 +48,6 @@ const App = () => {
 	const updateAppOnlineState = (event) => {
 		const online = event.type === "online";
 		if (appOnline !== online) {
-			console.log('update online state', !appOnline);
 			setAppOnline(!appOnline);
 		}
 	}

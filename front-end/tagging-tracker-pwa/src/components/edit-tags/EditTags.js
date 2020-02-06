@@ -76,7 +76,6 @@ const EditTags = (props) => {
         
         if (Array.isArray(localImages)) {
             return localImages.map((image, index) => {
-                console.log(image);
                 return <div key={ index }
                     style={{
                         backgroundImage: `url(${image.src})`

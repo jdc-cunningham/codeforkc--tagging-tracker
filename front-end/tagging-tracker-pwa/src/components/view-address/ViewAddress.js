@@ -12,9 +12,7 @@ const ViewAddress = (props) => {
     }
 
     const renderTags = () => {
-        console.log(props);
         const db = props.offlineStorage;
-        console.log(props);
 
         if (db && !localImages) {
             db.open().then(function (db) {

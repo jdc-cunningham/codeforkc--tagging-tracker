@@ -88,13 +88,11 @@ const OwnerInfo = (props) => {
         const offlineStorage = props.offlineStorage;
 
         if (addressId && offlineStorage) {
-            console.log(offlineStorage);
             await offlineStorage.ownerInfo.get(addressId, (ownerInfo) => {
                 setOwnerInfo(ownerInfo);
             }).catch (function (err) {
                 // handle this failure correctly
                 alert('failed to open local storage');
-                console.log(err);
             });
         }
     }
@@ -113,7 +111,7 @@ const OwnerInfo = (props) => {
                     </div>
                     {
                         Object.keys(formField).map((subGroup, subGroupIndex) => {
-                            console.log(subGroup);
+                            // console.log(subGroup);
                             return (
                                 <div key={subGroupIndex} className="owner-info-form__sub-row">
                                     <span>{ formField[subGroup] }</span>
