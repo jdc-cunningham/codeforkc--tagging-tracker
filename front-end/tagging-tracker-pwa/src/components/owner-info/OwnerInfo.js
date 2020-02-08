@@ -117,7 +117,6 @@ const OwnerInfo = (props) => {
                     </div>
                     {
                         Object.keys(formField).map((subGroup, subGroupIndex) => {
-                            // console.log(subGroup);
                             return (
                                 <div key={subGroupIndex} className="owner-info-form__sub-row">
                                     <span>{ formField[subGroup] }</span>
@@ -138,7 +137,7 @@ const OwnerInfo = (props) => {
     // TODO: fix the communication between navbar save and saving here so saving isn't based on onblur
     // eg. get all fields at once one time, not every time you change inputs
     // useEffect(() => {
-    //     console.log(document.getElementById('target-me').value);
+    //     // get all fields
     // }, [props.modifyOwnerInfo]);
 
     return(

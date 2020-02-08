@@ -33,6 +33,7 @@ const AddTag = (props) => {
                 if (
                     await offlineStorage.tags.add({
                         addressId: address.addressId,
+                        fileName: loadedPhoto.meta.name,
                         src: loadedPhoto.src,
                         thumbnail_src: "",
                         meta: loadedPhoto.meta

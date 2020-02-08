@@ -65,10 +65,8 @@ const App = () => {
 		const db = new Dexie("LocalImageDatabase");
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
-			tags: "++,addressId,src,thumbnail_src,meta",
-			// ownerInfo: "++,addressId,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer",
+			tags: "++,fileName,addressId,src,thumbnail_src,meta", // this seems bad to use a fileName for a primary key
 			ownerInfo: "++,addressId,formData",
-			// tagInfo: "++,addressId,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement",
 			tagInfo: "++,addressId,formData"
 		});
 		setOfflineStorage(db);

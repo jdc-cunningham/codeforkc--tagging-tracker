@@ -52,7 +52,6 @@ const AddTag = (props) => {
     }
 
     const renderPhotoPreviews = () => {
-        console.log(loadedPhotos);
         return loadedPhotos.map((loadedPhoto, index) => {
             return (
                 <div style={{
@@ -80,9 +79,6 @@ const AddTag = (props) => {
                 loadedPhotosClone[index].meta['width'] = loadedImage.width;
                 loadedPhotosClone[index].meta['height'] = loadedImage.height;
 
-                console.log(loadedImage.width);
-                console.log(loadedImage.height);
-
                 // this is not working, callback doesn't fire probably image disappears before it can
                 // do callback
                 // // genrate thumbnail
@@ -90,9 +86,7 @@ const AddTag = (props) => {
                 //     // create canvas for resizing
                 //     // https://stackoverflow.com/questions/17583984/possible-to-resize-an-image-client-side-on-an-html-form-before-upload
                 //     const img = new Image();
-                //     console.log('try');
                 //     img.onLoad = () => {
-                //         console.log('on load');
                 //         img.src = loadedImage.src;
                 //         const canvas = document.createELement('canvas');
                 //         const ctx = canvas.getContext('2d');
@@ -100,7 +94,6 @@ const AddTag = (props) => {
                 //         canvas.height = getResizedImageHeight(img.width, img.height, 150);
                 //         ctx.drawImage(img,0,0,img.width,img.height,0,0,canvas.width,canvas.height);
                 //         loadedPhoto.thumbnail_src = canvas.toDataURL();
-                //         console.log(canvas.toDataURL());
                 //         setLoadedPhotos(loadedPhotosClone);
                 //     };
                 // } else {

@@ -21,10 +21,7 @@ export const getDateTime = (format = "") => {
 
     // current seconds
     let seconds = date_ob.getSeconds();
-
-    // prints date in YYYY-MM-DD format
-    // console.log(year + "-" + month + "-" + date);
-
+    
     if (format === "YYYY-MM-DD") {
         return year + "-" + month + "-" + date;
     }

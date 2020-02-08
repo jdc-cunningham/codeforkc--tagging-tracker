@@ -124,7 +124,6 @@ const Addresses = (props) => {
         // })
         // .then((res) => {
         //     if (res.status === 201) {
-        //         console.log('create', res);
         //     } else {
         //         setAddAddressProcessing(false);
         //     }

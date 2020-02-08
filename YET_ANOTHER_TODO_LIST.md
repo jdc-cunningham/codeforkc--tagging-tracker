@@ -37,3 +37,6 @@
 
 ### Demoable
 - [ ] hit sync on certain account, pulls all remote info and populates client app
+
+### Stuff to look into
+- [ ] state management of delete tag workflow eg. processing status(dithered) of delete button/failures
