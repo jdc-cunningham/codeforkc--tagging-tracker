@@ -94,7 +94,7 @@ const BottomNavbar = (props) => {
                     <Link
                         to={{ pathname: "/view-address", state: {
                             address: address.address,
-                            addressId: address.id // used for lookup
+                            addressId: address.addressId // used for lookup
                         }}}
                         className="bottom-navbar__btn quarter caps-blue small-font">
                         <span>Cancel</span>

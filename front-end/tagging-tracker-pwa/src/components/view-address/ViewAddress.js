@@ -13,6 +13,7 @@ const ViewAddress = (props) => {
 
     const renderTags = () => {
         const db = props.offlineStorage;
+        console.log(props);
 
         if (db && !localImages) {
             db.open().then(function (db) {
@@ -20,7 +21,7 @@ const ViewAddress = (props) => {
                     !tags.length
                         ? setLocalImages([])
                         :  db.tags
-                        .where("address_id").equals(props.location.state.addressId)
+                        .where("addressId").equals(props.location.state.addressId)
                         .toArray().then((tags) => {
                             setLocalImages(tags);
                         });

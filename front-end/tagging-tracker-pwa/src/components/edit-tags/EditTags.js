@@ -26,7 +26,7 @@ const EditTags = (props) => {
                 })
             ) {
                 offlineStorage.tags
-                    .where("address_id").equals(props.location.state.addressId)
+                    .where("addressId").equals(props.location.state.addressId)
                     .toArray().then((tags) => {
                         setLocalImages(tags);
                     });
@@ -63,7 +63,7 @@ const EditTags = (props) => {
                     !tags.length
                         ? setLocalImages([])
                         :  offlineStorage.tags
-                        .where("address_id").equals(props.location.state.addressId)
+                        .where("addressId").equals(props.location.state.addressId)
                         .toArray().then((tags) => {
                             setLocalImages(tags);
                         });
@@ -80,7 +80,7 @@ const EditTags = (props) => {
                     style={{
                         backgroundImage: `url(${image.src})`
                     }} alt="address thumbnail"
-                    onClick={ () => { showDeletePrompt(image.address_id) } }
+                    onClick={ () => { showDeletePrompt(image.addressId) } }
                     className={ "address__tag-image delete " + getImagePreviewAspectRatioClass(localImages[index]) }>
                     <div style={{ backgroundImage: `url(${closeIcon})` }} className="tagging-tracker__edit-tags-close-btn"></div>
                 </div>

@@ -133,7 +133,7 @@ const AddTag = (props) => {
             offlineStorage.transaction('rw', offlineStorage.tags, async() => {
                 if (
                     await offlineStorage.tags.add({
-                        address_id: address.addressId,
+                        addressId: address.addressId,
                         src: loadedPhoto.src,
                         thumbnail_src: "",
                         meta: loadedPhoto.meta

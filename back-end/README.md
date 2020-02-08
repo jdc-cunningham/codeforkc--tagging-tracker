@@ -28,7 +28,7 @@ aws_secret_access_key = <YOUR_SECRET_ACCESS_KEY>
 
 The node `aws-sdk` package will try to read/find that file. I just made that file from VS code, didn't even bother with the AWS CLI stuff.
 
-### References
+## References
 #### AWS S3 - assumes you have access to a bucket
 [Creating IAM user](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/) - getting access-secret key(I used console eg. web interface)
 [JS SDK demo code](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-creating-buckets.html) - like upload/list buckets/etc...
@@ -41,3 +41,6 @@ Reading on this
 * [link 1](https://stackoverflow.com/questions/44133536/is-it-safe-to-store-a-jwt-in-localstorage-with-reactjs)
 * [link 2](https://stackoverflow.com/questions/20504846/why-is-it-common-to-put-csrf-prevention-tokens-in-cookies)
 * [link 3](https://security.stackexchange.com/questions/179498/is-it-safe-to-store-a-jwt-in-sessionstorage)
+
+## Deployment
+You still need to install `MySQL`, which I used `MariaDB` on `Debian 10`. I believe the node `mysql2` client is just that, it's not the server itself, so you have to install MySQL on the remote server and create auth/set credentials in `.env` file. Make sure your `localhost` `MySQL` user either has all privileges or after creating a specific user for this app, to grant privilege to the database/tables created.

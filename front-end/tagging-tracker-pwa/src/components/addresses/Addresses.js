@@ -38,10 +38,10 @@ const Addresses = (props) => {
                         addressesFormatted = tags.map((tag) => {
                             return {
                                 // not sure if this will work
-                                address: offlineStorage.addresses.where("id").equals(tag.address_id).toArray().then((addresses) => {
+                                address: offlineStorage.addresses.where("id").equals(tag.addressId).toArray().then((addresses) => {
                                         return addresses[0].id
                                     }),
-                                addressId: tag.address_id
+                                addressId: tag.addressId
                             };
                         });
                     });

@@ -27,7 +27,7 @@ const App = () => {
 	const [offlineStorage, setOfflineStorage] = useState(null);
 	const [modifyOwnerInfo, toggleModifyOwnerInfo] = useState(false);
 	const [modifyTagInfo, toggleModifyTagInfo] = useState(false);
-	const [bodyClass, setBodyClass] = useState("tagging-tracker__body");
+	const [bodyClass, setBodyClass] = useState("tagging-tracker__body"); // this will be removed when UI is updated, it's for AddTag BottomNavbar
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -65,9 +65,10 @@ const App = () => {
 		const db = new Dexie("LocalImageDatabase");
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
-			tags: "++id,address_id,src,thumbnail_src,meta",
-			ownerInfo: "++,address_id,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer",
-			tagInfo: "++,address_id,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement"
+			tags: "++,addressId,src,thumbnail_src,meta",
+			// ownerInfo: "++,addressId,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer",
+			ownerInfo: "++,addressId,formData",
+			tagInfo: "++,addressId,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement"
 		});
 		setOfflineStorage(db);
 	};

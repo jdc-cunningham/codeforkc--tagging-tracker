@@ -5,6 +5,8 @@ const OwnerInfo = (props) => {
     const [ownerInfo, setOwnerInfo] = useState(null);
     // TODO: this will need to be reworked the striping in particular, it's just coincidence
     // it works regarding the sub-group variant
+    // this is mapped to match the rendered input count regarding refs
+    // the name:value assigning comes from fieldKeys
     const formLabels = [
         "Name",
         "Phone",
@@ -39,13 +41,14 @@ const OwnerInfo = (props) => {
         // these match Dexie store
         const offlineStorage = props.offlineStorage;
         const ownerInfoValues = {
-            addressId: props.location.state.addressId
+            addressId: props.location.state.addressId,
+            formData: {}
         };
 
         if (inputValue) {
             inputElements.current.forEach((input, index) => {
                 // this is terrible should have been part of way the content is generated so it's set in the input names
-                ownerInfoValues[fieldKeys[index]] = input.current.value;
+                ownerInfoValues.formData[fieldKeys[index]] = input.current.value;
             });
         }
 
@@ -57,15 +60,17 @@ const OwnerInfo = (props) => {
     
                 if (
                     await offlineStorage.ownerInfo.put({
-                        address_id: ownerInfoValues.addressId,
-                        name: ownerInfoValues.name,
-                        phone: ownerInfoValues.phone,
-                        email: ownerInfoValues.email,
-                        tenantName: ownerInfoValues.tenantName,
-                        tenantPhoneNumber: ownerInfoValues.tenantPhoneNumber,
-                        waiverCompleted: ownerInfoValues.waiverCompleted,
-                        needFollowUp: ownerInfoValues.needFollowUp,
-                        buildingSurveyQuestionAnswer: ownerInfoValues.buildingSurveyQuestionAnswer
+                        addressId: ownerInfoValues.addressId,
+                        formData: {
+                            name: ownerInfoValues.formData.name,
+                            phone: ownerInfoValues.formData.phone,
+                            email: ownerInfoValues.formData.email,
+                            tenantName: ownerInfoValues.formData.tenantName,
+                            tenantPhoneNumber: ownerInfoValues.formData.tenantPhoneNumber,
+                            waiverCompleted: ownerInfoValues.formData.waiverCompleted,
+                            needFollowUp: ownerInfoValues.formData.needFollowUp,
+                            buildingSurveyQuestionAnswer: ownerInfoValues.formData.buildingSurveyQuestionAnswer
+                        }
                     }, ownerInfoValues.addressId).then((insertedId) => {
                         newRowId = insertedId;
                         return true;
@@ -74,11 +79,13 @@ const OwnerInfo = (props) => {
                     updateDone = true;
                     setOwnerInfo(ownerInfoValues);
                 } else {
-                    alert('Failed to update owner information 1');
+                    alert('Failed to update owner information');
+                    console.log('else');
                 }
             })
             .catch(e => {
-                alert('Failed to update owner information', e);
+                alert('Failed to update owner information');
+                console.log(e);
             });
         }
     }
@@ -103,7 +110,7 @@ const OwnerInfo = (props) => {
             return (isString
                 ? <div key={index} className="owner-info-form__row">
                         <span>{ formField }:</span>
-                        <input defaultValue={ ownerInfo ? ownerInfo[fieldKeys[index]] : "" } onBlur={ (e) => updateInfo(e.target.value) } ref={inputElements.current[index]} type="text" readOnly={ props.modifyOwnerInfo ? false : true } />
+                        <input defaultValue={ ownerInfo ? ownerInfo.formData[fieldKeys[index]] : "" } onBlur={ (e) => updateInfo(e.target.value) } ref={inputElements.current[index]} type="text" readOnly={ props.modifyOwnerInfo ? false : true } />
                     </div>
                 : <div className="owner-info-form__row group" key={index}>
                     <div className="owner-info-form__row white">
@@ -115,7 +122,7 @@ const OwnerInfo = (props) => {
                             return (
                                 <div key={subGroupIndex} className="owner-info-form__sub-row">
                                     <span>{ formField[subGroup] }</span>
-                                    <input defaultValue={ ownerInfo ? ownerInfo[fieldKeys[index]] : "" } id="target-me" onChange={ updateInfo } ref={inputElements.current[index]} type="text" className="full" readOnly={ props.modifyOwnerInfo ? false : true } />
+                                    <input defaultValue={ ownerInfo ? ownerInfo.formData[fieldKeys[index]] : "" } id="target-me" onChange={ updateInfo } ref={inputElements.current[index]} type="text" className="full" readOnly={ props.modifyOwnerInfo ? false : true } />
                                 </div>
                             );
                         })

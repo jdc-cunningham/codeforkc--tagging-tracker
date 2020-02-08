@@ -111,7 +111,7 @@ const TagInfo = (props) => {
     
             //     if (
             //         await offlineStorage.ownerInfo.put({
-            //             address_id: ownerInfoValues.addressId,
+            //             addressId: ownerInfoValues.addressId,
             //             dateOfPicture: ,
             //             dateOfAbatement: ,
             //             numberOfTags: ,

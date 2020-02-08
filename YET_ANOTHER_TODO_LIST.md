@@ -1,4 +1,7 @@
 ### Front end
+- [ ] update schema so forms are not based on columns in tables
+    - thought is to use "serialization" or at least match by `name:value` pairs at least
+    - then use the dynamic form generation by an object structure and map the values
 - [ ] sync button
     - [ ] tie in with online/offline events
     - [ ] write function to sync stuff after deciding on master/source of truth
@@ -27,3 +30,9 @@
 ### Misc
 - [ ] test on iphone somehow, browserstack is expensive af
     - use lighthouse to confirm can pin to Apple devices
+- [ ] split the repo
+    - after deploying by git I realized how you should not have the front/back end together in the same repo
+- [ ] look into [persistence](https://dexie.org/docs/StorageManager) regarding being able to gauge available storage. Apparently in Chrome it's 50% of user's storage which should be enough.
+
+### Demoable
+- [ ] hit sync on certain account, pulls all remote info and populates client app
