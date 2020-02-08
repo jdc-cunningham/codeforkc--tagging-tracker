@@ -28,6 +28,7 @@ const App = () => {
 	const [modifyOwnerInfo, toggleModifyOwnerInfo] = useState(false);
 	const [modifyTagInfo, toggleModifyTagInfo] = useState(false);
 	const [bodyClass, setBodyClass] = useState("tagging-tracker__body"); // this will be removed when UI is updated, it's for AddTag BottomNavbar
+	const [userId, setUserId] = useState(null);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -134,6 +135,9 @@ const App = () => {
 										{...props}
 										offlineStorage={offlineStorage}
 										setBodyClass={setBodyClass}
+										userId={userId}
+										token={token}
+										appOnline={appOnline}
 									/>
 									: <Redirect to="/"/> }/>
 							}/>
@@ -168,7 +172,7 @@ const App = () => {
 					re-render while adding more images since the initial bridge between bottomNavbar
 					and AddTag body was causing the entire app to re-render */}
 				<Route component={ (props) =>
-					(props.location.pathname !== "/add-tag")
+					(props.location.pathname !== "/login" && props.location.pathname !== "/add-tag")
 						? <BottomNavbar
 							{...props}
 							appOnline={appOnline}

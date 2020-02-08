@@ -44,3 +44,5 @@ Reading on this
 
 ## Deployment
 You still need to install `MySQL`, which I used `MariaDB` on `Debian 10`. I believe the node `mysql2` client is just that, it's not the server itself, so you have to install MySQL on the remote server and create auth/set credentials in `.env` file. Make sure your `localhost` `MySQL` user either has all privileges or after creating a specific user for this app, to grant privilege to the database/tables created.
+
+You will also need to run the private `createUser` function in `/utils/users` since there isn't a registration aspect to this app yet. You can just run `createUser('username','pass')` while running the node app locally.

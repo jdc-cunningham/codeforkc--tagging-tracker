@@ -36,7 +36,7 @@ connection.query('USE tagging_tracker', (error, results, fields) => {
 connection.query(
     'CREATE TABLE `users` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
-        ' `user` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
+        ' `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
         ' `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
         ' `active` tinyint(4) NOT NULL,' +
         ' PRIMARY KEY (`id`)' +

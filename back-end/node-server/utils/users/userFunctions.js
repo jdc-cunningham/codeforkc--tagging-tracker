@@ -1,9 +1,10 @@
+const { pool } = require('./../../utils/db/dbConnect');
 const bcrypt = require('bcrypt');
 const saltRounds = 15;
 
 // internal method currently, need middleware if public
-const createUser = (pool, username, password) => {
-    if (!pool || !username || !password) {
+const createUser = (username, password) => {
+    if (!username || !password) {
         return false;
     }
 
@@ -45,7 +46,7 @@ const createUser = (pool, username, password) => {
 }
 
 // internal method currently, need middleware if public
-const deleteUser = (pool, userId) => {
+const deleteUser = (userId) => {
     pool.query(
         `DELETE FROM users WHERE id = ?`,
         [userId],
@@ -59,7 +60,11 @@ const deleteUser = (pool, userId) => {
     );
 }
 
-module.exports = {
-    createUser,
-    deleteUser
-};
+// can create users as needed ex.
+// createUser('test', 'test');
+
+// internal for now
+// module.exports = {
+//     createUser,
+//     deleteUser
+// };

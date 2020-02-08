@@ -12,8 +12,6 @@ const Login = (props) => {
     const [loginProcessing, setLoginProcessing] = useState(false);
 
     const login = () => {
-        history.push("/addresses"); // this is temporary bypass of auth
-        return;
         const username = usernameInput.current.value;
         const password = passwordInput.current.value;
 

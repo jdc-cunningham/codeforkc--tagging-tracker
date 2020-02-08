@@ -30,16 +30,31 @@ const BottomNavbar = (props) => {
 
     // this probably shouldn't be here but just an initializer
     const sync = () => {
-        if (!props.appOnline) {
+        if (!props.appOnline) { // shouldn't be needed disabled buttons
             alert('Unable to sync, you are offline');
+            return;
         }
 
         if (!props.token) {
-
+            alert('Please login to sync');
+            history.push("/login");
+            return;
         }
     }
 
     const uploadImages = () => {
+        console.log(props);
+        if (!props.appOnline) {
+            alert('Unable to upload, you are offline');
+            return;
+        }
+
+        if (!props.token) {
+            alert('Please login to upload');
+            history.push("/login");
+            return;
+        }
+
         props.triggerFileUpload(true);
     }
 
@@ -50,7 +65,8 @@ const BottomNavbar = (props) => {
             case "/":
             case "/addresses":
                 return <>
-                    <button onClick= { sync } ref={ syncBtn } className={`bottom-navbar__btn half sync ${props.appOnline ? "" : "offline"}`} type="button">
+                    <button onClick= { sync } ref={ syncBtn } className="bottom-navbar__btn half sync"
+                    type="button" disabled={ props.appOnline ? false : true }>
                         <img src={ syncIcon } alt="sync button" />
                         <span>Sync</span>
                     </button>

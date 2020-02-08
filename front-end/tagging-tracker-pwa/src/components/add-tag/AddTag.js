@@ -63,14 +63,12 @@ const AddTag = (props) => {
             ? process.env.REACT_APP_API_BASE_LOCAL
             : process.env.REACT_APP_API_BASE;
 		const postUrl = baseApiPath + '/upload-tag';
-        const formData = new FormData();
-
-        console.log(loadedPhotos[0].src);
-
-        formData.append("images", loadedPhotos[0].src);
+        const userId = props.userId;
         
 		axios.post(postUrl, {
-            images: loadedPhotos
+            headers: { Authorization: `Bearer ${props.token}` },
+            images: loadedPhotos,
+            userId
 		}).then((res) => {
             console.log(res);
             if (res.status === 200) {
@@ -185,6 +183,8 @@ const AddTag = (props) => {
                 saveToDevice={saveToDevice}
                 savingToDevice={savingToDevice}
                 loadedPhotos={loadedPhotos}
+                appOnline={props.appOnline}
+                token={props.token}
             />
         </>
     );
