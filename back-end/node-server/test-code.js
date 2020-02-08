@@ -21,6 +21,7 @@ app.use(function(req, res, next) {
 app.use(fileUpload());
 
 app.post('/upload-tag', (req, res) => {
+    console.log(req);
     console.log(req.files);
     // this is super ugly but just testing
     const uploadParams = {Bucket: bucketName, Key: '', Body: ''};

@@ -99,6 +99,7 @@ const Navbar = (props) => {
 
     const renderNavbar = (routeLocation) => {
         switch(routeLocation.pathname) {
+            case '/':
             case '/addresses':
                 return <>
                     <div className="tagging-tracker__navbar-top addresses">

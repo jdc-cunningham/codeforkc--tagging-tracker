@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './BottomNavbar.scss';
 
-import sync from './../../assets/icons/svgs/upload.svg';
+import syncIcon from './../../assets/icons/svgs/upload.svg';
 import logoutIcon from './../../assets/icons/svgs/switch.svg';
 import property from './../../assets/icons/svgs/property.svg';
 import textDocument from './../../assets/icons/svgs/text-document.svg';
@@ -13,6 +13,7 @@ const BottomNavbar = (props) => {
     const logoutBtn = useRef(null);
     const cameraBtn = useRef(null);
     const uploadBtn = useRef(null);
+    const history = useHistory();
 
     const logout = () => {
         window.location.href = "/"; // token is wiped out as it's set by state not in storage
@@ -24,6 +25,21 @@ const BottomNavbar = (props) => {
 
     // propogates upward click intent to then be received by AddTag body
     const openCamera = () => {
+        props.triggerLoadCamera(true);
+    }
+
+    // this probably shouldn't be here but just an initializer
+    const sync = () => {
+        if (!props.appOnline) {
+            alert('Unable to sync, you are offline');
+        }
+
+        if (!props.token) {
+
+        }
+    }
+
+    const uploadImages = () => {
         props.triggerFileUpload(true);
     }
 
@@ -31,13 +47,11 @@ const BottomNavbar = (props) => {
         const address = props.location.state;
 
         switch(routeLocation.pathname) {
-            case '/huh':
-                return <>
-                </>;
+            case "/":
             case "/addresses":
                 return <>
-                    <button ref={ syncBtn } className="bottom-navbar__btn half sync" type="button">
-                        <img src={ sync } alt="sync button" />
+                    <button onClick= { sync } ref={ syncBtn } className={`bottom-navbar__btn half sync ${props.appOnline ? "" : "offline"}`} type="button">
+                        <img src={ syncIcon } alt="sync button" />
                         <span>Sync</span>
                     </button>
                     <button ref={ logoutBtn } onClick={ logout } className="bottom-navbar__btn half" type="button">
@@ -81,7 +95,7 @@ const BottomNavbar = (props) => {
                     <button ref={ cameraBtn } onClick={ openCamera } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
                         <span>Use Camera</span>
                     </button>
-                    <button ref={ uploadBtn } className="bottom-navbar__btn quarter caps-blue border small-font" type="button">
+                    <button ref={ uploadBtn } onClick={ uploadImages } className="bottom-navbar__btn quarter caps-blue border small-font" type="button" disabled={ props.loadedPhotos.length ? false : true }>
                         <span>Upload</span>
                     </button>
                     <button

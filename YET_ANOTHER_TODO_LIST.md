@@ -40,3 +40,4 @@
 
 ### Stuff to look into
 - [ ] state management of delete tag workflow eg. processing status(dithered) of delete button/failures
+- [ ] the logout button doesn't really make sense as you're never really "logged out" regarding being able to use the app, you need to login to sync as the remote side will deny your requests without a valid token

@@ -19,8 +19,8 @@ const EditTags = (props) => {
         history.push("/addresses");
     }
 
-    const deleteImage = async (addressId, fileName) => {   
-        await offlineStorage.transaction('rw', offlineStorage.tags, () => {
+    const deleteImage = (addressId, fileName) => {   
+        offlineStorage.transaction('rw', offlineStorage.tags, () => {
             if (
                 offlineStorage.tags.where("addressId").equals(addressId).toArray()
                     .then((images) => {

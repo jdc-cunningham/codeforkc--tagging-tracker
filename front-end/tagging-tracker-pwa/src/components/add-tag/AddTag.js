@@ -3,10 +3,11 @@ import { useHistory } from 'react-router-dom';
 import './AddTag.scss';
 import BottomNavbar from './../../components/bottom-navbar/BottomNavbar';
 import { getImagePreviewAspectRatioClass } from './../../utils/image';
+import axios from 'axios';
 
 /**
  * Brief explanation how this works it's kind of confusing since everything is a callback of a callback
- * The bottomNavbar starts it off by setting fileUpload to true
+ * The bottomNavbar starts it off by setting loadCamera to true
  * Then that clicks on fileInput which if a device has a camera prompts to open the camera or show file upload(pc)
  * Then when the fileInput changes, cameraCallback is called and the previewPhoto function is called
  * That actually renders it on page, then when the rendered image load, it has a callback to update image meta eg. width/height
@@ -16,7 +17,8 @@ import { getImagePreviewAspectRatioClass } from './../../utils/image';
  */
 const AddTag = (props) => {
     const fileInput = useRef(null);
-	const [fileUpload, triggerFileUpload] = useState(false);
+    const [loadCamera, triggerLoadCamera] = useState(false);
+    const [fileUpload, triggerFileUpload] = useState(false);
     const [loadedPhotos, setLoadedPhotos] = useState([]);
     const [savingToDevice, setSavingToDevice] = useState(false);
 
@@ -56,6 +58,34 @@ const AddTag = (props) => {
         });
     }
 
+    const uploadImages = () => {
+        const baseApiPath = window.location.href.indexOf('localhost') !== -1
+            ? process.env.REACT_APP_API_BASE_LOCAL
+            : process.env.REACT_APP_API_BASE;
+		const postUrl = baseApiPath + '/upload-tag';
+        const formData = new FormData();
+
+        console.log(loadedPhotos[0].src);
+
+        formData.append("images", loadedPhotos[0].src);
+        
+		axios.post(postUrl, {
+            images: loadedPhotos
+		}).then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+                saveToDevice(); // because don't want to bridge remote sync from upload here
+            } else {
+                alert('Failed to upload');
+            }
+            triggerFileUpload(false);
+		})
+		.catch((err) => {
+			console.log('err', err);
+            triggerFileUpload(false);
+		});
+	}
+
     // Step 2: when file input changes, check if file/photo selected
     const cameraCallback = (fileInput) => {
         if (fileInput.files.length) {
@@ -73,6 +103,7 @@ const AddTag = (props) => {
         reader.onload = function (e) {
             setLoadedPhotos(loadedPhotos.concat({
                 addressId: props.location.state.addressId,
+                fileName: file.name,
                 src: e.target.result,
                 thumbanil_src: "",
                 meta: {
@@ -114,17 +145,25 @@ const AddTag = (props) => {
 
     // Step 1: Click on file input when clicking on Use Camera button
     useEffect(() => {
-        if (fileUpload) {
+        if (loadCamera) {
             fileInput.current.click();
+        } else {
+            triggerLoadCamera(false);
+        }
+    }, [loadCamera]);
+
+    // callback to toggle/make Use Camera useable again
+    useEffect(() => {
+        triggerLoadCamera(false);
+    }, [loadedPhotos]);
+
+    useEffect(() => {
+        if (fileUpload) {
+            uploadImages();
         } else {
             triggerFileUpload(false);
         }
     }, [fileUpload]);
-
-    // callback to toggle/make Use Camera useable again
-    useEffect(() => {
-        triggerFileUpload(false);
-    }, [loadedPhotos]);
 
     // TODO this is not staying eg. ugly flash
     useEffect(() => {
@@ -139,10 +178,13 @@ const AddTag = (props) => {
             </div>
             <BottomNavbar
                 {...props}
+                triggerLoadCamera={triggerLoadCamera}
+                loadCamera={loadCamera}
                 triggerFileUpload={triggerFileUpload}
                 fileUpload={fileUpload}
                 saveToDevice={saveToDevice}
                 savingToDevice={savingToDevice}
+                loadedPhotos={loadedPhotos}
             />
         </>
     );

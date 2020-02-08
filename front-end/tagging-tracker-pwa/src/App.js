@@ -65,7 +65,7 @@ const App = () => {
 		const db = new Dexie("LocalImageDatabase");
 		db.version(1).stores({
 			addresses: "++id,address,lat,lng,created,updated",
-			tags: "++,fileName,addressId,src,thumbnail_src,meta", // this seems bad to use a fileName for a primary key
+			tags: "++,fileName,addressId,src,thumbnail_src,meta",
 			ownerInfo: "++,addressId,formData",
 			tagInfo: "++,addressId,formData"
 		});
@@ -97,26 +97,12 @@ const App = () => {
 					<Switch>
 						<Route
 							exact
-							path="/"
+							path="/login"
 							component={ (props) =>
-								false // token
+								token
 									? <Redirect to="/addresses" />
 									: <Login {...props} updateToken={updateToken} token={token} />
 						} />
-						<Route
-							path="/addresses"
-							component={ (props) =>
-								true 
-									? <Addresses {...props}
-										searchedAddress={searchedAddress}
-										setShowAddressModal={setShowAddressModal}
-										showAddressModal={showAddressModal}
-										toggleAddressModal={toggleAddressModal}
-										clearSearchAddress={clearSearchedAddress}
-										token={token}
-										offlineStorage={offlineStorage}
-										getDateTime={getDateTime} />
-									: <Redirect to="/"/> } />
 						<Route
 							path={"/view-address"}
 							component={ (props) =>
@@ -159,6 +145,20 @@ const App = () => {
 										{...props}
 										offlineStorage={offlineStorage} />
 									: <Redirect to="/"/> }/>
+						<Route
+							path={["/","/addresses"]}
+							component={ (props) =>
+								true 
+									? <Addresses {...props}
+										searchedAddress={searchedAddress}
+										setShowAddressModal={setShowAddressModal}
+										showAddressModal={showAddressModal}
+										toggleAddressModal={toggleAddressModal}
+										clearSearchAddress={clearSearchedAddress}
+										token={token}
+										offlineStorage={offlineStorage}
+										getDateTime={getDateTime} />
+									: <Redirect to="/"/> } />
 						<Route>
 							<Page404 />
 						</Route>
@@ -168,9 +168,11 @@ const App = () => {
 					re-render while adding more images since the initial bridge between bottomNavbar
 					and AddTag body was causing the entire app to re-render */}
 				<Route component={ (props) =>
-					(props.location.pathname !== "/" && props.location.pathname !== "/add-tag")
+					(props.location.pathname !== "/add-tag")
 						? <BottomNavbar
 							{...props}
+							appOnline={appOnline}
+							token={token}
 						/>
 						: null
 					} />

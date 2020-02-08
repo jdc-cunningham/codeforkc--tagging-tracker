@@ -34,6 +34,12 @@
         padding: 1em 2rem;
         text-decoration: none;
 
+        &.sync {
+            &.offline {
+                opacity: 0.6;
+            }
+        }
+
         &.active {
             border: 1px solid #383838;
             border-radius: 3px;
