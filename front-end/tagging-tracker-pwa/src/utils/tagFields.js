@@ -1,9 +1,9 @@
 export const tagInfoFields = {
     "Date of picture:": { // TODO: these should be date time with date pickers
-        type: "input"
+        type: "date"
     },
     "Date of abatement:": { // TODO: these should be date time with date pickers
-        type: "input"
+        type: "date"
     },
     "Number of tags:": {
         type: "number"
@@ -65,8 +65,11 @@ export const tagInfoFields = {
             wood: "Bare Wood",
             glass: "Glass",
             painted: "Painted",
-            others: "type in here"
+            others: "other"
         }
+    },
+    "Surface other:": {
+        type: "input"
     },
     "Need other code enforcement?": {
         type: "checkbox",
@@ -76,7 +79,10 @@ export const tagInfoFields = {
             weeds: "Weeds",
             trash: "Glass",
             illegalDumping: "Illegal dumping",
-            others: "type in here"
+            others: "other"
         }
+    },
+    "Other code enforcement:": {
+        type: "input"
     }
 };

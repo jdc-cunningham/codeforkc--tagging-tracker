@@ -68,7 +68,8 @@ const App = () => {
 			tags: "++,addressId,src,thumbnail_src,meta",
 			// ownerInfo: "++,addressId,name,phone,email,tenantName,tenantPhoneNumber,waiverCompleted,needFollowUp,buildingSurveyQuestionAnswer",
 			ownerInfo: "++,addressId,formData",
-			tagInfo: "++,addressId,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement"
+			// tagInfo: "++,addressId,dateOfPicture,dateOfAbatement,numberOfTags,tagText,smallTagText,squareFootageCovered,racialOrHateTone,gangRelated,crossedOutTag,vacantProperty,landBankProperty,surface,needOtherCodeEnforcement",
+			tagInfo: "++,addressId,formData"
 		});
 		setOfflineStorage(db);
 	};
@@ -137,7 +138,9 @@ const App = () => {
 							path="/tag-info"
 							component={ (props) =>
 								true
-									? <TagInfo {...props} modifyTagInfo={modifyTagInfo} />
+									? <TagInfo {...props}
+										modifyTagInfo={modifyTagInfo}
+										offlineStorage={offlineStorage} />
 									: <Redirect to="/"/> }/>
 						<Route
 							path="/add-tag"

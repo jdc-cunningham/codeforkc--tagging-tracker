@@ -1,4 +1,4 @@
-import React, { createRef, useState, useRef } from 'react';
+import React, { createRef, useState, useRef, useEffect } from 'react';
 import './TagInfo.scss';
 
 import { getDateTime } from './../../utils/date';
@@ -6,8 +6,20 @@ import { tagInfoFields } from './../../utils/tagFields';
 
 // TODO: there is this functionality of "Others: type here" but that will take some work to make a dynamic input field
 
+/**
+ * So this is probably pretty confusing I get that, I was trying to make dynamic forms which it does work pretty well but has verbose code
+ * The field types and values are defined in a util file called tagFields.js
+ * The tagInfoFieldKeys below are used to map the refs so the inputs can be selected(for getting current value)
+ * The nameValueMap is used to map the values for render
+ * The main things to keep in mind is your tagFields.js structure has to match the structures here
+ * Note the option-#-# when nested values are inside an input group eg. radio/checkbox you increment the sub group vs. incrementing a new level
+ * OwnerInfo is built similarly but it's much simpler since it has no depth and just text input
+ * @param {Object} props 
+ */
 const TagInfo = (props) => {
     const [tagInfo, setTagInfo] = useState(null);
+
+    // these have to match the order of the keys in tagFields.js
     const tagInfoFieldKeys = {
         "Date of picture:": "", // TODO - change to type date
         "Date of abatement:": "", // TODO - change to type date, picker is extra but format guarding would be good
@@ -21,7 +33,9 @@ const TagInfo = (props) => {
         "Vacant property": "",
         "Land bank property": "",
         "Surface:": "",
-        "Need other code enforcement?": ""
+        "Surface other:": "",
+        "Need other code enforcement?": "",
+        "Other code enforcement:": ""
     }
 
     // this is really bad, just a result of poor planning and brain dead
@@ -54,12 +68,14 @@ const TagInfo = (props) => {
         "option-11-3": "surface",
         "option-11-4": "surface",
         "option-11-5": "surface",
+        "option-11-6": "otherSurface",
         "option-12-0": "needOtherCodeEnforcement",
         "option-12-1": "needOtherCodeEnforcement",
         "option-12-2": "needOtherCodeEnforcement",
         "option-12-3": "needOtherCodeEnforcement",
         "option-12-4": "needOtherCodeEnforcement",
-        "option-12-5": "needOtherCodeEnforcement"
+        "option-12-5": "needOtherCodeEnforcement",
+        "option-12-6": "otherCodeEnforcement"
     };
 
     // damn this is brutal but it works
@@ -67,7 +83,7 @@ const TagInfo = (props) => {
         // these are manually mapped based on tagFields.js not great, mainly for the nested inputs eg. radio/checkbox
         (fieldKey) => {
             const fieldType = tagInfoFields[fieldKey].type;
-            if (fieldType === "input" || fieldType === "number") {
+            if (fieldType === "input" || fieldType === "number" || fieldType === "date") {
                 return createRef();
             } else {
                 const subFields = tagInfoFields[fieldKey].options;
@@ -80,65 +96,53 @@ const TagInfo = (props) => {
             }
         }
     ));
+
     let updateDone = true; // bad
 
     const updateTagInfo = () => {
+        const offlineStorage = props.offlineStorage;
         const mappedFieldValues = {}
 
-        tagInfoInputElements.current.map((element) => {
+        tagInfoInputElements.current.forEach((element) => {
+            let elementType = "";
+
+            if (typeof element.current !== "undefined" && typeof element.current.type !== "undefined") {
+                elementType = element.current.type;
+            }
+
             if (typeof element.subRefs !== "undefined" && Array.isArray(element.subRefs)) {
-                element.subRefs.map((subElement) => {
+                element.subRefs.forEach((subElement) => {
                     mappedFieldValues[subElement.current.name] = subElement.current.checked;
                 });
+            } else if (elementType === "text" || elementType === "number" || elementType === "date") {
+                mappedFieldValues[element.current.name] = element.current.value;
             } else {
                 mappedFieldValues[element.current.name] = element.current.checked;
             }
         });
 
-        // console.log(mappedFieldValues);
-
-        // group the mapped fields, this is kind of band I'll admit hindsight
-        const groupedTagInputFields = Object.keys(mappedFieldValues).forEach((inputPair) => {
-            // console.log('>>>', inputPair);
-            
-        });
-
         if (updateDone) {
             updateDone = false;
         
-            // offlineStorage.transaction('rw', offlineStorage.tagInfo, async() => {
-            //     let newRowId;
-    
-            //     if (
-            //         await offlineStorage.ownerInfo.put({
-            //             addressId: ownerInfoValues.addressId,
-            //             dateOfPicture: ,
-            //             dateOfAbatement: ,
-            //             numberOfTags: ,
-            //             tagText: ,
-            //             smallTagText: ,
-            //             squareFootageCovered: ,
-            //             racialOrHateTone: ,
-            //             gangRelated: ,
-            //             crossedOutTag: ,
-            //             vacantProperty: ,
-            //             landBankProperty: ,
-            //             surface: ,
-            //             needOtherCodeEnforcement:
-            //         }, ownerInfoValues.addressId).then((insertedId) => {
-            //             newRowId = insertedId;
-            //             return true;
-            //         })
-            //     ) {
-            //         updateDone = true;
-            //         setOwnerInfo(ownerInfoValues);
-            //     } else {
-            //         alert('Failed to update owner information 1');
-            //     }
-            // })
-            // .catch(e => {
-            //     alert('Failed to update owner information', e);
-            // });
+            offlineStorage.transaction('rw', offlineStorage.tagInfo, async() => {
+                if (
+                    await offlineStorage.tagInfo.put({
+                        addressId: props.location.state.addressId,
+                        formData: mappedFieldValues
+                    }, props.location.state.addressId).then((insertedId) => {
+                        return true;
+                    })
+                ) {
+                    updateDone = true;
+                    setTagInfo(mappedFieldValues);
+                } else {
+                    alert('Failed to update tag information');
+                }
+            })
+            .catch(e => {
+                alert('Failed to update tag information');
+                console.log('tag info', e);
+            });
         }
     }
 
@@ -148,12 +152,16 @@ const TagInfo = (props) => {
         if (fieldType === "input") {
             nameValueMap[`option-${mainIndex}`] = null;
             return (
-                <input name={ `option-${mainIndex}`} onBlur={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex]} className="grow" type="text" disabled={ props.modifyTagInfo ? false : true } />
+                <input defaultValue={ tagInfo ? tagInfo[`option-${mainIndex}`] : "" } name={ `option-${mainIndex}` } onBlur={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex]} className="grow" type="text" disabled={ props.modifyTagInfo ? false : true } />
             )
         } else if (fieldType === "number") {
             nameValueMap[`option-${mainIndex}`] = null;
             return (
-                <input name={ `option-${mainIndex}`} placeholder="0" onBlur={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex]} className="grow" type="number" min="0" disabled={ props.modifyTagInfo ? false : true } />
+                <input defaultValue={ tagInfo ? tagInfo[`option-${mainIndex}`] : "" } name={ `option-${mainIndex}` } placeholder="0" onBlur={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex]} className="grow" type="number" min="0" disabled={ props.modifyTagInfo ? false : true } />
+            )
+        } else if (fieldType === "date") {
+            return (
+                <input defaultValue={ tagInfo ? tagInfo[`option-${mainIndex}`] : "" } name={ `option-${mainIndex}` } onBlur={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex]} className="grow" type="date" min={getDateTime('MM-DD-YYYY')} disabled={ props.modifyTagInfo ? false : true } />
             )
         } else if (fieldType === "radio" || fieldType === "checkbox") {
             const optionKeys = Object.keys(fieldGroup.options);
@@ -165,10 +173,9 @@ const TagInfo = (props) => {
                         <div className="padding-left">
                             {
                                 optionKeys.map((optionKey, index) => {
-                                    nameValueMap[`option-${mainIndex}-${index}`] = null;
                                     return (
                                         <span key={index} className="option-group">
-                                            <input onChange={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex].subRefs[index]} id={`option-${mainIndex}-${index}`}
+                                            <input checked={ tagInfo ? tagInfo[`option-${mainIndex}-${index}`] : false } onChange={ updateTagInfo } ref={tagInfoInputElements.current[mainIndex].subRefs[index]} id={`option-${mainIndex}-${index}`}
                                                 name={ `option-${mainIndex}-${index}`} type={ fieldType } disabled={ props.modifyTagInfo ? false : true } />
                                             <label htmlFor={`option-${mainIndex}-${index}`}>{ fieldGroup.options[optionKey] }</label>
                                         </span>
@@ -179,11 +186,10 @@ const TagInfo = (props) => {
                     )
                 } else {
                     return optionKeys.map((optionKey, index) => {
-                        nameValueMap[`option-${mainIndex}-${index}`] = null;
                         return (
                             <span key={index} className="option-group">
-                                <input onChange={ updateTagInfo } id={`option-${mainIndex}-${index}`} name={ `option-${mainIndex}-${index}`}
-                                    ref={tagInfoInputElements.current[mainIndex].subRefs[index]}type={ fieldType } disabled={ props.modifyTagInfo ? false : true } />
+                                <input checked={ tagInfo ? tagInfo[`option-${mainIndex}-${index}`] : false } onChange={ updateTagInfo } id={`option-${mainIndex}-${index}`} name={ `option-${mainIndex}-${index}`}
+                                    ref={tagInfoInputElements.current[mainIndex].subRefs[index]} type={ fieldType } disabled={ props.modifyTagInfo ? false : true } />
                                 <label htmlFor={`option-${mainIndex}-${index}`}>{ fieldGroup.options[optionKey] }</label>
                             </span>
                         )
@@ -218,9 +224,20 @@ const TagInfo = (props) => {
         });
     };
 
-    // useEffect(() => {
-    //     getTagInfo();
-    // }, []);
+    useEffect(() => {
+        if (!tagInfo) {
+            const addressId = props.location.state.addressId;
+            const offlineStorage = props.offlineStorage;
+
+            if (addressId && offlineStorage) {
+                offlineStorage.tagInfo.get(addressId, (tagInfo) => {
+                    setTagInfo(tagInfo.formData);
+                }).catch (function (err) {
+                    alert('failed to load tagInfo');
+                });
+            }
+        }
+    }, []);
 
     return(
         <div className="tagging-tracker__tag-info">

@@ -1,4 +1,4 @@
-export const getDateTime = () => {
+export const getDateTime = (format = "") => {
     // from https://stackoverflow.com/questions/8083410/how-can-i-set-the-default-timezone-in-node-js
     process.env.TZ = "America/Chicago";
     let date_ob = new Date();
@@ -24,6 +24,14 @@ export const getDateTime = () => {
 
     // prints date in YYYY-MM-DD format
     // console.log(year + "-" + month + "-" + date);
+
+    if (format === "YYYY-MM-DD") {
+        return year + "-" + month + "-" + date;
+    }
+
+    if (format === "MM-DD-YYYY") {
+        return month + "-" + "date" + "-" + year;
+    }
 
     // prints date & time in YYYY-MM-DD HH:MM:SS format
     return year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;

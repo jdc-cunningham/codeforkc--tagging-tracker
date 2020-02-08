@@ -80,18 +80,17 @@ const OwnerInfo = (props) => {
                     setOwnerInfo(ownerInfoValues);
                 } else {
                     alert('Failed to update owner information');
-                    console.log('else');
                 }
             })
             .catch(e => {
                 alert('Failed to update owner information');
-                console.log(e);
+                console.log('owner info', e);
             });
         }
     }
 
     const getOwnerInfo = async () => {
-        const addressId = 1; // props.location.addressId;
+        const addressId = props.location.state.addressId;
         const offlineStorage = props.offlineStorage;
 
         if (addressId && offlineStorage) {

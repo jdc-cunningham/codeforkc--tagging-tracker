@@ -33,6 +33,7 @@
 - [ ] split the repo
     - after deploying by git I realized how you should not have the front/back end together in the same repo
 - [ ] look into [persistence](https://dexie.org/docs/StorageManager) regarding being able to gauge available storage. Apparently in Chrome it's 50% of user's storage which should be enough.
+- [ ] add gear icon on main page(addresses) to [delete all cache data](https://stackoverflow.com/questions/56972246/how-to-update-reactjs-based-pwa-to-the-new-version) so local app syncs code with remote update
 
 ### Demoable
 - [ ] hit sync on certain account, pulls all remote info and populates client app

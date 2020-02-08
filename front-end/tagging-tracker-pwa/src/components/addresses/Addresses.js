@@ -8,7 +8,7 @@ const Addresses = (props) => {
     const cancelAddAddressBtn = useRef(null);
     const createAddressBtn = useRef(null);
     const [addAddressProcessing, setAddAddressProcessing] = useState(false);
-    const [recentAddresses, setRecentAddresses] = useState([]);
+    const [recentAddresses] = useState([]);
     const [activeAddresses, setActiveAddresses] = useState(null);
     
     // this search may need to get restructured depending on what's available/important to search against
