@@ -1,0 +1,2 @@
+- what is the point of S3 when images can be stored as binary/base64 on remote/client side
+- I guess they could be embedded easier in websites or something from the s3 public url

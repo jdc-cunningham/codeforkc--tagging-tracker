@@ -8,7 +8,7 @@ import property from './../../assets/icons/svgs/property.svg';
 import textDocument from './../../assets/icons/svgs/text-document.svg';
 import addSquare from './../../assets/icons/svgs/add-square.svg';
 import ajaxLoaderGray from './../../assets/gifs/ajax-loader--gray.gif';
-import { syncUserData } from './../../utils/sync';
+import { syncUserData } from '../../utils/sync/sync';
 
 const BottomNavbar = (props) => {
     const syncBtn = useRef(null);
@@ -49,11 +49,11 @@ const BottomNavbar = (props) => {
             props.setSyncApp(true);
             const synced = await syncUserData(props);
 
-            if (typeof synced.msg !== "undefined") {
+            if (synced && typeof synced.msg !== "undefined") {
                 alert(synced.msg);
-            } else if (synced.msg !== "undefined" && synced.msg === 403) {
+            } else if (synced && synced.msg !== "undefined" && synced.msg === 403) {
                 alert('You have been logged out, please login to sync');
-            } else if (synced) {
+            } else if (synced && synced.msg === "undefined") { // whack
                 alert('Sync successful');
             } else {
                 alert('Failed to sync');

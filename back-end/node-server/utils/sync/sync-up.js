@@ -93,7 +93,7 @@ const insertTags = async (userId, syncId, tags) => {
             [userId, tagRow.addressId, buff, "", s3PublicUrl, JSON.stringify(tagRow.meta), syncId],
             (err, qres) => {
                 if (err) {
-                    console.log('insert address', err);
+                    console.log('insert tags', err);
                     insertErr = true;
                     throw Error(false);
                 } else {

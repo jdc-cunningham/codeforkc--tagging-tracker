@@ -9,30 +9,6 @@ import axios from 'axios';
  * though currently not possible(no UI/methods)
  */
 
-const isLocalStorageEmpty = async (props) => {
-    const localStorage = props.offlineStorage;
-
-    if (!localStorage) {
-        return;
-    }
-
-    // you should only have to check addresses because every other table is tied to an address
-    // so an address has to exist before you can add photos/owner/tag info
-    return new Promise(resolve => {
-        localStorage.addresses.count().then((count) => {
-            if (count > 0) {
-                resolve(false);
-            } else {
-                resolve(true);
-            }
-        })
-        .catch((err) => {
-            console.log('sync addresses err', err);
-            resolve(true); // technically could be an error not empty
-        });
-    });
-}
-
 const getLocalAddresses = async (localStorage) => {
     return new Promise(resolve => {
         localStorage.addresses.toArray().then((addresses) => {
@@ -138,54 +114,44 @@ const bundleData = async (props) => {
     });
 }
 
-export const syncUserData = async (props) => {
-    console.log('sync ran');
-    const localStorageEmpty = await isLocalStorageEmpty(props);
-    console.log('empty', localStorageEmpty);
+export const syncUp = async (props) => {
+    const bundledData = await bundleData(props);
 
-    return new Promise(async resolve => {
-        if (localStorageEmpty) {
-            // pull down
-        } else {
-            // push up
-            const bundledData = await bundleData(props);
-            if (Object.keys(bundledData).length === 0 || !bundledData) {
-                resolve({msg: 'No data to sync'});
+    if (Object.keys(bundledData).length === 0 || !bundledData) {
+        return {msg: 'No data to sync'};
+    } else {
+        console.log(bundledData);
+        // sync to remote server
+        const baseApiPath = window.location.href.indexOf('localhost') !== -1
+            ? process.env.REACT_APP_API_BASE_LOCAL
+            : process.env.REACT_APP_API_BASE;
+        const postUrl = baseApiPath + '/sync-up';
+        
+        axios.post(postUrl, {
+            headers: { Authorization: `Bearer ${props.token}` },
+            bundledData
+        }).then((res) => {
+            console.log(res);
+            if (res.status === 201) {
+                return true;
             } else {
-                console.log(bundledData);
-                // sync to remote server
-                const baseApiPath = window.location.href.indexOf('localhost') !== -1
-                    ? process.env.REACT_APP_API_BASE_LOCAL
-                    : process.env.REACT_APP_API_BASE;
-                const postUrl = baseApiPath + '/sync-up';
-                
-                axios.post(postUrl, {
-                    headers: { Authorization: `Bearer ${props.token}` },
-                    bundledData
-                }).then((res) => {
-                    console.log(res);
-                    if (res.status === 201) {
-                        resolve(true);
-                    } else {
-                        if (res.status === 403) {
-                            alert("Your session has expired, please login again");
-                            window.location.href = "/login"; // flush app state
-                        } else {
-                            resolve(false);
-                        }
-                    }
-                })
-                .catch((err) => {
-                    console.log('sync err', err);
-                    console.log(err.response);
-
-                    if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
-                        resolve({msg: 403});
-                    }
-
-                    resolve(false);
-                });
+                if (res.status === 403) {
+                    alert("Your session has expired, please login again");
+                    window.location.href = "/login"; // flush app state
+                } else {
+                    return false;
+                }
             }
-        }
-    });
+        })
+        .catch((err) => {
+            console.log('sync err', err);
+            console.log(err.response);
+
+            if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
+                return {msg: 403};
+            }
+
+            return false;
+        });
+    }
 }

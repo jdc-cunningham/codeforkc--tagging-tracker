@@ -60,6 +60,8 @@
     - [maybe related](https://medium.com/progressive-web-apps/pwa-create-a-new-update-available-notification-using-service-workers-18be9168d717) for updating code
 - [ ] take out all console logs except errors
 - [ ] fix double promises i.e. promise inside async, generally make sure these actually make sense/work
+    - don't have to use async wrapper around promise i.e. remove async
+- [ ] sync pagination
 
 ### Extra
 - [ ] cache requested uploads when redirecting to upload for token
