@@ -51,6 +51,8 @@ const BottomNavbar = (props) => {
 
             if (typeof synced.msg !== "undefined") {
                 alert(synced.msg);
+            } else if (synced.msg !== "undefined" && synced.msg === 403) {
+                alert('You have been logged out, please login to sync');
             } else if (synced) {
                 alert('Sync successful');
             } else {

@@ -22,7 +22,6 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 // since it's just a unique reference
 const getSyncId = async (userId) => {
     return new Promise(resolve => {
-        // turn image into binary from base64
         pool.query(
             `INSERT INTO sync_history SET user_id = ?, sync_timestamp = ?`,
             [userId, getDateTime()], // no sync id on uploads
@@ -31,7 +30,6 @@ const getSyncId = async (userId) => {
                     console.log('getSyncId', err);
                     resolve(false);
                 } else {
-                    console.log(res);
                     resolve(res.insertId);
                 }
             }
@@ -39,34 +37,32 @@ const getSyncId = async (userId) => {
     });
 }
 
-const insertAddresses = (userId, syncId, addresses) => {
-    return new Promise(resolve => {
-        let insertErr = false;
-        for (let i = 0; i < addresses.length; i++) {
-            if (insertErr) {
-                break; // may be pointless
-            }
+const insertAddresses = async (userId, syncId, addresses) => {
+    let insertErr = false;
+    for (let i = 0; i < addresses.length; i++) {
+        if (insertErr) {
+            break; // may be pointless
+        }
 
-            const addressRow = addresses[i];
+        const addressRow = addresses[i];
 
-            // insert
-            pool.query(
-                `INSERT INTO addresses SET user_id = ?, address = ?, lat = ?, lng = ?, created = ?, updated = ?, sync_id = ?`,
-                [userId, addressRow.address, addressRow.lat, addressRow.lng, addressRow.created, addressRow.updated, syncId],
-                (err, qres) => {
-                    if (err) {
-                        console.log('insert address', err);
-                        insertErr = true;
-                        resolve(false);
-                    } else {
-                        if (i === addresses.length - 1) {
-                            resolve(true);
-                        }
+        // insert
+        pool.query(
+            `INSERT INTO addresses SET user_id = ?, address = ?, lat = ?, lng = ?, created = ?, updated = ?, sync_id = ?`,
+            [userId, addressRow.address, addressRow.lat, addressRow.lng, addressRow.created, addressRow.updated, syncId],
+            (err, qres) => {
+                if (err) {
+                    console.log('insert address', err);
+                    insertErr = true;
+                    throw Error(false);
+                } else {
+                    if (i === addresses.length - 1) {
+                        return true;
                     }
                 }
-            );
-        }
-    });
+            }
+        );
+    }
 }
 
 /**
@@ -115,6 +111,65 @@ const insertTags = async (userId, syncId, tags) => {
     }
 }
 
+const insertOwnerInfos = async (userId, syncId, ownerInfos) => {
+    let insertErr = false;
+    for (let i = 0; i < ownerInfos.length; i++) {
+        if (insertErr) {
+            break; // may be pointless
+        }
+
+        const ownerInfoRow = ownerInfos[i];
+
+        // insert
+        // this structure does not exactly match Dexie i.e. Dexie has the extra fileName column used for deletion on client side
+        pool.query(
+            `INSERT INTO owner_info SET user_id = ?, address_id = ?, form_data = ?, sync_id = ?`,
+            [userId, ownerInfoRow.addressId, JSON.stringify(ownerInfoRow.formData), syncId],
+            (err, qres) => {
+                if (err) {
+                    console.log('insert ownerInfo', err);
+                    insertErr = true;
+                    throw Error(false);
+                } else {
+                    if (i === ownerInfos.length - 1) {
+                        return true;
+                    }
+                }
+            }
+        );
+    }
+}
+
+// also sequential inserts like this is probably bad i.e. for loop
+const insertTagInfos = async (userId, syncId, tagInfos) => {
+    let insertErr = false;
+    for (let i = 0; i < tagInfos.length; i++) {
+        if (insertErr) {
+            break; // may be pointless
+        }
+
+        const tagInfoRow = tagInfos[i];
+
+        // insert
+        // this structure does not exactly match Dexie i.e. Dexie has the extra fileName column used for deletion on client side
+        pool.query(
+            `INSERT INTO tag_info SET user_id = ?, address_id = ?, form_data = ?, sync_id = ?`,
+            [userId, tagInfoRow.addressId, JSON.stringify(tagInfoRow.formData), syncId],
+            (err, qres) => {
+                if (err) {
+                    console.log('insert tagInfo', err);
+                    insertErr = true;
+                    throw Error(false);
+                } else {
+                    if (i === tagInfos.length - 1) {
+                        return true;
+                    }
+                }
+            }
+        );
+    }
+}
+
 const syncUp = async (req, res) => {
     // somehow req.token is available though sent from body
     const userId = await getUserIdFromToken(req.token);
@@ -127,16 +182,16 @@ const syncUp = async (req, res) => {
             syncErr = await insertAddresses(userId, syncId, dataToSync.addresses);
         }
 
-        if (typeof dataToSync.tags !== "undefined") {
+        if (!syncErr && typeof dataToSync.tags !== "undefined") {
             syncErr = await insertTags(userId, syncId, dataToSync.tags);
         }
 
-        if (typeof dataToSync.ownerInfo !== "undefined") {
-
+        if (!syncErr && typeof dataToSync.ownerInfo !== "undefined") {
+            syncErr = await insertOwnerInfos(userId, syncId, dataToSync.ownerInfo); // mixed singular/plural not great, same with client side sync.js
         }
 
-        if (typeof dataToSync.tagInfo !== "undefined") {
-
+        if (!syncErr && typeof dataToSync.tagInfo !== "undefined") {
+            syncErr = await insertTagInfos(userId, syncId, dataToSync.tagInfo);
         }
 
         if (syncErr) {

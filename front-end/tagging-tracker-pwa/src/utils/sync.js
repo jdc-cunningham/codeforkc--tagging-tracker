@@ -164,7 +164,7 @@ export const syncUserData = async (props) => {
                     bundledData
                 }).then((res) => {
                     console.log(res);
-                    if (res.status === 200) {
+                    if (res.status === 201) {
                         resolve(true);
                     } else {
                         if (res.status === 403) {
@@ -176,7 +176,12 @@ export const syncUserData = async (props) => {
                     }
                 })
                 .catch((err) => {
-                    console.log('upload err', err);
+                    console.log('sync err', err);
+
+                    if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
+                        resolve({msg: 403});
+                    }
+
                     resolve(false);
                 });
             }

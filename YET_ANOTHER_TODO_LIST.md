@@ -59,7 +59,7 @@
 - [ ] add way to clear all data on app
     - [maybe related](https://medium.com/progressive-web-apps/pwa-create-a-new-update-available-notification-using-service-workers-18be9168d717) for updating code
 - [ ] take out all console logs except errors
-- [ ] fix double promises i.e. promise inside async
+- [ ] fix double promises i.e. promise inside async, generally make sure these actually make sense/work
 
 ### Extra
 - [ ] cache requested uploads when redirecting to upload for token
