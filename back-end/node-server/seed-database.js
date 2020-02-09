@@ -50,5 +50,44 @@ connection.query(
 )
 
 // addresses -- will get modified to include user_id so know which account made what entries
+connection.query(
+    'CREATE TABLE `addresses` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`user_id` int(11) NOT NULL,' +
+        '`address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
+        '`lat` decimal(10,8) NOT NULL,' +
+        '`lng` decimal(11,8) NOT NULL,' +
+        '`created` datetime NOT NULL,' +
+        '`updated` datetime NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
+        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
+    (error, results, fields) => {
+        if (error) {
+            console.log('error creating table addresses:', error.sqlMessage);
+            return;
+        }
+    }
+)
+
+// tags, medium blob is good up to 16MB, long blob is overkill at 4GB
+connection.query(
+    'CREATE TABLE `tags` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`user_id` int(11) NOT NULL,' +
+        '`address_id` int(11) NOT NULL,' +
+        '`src` mediumblob NOT NULL,' +
+        '`thumbnail_src` blob NOT NULL,' +
+        '`public_s3_url` varchar(2083) COLLATE utf8_unicode_ci NOT NULL,' +
+        '`meta` text COLLATE utf8_unicode_ci NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
+       ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
+    (error, results, fields) => {
+        if (error) {
+            console.log('error creating table tags:', error.sqlMessage);
+            return;
+        }
+    }
+)
+
 
 connection.end();

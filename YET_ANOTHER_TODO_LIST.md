@@ -37,11 +37,16 @@
 
 ### Demoable
 - [ ] hit sync on certain account, pulls all remote info and populates client app
+- [ ] confirm `seed-database.js` stil works after finalizing table schemas
 
 ### Stuff to look into
 - [ ] state management of delete tag workflow eg. processing status(dithered) of delete button/failures
 - [ ] the logout button doesn't really make sense as you're never really "logged out" regarding being able to use the app, you need to login to sync as the remote side will deny your requests without a valid token
 - [ ] deleting files by filename could be bad... since it deletes multiple if same file uploaded more than once
+- [ ] consider not using base64 as a medium to transfer images back and forth between client/api
+    - I guess this is convention actually, storage should use `BLOB` though eg. `mediumblob`
+- [ ] can't remove from upload once selected for upload
+- [ ] when you get logged out in process of uploading goes into `catch` error of `uploadImages`
 
 ### Extra
 - [ ] cache requested uploads when redirecting to upload for token

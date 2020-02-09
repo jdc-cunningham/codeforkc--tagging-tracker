@@ -6,7 +6,6 @@ const { pool } = require('./../../utils/db/dbConnect');
 
 const loginUser = (req, res) => {
     // get these from post params
-
     if (
         !Object.keys(req.body).length ||
         typeof req.body.username === "undefined" ||
@@ -17,6 +16,7 @@ const loginUser = (req, res) => {
     
     const username = req.body.username;
     const password = req.body.password;
+
     let passwordHash;
     
     pool.query(
@@ -40,12 +40,12 @@ const loginUser = (req, res) => {
 // private
 const _comparePasswords = (res, username, password, passwordHash) => {
     bcrypt.compare(password, passwordHash, (err, bres) => { // this is bad bres
-        if (err) {
+        if (err || !bres) {
             console.log('bcrypt compare', err);
             res.status(401).send('Failed to login');
         }
 
-        jwt.sign({user: username}, process.env.JWT_SECRET_KEY, {expiresIn: process.env.JWT_EXPIRES}, (err,token) => {
+        jwt.sign({username}, process.env.JWT_SECRET_KEY, {expiresIn: process.env.JWT_EXPIRES}, (err,token) => {
             if (token) {
                 _issueToken(res, token);
             } else {

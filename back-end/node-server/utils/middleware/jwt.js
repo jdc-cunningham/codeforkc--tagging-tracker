@@ -1,3 +1,4 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
@@ -9,8 +10,14 @@ const verifyToken = (req, res, next) => {
         const bearerToken = bearerHeader.split(" ")[1];
         // set the token
         req.token = bearerToken;
-        // next middleware
-        next();
+        // check token
+        jwt.verify(req.token, process.env.JWT_SECRET_KEY, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                next();
+            }
+        });
     } else {
         // Forbidden
         res.sendStatus(403);

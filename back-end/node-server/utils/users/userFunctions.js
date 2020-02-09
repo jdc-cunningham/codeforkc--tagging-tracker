@@ -1,3 +1,5 @@
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const { pool } = require('./../../utils/db/dbConnect');
 const bcrypt = require('bcrypt');
 const saltRounds = 15;
@@ -60,11 +62,34 @@ const deleteUser = (userId) => {
     );
 }
 
-// can create users as needed ex.
-// createUser('test', 'test');
+const getUserIdFromToken = async (token) => {
+    return new Promise(resolve => {
+        if (token) {
+            jwt.verify(token, process.env.JWT_SECRET_KEY, (err, authData) => {
+                if (err) {
+                    res.sendStatus(403);
+                } else {
+                    pool.query(
+                        `SELECT id FROM users WHERE username = ?`,
+                        [authData.username],
+                        (err, res) => {
+                            if (err) {
+                                resolve(false);
+                            } else {
+                                if (res.length && typeof res[0].id !== "undefined") {
+                                    resolve(res[0].id);
+                                }
+                            }
+                        }
+                    );
+                }
+            });
+        } else {
+            resolve(false);
+        }
+    });
+}
 
-// internal for now
-// module.exports = {
-//     createUser,
-//     deleteUser
-// };
+module.exports = {
+    getUserIdFromToken
+};

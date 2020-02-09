@@ -21,6 +21,7 @@ const AddTag = (props) => {
     const [fileUpload, triggerFileUpload] = useState(false);
     const [loadedPhotos, setLoadedPhotos] = useState([]);
     const [savingToDevice, setSavingToDevice] = useState(false);
+    const history = useHistory();
 
     const saveToDevice = () => {
         setSavingToDevice(true);
@@ -74,12 +75,17 @@ const AddTag = (props) => {
             if (res.status === 200) {
                 saveToDevice(); // because don't want to bridge remote sync from upload here
             } else {
-                alert('Failed to upload');
+                if (res.status === 403) {
+                    alert("Your session has expired, please login again");
+                    window.location.href = "/login"; // flush app state
+                } else {
+                    alert('Failed to upload');
+                }
             }
             triggerFileUpload(false);
 		})
 		.catch((err) => {
-			console.log('err', err);
+            console.log('err', err);
             triggerFileUpload(false);
 		});
 	}
