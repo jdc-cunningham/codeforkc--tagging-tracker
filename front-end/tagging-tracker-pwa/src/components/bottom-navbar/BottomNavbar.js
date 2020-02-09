@@ -7,6 +7,7 @@ import logoutIcon from './../../assets/icons/svgs/switch.svg';
 import property from './../../assets/icons/svgs/property.svg';
 import textDocument from './../../assets/icons/svgs/text-document.svg';
 import addSquare from './../../assets/icons/svgs/add-square.svg';
+import ajaxLoaderGray from './../../assets/gifs/ajax-loader--gray.gif';
 
 const BottomNavbar = (props) => {
     const syncBtn = useRef(null);
@@ -40,10 +41,13 @@ const BottomNavbar = (props) => {
             history.push("/login");
             return;
         }
+
+        if (!props.syncApp) {
+            props.setSyncApp(true);
+        }
     }
 
     const uploadImages = () => {
-        console.log(props);
         if (!props.appOnline) {
             alert('Unable to upload, you are offline');
             return;
@@ -67,8 +71,16 @@ const BottomNavbar = (props) => {
                 return <>
                     <button onClick= { sync } ref={ syncBtn } className="bottom-navbar__btn half sync"
                     type="button" disabled={ props.appOnline ? false : true }>
-                        <img src={ syncIcon } alt="sync button" />
-                        <span>Sync</span>
+                        {props.syncApp
+                            ? <>
+                                <span>Syncing...</span>
+                                <img src={ ajaxLoaderGray } alt="sync button" />
+                            </>
+                            : <>
+                                <img src={ syncIcon } alt="sync button" />
+                                <span>Sync</span>
+                            </>
+                        }
                     </button>
                     <button ref={ logoutBtn } onClick={ logout } className="bottom-navbar__btn half" type="button">
                         <img src={ logoutIcon } alt="logout button" />

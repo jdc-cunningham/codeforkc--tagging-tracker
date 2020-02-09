@@ -28,6 +28,7 @@ const App = () => {
 	const [modifyOwnerInfo, toggleModifyOwnerInfo] = useState(false);
 	const [modifyTagInfo, toggleModifyTagInfo] = useState(false);
 	const [bodyClass, setBodyClass] = useState("tagging-tracker__body"); // this will be removed when UI is updated, it's for AddTag BottomNavbar
+	const [syncApp, setSyncApp] = useState(false);
 
 	const searchAddress = (searchStr) => {
 		updateSearchedAddress(searchStr);
@@ -175,6 +176,8 @@ const App = () => {
 							{...props}
 							appOnline={appOnline}
 							token={token}
+							syncApp={syncApp}
+							setSyncApp={setSyncApp}
 						/>
 						: null
 					} />

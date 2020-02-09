@@ -13,7 +13,7 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 const addImageToDatabase = async (userId, imageData, imagePublicS3Url) => {
     return new Promise(resolve => {
         // turn image into binary from base64
-        const buff = new Buffer.from(imageData.src, 'base64', imageData.src.length);
+        const buff = new Buffer.from(imageData.src, 'base64');
         pool.query(
             `INSERT INTO tags SET user_id = ?, address_id = ?, src = ?, thumbnail_src = ?, public_s3_url = ?, meta = ?`,
             [userId, imageData.addressId, buff, "", imagePublicS3Url, JSON.stringify(imageData.meta)],
@@ -57,7 +57,7 @@ const uploadTags = async (req, res) => {
 
             // plain Buffer is depricated/need to specify size in case secret info released
             const image = imagesToUpload[i];
-            const buf = new Buffer.from(image.src.replace(/^data:image\/\w+;base64,/, ""), 'base64', image.src.length);
+            const buf = new Buffer.from(image.src.replace(/^data:image\/\w+;base64,/, ""), 'base64');
             const uploadParams = {
                 Bucket: bucketName,
                 Key: image.fileName,
