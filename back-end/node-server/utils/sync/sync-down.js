@@ -64,7 +64,9 @@ const getTagsFromRecentSync = (syncId) => {
                             return {
                                 name: tagMeta.name,
                                 address_id: tagRow.address_id,
-                                src: new Buffer.from(tagRow.src, 'binary').toString('base64'),
+                                // this has to match how it was saved i.e. in sync-up.js or uplaodTags.js
+                                // the missing string in front i.e. data:image/jpeg;base64, is added to the client side
+                                src: "data:image/jpeg;base64," + new Buffer.from(tagRow.src, 'binary').toString('base64'),
                                 thumbnail_src: "",
                                 meta: tagRow.meta // stringify client side
                             };
@@ -125,8 +127,7 @@ const syncDown = async (req, res) => {
     const userId = 1;
     const syncId = await getRecentSyncId(userId);
     if (!syncId) {
-        // means not synced before, not sure if 400 is right status though, nothing went wrong
-        res.status(400).send('No sync data available');
+        res.status(200).send(false);
     } else {
         const bundledData = {};
         bundledData['addresses'] = await getAddressesFromRecentSync(syncId);

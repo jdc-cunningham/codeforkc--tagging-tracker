@@ -117,41 +117,41 @@ const bundleData = async (props) => {
 export const syncUp = async (props) => {
     const bundledData = await bundleData(props);
 
-    if (Object.keys(bundledData).length === 0 || !bundledData) {
-        return {msg: 'No data to sync'};
-    } else {
-        console.log(bundledData);
-        // sync to remote server
-        const baseApiPath = window.location.href.indexOf('localhost') !== -1
-            ? process.env.REACT_APP_API_BASE_LOCAL
-            : process.env.REACT_APP_API_BASE;
-        const postUrl = baseApiPath + '/sync-up';
-        
-        axios.post(postUrl, {
-            headers: { Authorization: `Bearer ${props.token}` },
-            bundledData
-        }).then((res) => {
-            console.log(res);
-            if (res.status === 201) {
-                return true;
-            } else {
-                if (res.status === 403) {
-                    alert("Your session has expired, please login again");
-                    window.location.href = "/login"; // flush app state
+    return new Promise(resolve => {
+        if (Object.keys(bundledData).length === 0 || !bundledData) {
+            resolve({msg: 'No data to sync'});
+        } else {
+            // sync to remote server
+            const baseApiPath = window.location.href.indexOf('localhost') !== -1
+                ? process.env.REACT_APP_API_BASE_LOCAL
+                : process.env.REACT_APP_API_BASE;
+            const postUrl = baseApiPath + '/sync-up';
+            
+            axios.post(postUrl, {
+                headers: { Authorization: `Bearer ${props.token}` },
+                bundledData
+            }).then((res) => {
+                if (res.status === 201) {
+                    resolve(true);
                 } else {
-                    return false;
+                    if (res.status === 403) {
+                        alert("Your session has expired, please login again");
+                        window.location.href = "/login"; // flush app state
+                    } else {
+                        resolve(false);
+                    }
                 }
-            }
-        })
-        .catch((err) => {
-            console.log('sync err', err);
-            console.log(err.response);
+            })
+            .catch((err) => {
+                console.log('sync err', err);
+                console.log(err.response);
 
-            if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
-                return {msg: 403};
-            }
+                if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
+                    resolve({msg: 403});
+                }
 
-            return false;
-        });
-    }
+                resolve(false);
+            });
+        }
+    });
 }

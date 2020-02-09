@@ -26,25 +26,21 @@ const isLocalStorageEmpty = async (props) => {
 }
 
 export const syncUserData = async (props) => {
-    console.log('sync ran');
     const localStorageEmpty = await isLocalStorageEmpty(props);
-    console.log('empty', localStorageEmpty);
 
     if (localStorageEmpty) {
         // pull down
         const bundledData = await syncDown(props);
-        console.log('remote', bundledData);
-        console.log('here');
         if (bundledData) {
             updateLocalStorageFromSync(props, bundledData);
             return true;
         } else {
-            alert('No data to sync');
+            return({msg: 'No data to sync'});
         }
-        return true;
     } else {
         // push up
-        syncUp(props);
+        console.log('sync up');
+        return await syncUp(props);
     }
 }
 
@@ -164,14 +160,11 @@ const updateLocalTagInfo = (props, remoteData) => {
 }
 
 export const updateLocalStorageFromSync = async (props, remoteData) => {
-    console.log('up', remoteData);
     let updateErr = false;
     updateErr = await updateLocalAddresses(props, remoteData);
     updateErr = await updateLocalTags(props, remoteData);
     updateErr = await updateLocalOwnerInfo(props, remoteData);
     updateErr = await updateLocalTagInfo(props, remoteData);
-
-    console.log(updateErr);
 
     if (updateErr) {
         return true;
