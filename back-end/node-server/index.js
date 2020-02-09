@@ -8,6 +8,7 @@ const { loginUser } = require('./utils/auth/authFunctions');
 const { verifyToken } = require('./utils/middleware/jwt');
 const { uploadTags } = require('./utils/tags/uploadTags');
 const { syncUp } = require('./utils/sync/sync-up'); // sync here eg. client pushing up
+const { syncDown } = require('./utils/sync/sync-down');
 
 // CORs
 app.use((req, res, next) => {
@@ -33,6 +34,7 @@ app.use(fileUpload());
 app.post('/login-user', loginUser);
 app.post('/upload-tag', verifyToken, uploadTags);
 app.post('/sync-up', verifyToken, syncUp); // these names are terrible
+app.post('/sync-down', verifyToken, syncDown);
 
 app.listen(port, () => {
     console.log(`App running... on port ${port}`);

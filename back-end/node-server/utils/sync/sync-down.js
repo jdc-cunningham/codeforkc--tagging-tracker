@@ -62,8 +62,8 @@ const getTagsFromRecentSync = (syncId) => {
                         resolve(res.map((tagRow) => {
                             const tagMeta = JSON.parse(tagRow.meta);
                             return {
-                                fileName: tagMeta.fileName,
-                                addressId: tagRow.addressId,
+                                name: tagMeta.name,
+                                address_id: tagRow.address_id,
                                 src: new Buffer.from(tagRow.src, 'binary').toString('base64'),
                                 thumbnail_src: "",
                                 meta: tagRow.meta // stringify client side
@@ -125,17 +125,17 @@ const syncDown = async (req, res) => {
     const userId = 1;
     const syncId = await getRecentSyncId(userId);
     if (!syncId) {
-        // res.status(200).send({syncData: false}); // means not synced before
+        // means not synced before, not sure if 400 is right status though, nothing went wrong
+        res.status(400).send('No sync data available');
     } else {
         const bundledData = {};
         bundledData['addresses'] = await getAddressesFromRecentSync(syncId);
         bundledData['tags'] = await getTagsFromRecentSync(syncId);
         bundledData['ownerInfo'] = await getOwnerInfoFromRecentSync(syncId);
         bundledData['tagInfo'] = await getTagInfoFromRecentSync(syncId);
+        res.status(200).send(bundledData);
     }
 }
-
-syncDown(true, true);
 
 module.exports = {
     syncDown
