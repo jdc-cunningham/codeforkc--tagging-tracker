@@ -177,6 +177,7 @@ export const syncUserData = async (props) => {
                 })
                 .catch((err) => {
                     console.log('sync err', err);
+                    console.log(err.response);
 
                     if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
                         resolve({msg: 403});

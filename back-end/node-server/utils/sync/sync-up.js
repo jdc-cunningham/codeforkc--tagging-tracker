@@ -37,36 +37,31 @@ const getSyncId = async (userId) => {
     });
 }
 
+// I think these are still safe i.e. using param = ?
+// https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js
 const insertAddresses = async (userId, syncId, addresses) => {
-    let insertErr = false;
-    for (let i = 0; i < addresses.length; i++) {
-        if (insertErr) {
-            break; // may be pointless
-        }
-
-        const addressRow = addresses[i];
-
-        // insert
-        pool.query(
-            `INSERT INTO addresses SET user_id = ?, address = ?, lat = ?, lng = ?, created = ?, updated = ?, sync_id = ?`,
-            [userId, addressRow.address, addressRow.lat, addressRow.lng, addressRow.created, addressRow.updated, syncId],
-            (err, qres) => {
-                if (err) {
-                    console.log('insert address', err);
-                    insertErr = true;
-                    throw Error(false);
-                } else {
-                    if (i === addresses.length - 1) {
-                        return true;
-                    }
-                }
+    // insert all rows in one INSERT using VALUES 80-90% faster than sequential individual inserts
+    pool.query(
+        `INSERT INTO addresses (user_id, address, lat, lng, created, updated, sync_id) VALUES ?`,
+        [
+            addresses.map(addressRow => (
+                [userId, addressRow.address, addressRow.lat, addressRow.lng, addressRow.created, addressRow.updated, syncId]
+            ))
+        ],
+        (err, qres) => {
+            if (err) {
+                console.log('insert address', err);
+                throw Error(false);
+            } else {
+                return true;
             }
-        );
-    }
+        }
+    );
 }
 
 /**
  * TODO: This should use a job queue not upload to s3 synchronously
+ * I will keep this as a non-batch upload due to the s3 that's still coupled at this time
  */
 const insertTags = async (userId, syncId, tags) => {
     let insertErr = false;
@@ -112,62 +107,44 @@ const insertTags = async (userId, syncId, tags) => {
 }
 
 const insertOwnerInfos = async (userId, syncId, ownerInfos) => {
-    let insertErr = false;
-    for (let i = 0; i < ownerInfos.length; i++) {
-        if (insertErr) {
-            break; // may be pointless
-        }
-
-        const ownerInfoRow = ownerInfos[i];
-
-        // insert
-        // this structure does not exactly match Dexie i.e. Dexie has the extra fileName column used for deletion on client side
-        pool.query(
-            `INSERT INTO owner_info SET user_id = ?, address_id = ?, form_data = ?, sync_id = ?`,
-            [userId, ownerInfoRow.addressId, JSON.stringify(ownerInfoRow.formData), syncId],
-            (err, qres) => {
-                if (err) {
-                    console.log('insert ownerInfo', err);
-                    insertErr = true;
-                    throw Error(false);
-                } else {
-                    if (i === ownerInfos.length - 1) {
-                        return true;
-                    }
-                }
+    pool.query(
+        `INSERT INTO owner_info (user_id, address_id, form_data, sync_id) VALUES ?`,
+        [
+            ownerInfos.map(ownerInfoRow => (
+                [userId, ownerInfoRow.addressId, JSON.stringify(ownerInfoRow.formData), syncId]
+            ))
+        ],
+        (err, qres) => {
+            if (err) {
+                console.log('insert ownerInfo', err);
+                throw Error(false);
+            } else {
+                return true;
             }
-        );
-    }
+        }
+    );
 }
 
 // also sequential inserts like this is probably bad i.e. for loop
 const insertTagInfos = async (userId, syncId, tagInfos) => {
-    let insertErr = false;
-    for (let i = 0; i < tagInfos.length; i++) {
-        if (insertErr) {
-            break; // may be pointless
-        }
-
-        const tagInfoRow = tagInfos[i];
-
-        // insert
-        // this structure does not exactly match Dexie i.e. Dexie has the extra fileName column used for deletion on client side
-        pool.query(
-            `INSERT INTO tag_info SET user_id = ?, address_id = ?, form_data = ?, sync_id = ?`,
-            [userId, tagInfoRow.addressId, JSON.stringify(tagInfoRow.formData), syncId],
-            (err, qres) => {
-                if (err) {
-                    console.log('insert tagInfo', err);
-                    insertErr = true;
-                    throw Error(false);
-                } else {
-                    if (i === tagInfos.length - 1) {
-                        return true;
-                    }
-                }
+    // insert
+    // this structure does not exactly match Dexie i.e. Dexie has the extra fileName column used for deletion on client side
+    pool.query(
+        `INSERT INTO tag_info (user_id, address_id, form_data, sync_id) VALUES ?`,
+        [
+            tagInfos.map(tagInfoRow => (
+                [userId, tagInfoRow.addressId, JSON.stringify(tagInfoRow.formData), syncId]
+            ))
+        ],
+        (err, qres) => {
+            if (err) {
+                console.log('insert tagInfo', err);
+                throw Error(false);
+            } else {
+                return true;
             }
-        );
-    }
+        }
+    );
 }
 
 const syncUp = async (req, res) => {
