@@ -1,19 +1,22 @@
 ### Front end
-- [ ] update schema so forms are not based on columns in tables
+- [x] update schema so forms are not based on columns in tables
     - thought is to use "serialization" or at least match by `name:value` pairs at least
     - then use the dynamic form generation by an object structure and map the values
 - [ ] sync button
-    - [ ] tie in with online/offline events
+    - [x] tie in with online/offline events
     - [ ] write function to sync stuff after deciding on master/source of truth
         - this will just be a copy of the tables(`Dexie`)
+        - I'm just gonna go with:
+            - if empty(client) pull down
+            - if not empty(client) replace remote(per user)
 - [ ] add tag
-    - [ ] fix the upload meta image dimension getter async issue
-    - [ ] add the canvas resize, not entirely sure what for... maybe don't need it since can resize on server side
+    - [x] fix the upload meta image dimension getter async issue
+    - [ ] Extra: add the canvas resize, not entirely sure what for... maybe don't need it since can resize on server side
         - guess can be useful for reducing client storage
 - [ ] finish tag info
-    - [ ] need to figure out a good way to structure the dynamic form that also can easily map the values
-        - [ ] store into `Dexie`
-- [ ] finish the delete process(tie into prompt)
+    - [ ] Extra: need to figure out a good way to structure the dynamic form that also can easily map the values
+        - [x] store into `Dexie`
+- [x] finish the delete process(tie into prompt)
 - [ ] after remote server set up, re-enable token-protected routes again
 
 ### Back end
@@ -23,9 +26,10 @@
 - [ ] write the sync-related APIs
 
 ### Sync
-- [ ] add user_id field to tables in remote side so client side data is separate
+- [x] add user_id field to tables in remote side so client side data is separate
     this allows the user to not login initially and be able to use the app, client side does not require user id
 - [ ] make a full demo account where it has the spreadsheet data synced so anyone signing into app as that user will pull down that new data
+- [ ] check that sync still successfully calls back when you navigate to another page while processing sync
 
 ### Misc
 - [ ] test on iphone somehow, browserstack is expensive af
@@ -47,6 +51,15 @@
     - I guess this is convention actually, storage should use `BLOB` though eg. `mediumblob`
 - [ ] can't remove from upload once selected for upload
 - [ ] when you get logged out in process of uploading goes into `catch` error of `uploadImages`
+    - added fix for this based on [this](https://github.com/axios/axios/issues/960), needed actual response not string
+- [ ] unmounted state update errors particularly on taginfo/ownerInfo sometimes fires
+    - happens on empty sync too
+- [ ] update axios calls to follow param format eg. url, payload, config(headers)
+    - I tried it the third parameter doesn't show up in req
+- [ ] add way to clear all data on app
+    - [maybe related](https://medium.com/progressive-web-apps/pwa-create-a-new-update-available-notification-using-service-workers-18be9168d717) for updating code
+- [ ] take out all console logs except errors
+- [ ] fix double promises i.e. promise inside async
 
 ### Extra
 - [ ] cache requested uploads when redirecting to upload for token

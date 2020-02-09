@@ -8,6 +8,7 @@ import property from './../../assets/icons/svgs/property.svg';
 import textDocument from './../../assets/icons/svgs/text-document.svg';
 import addSquare from './../../assets/icons/svgs/add-square.svg';
 import ajaxLoaderGray from './../../assets/gifs/ajax-loader--gray.gif';
+import { syncUserData } from './../../utils/sync';
 
 const BottomNavbar = (props) => {
     const syncBtn = useRef(null);
@@ -30,7 +31,9 @@ const BottomNavbar = (props) => {
     }
 
     // this probably shouldn't be here but just an initializer
-    const sync = () => {
+    const sync = async () => {
+        console.log(props);
+
         if (!props.appOnline) { // shouldn't be needed disabled buttons
             alert('Unable to sync, you are offline');
             return;
@@ -44,6 +47,17 @@ const BottomNavbar = (props) => {
 
         if (!props.syncApp) {
             props.setSyncApp(true);
+            const synced = await syncUserData(props);
+
+            if (typeof synced.msg !== "undefined") {
+                alert(synced.msg);
+            } else if (synced) {
+                alert('Sync successful');
+            } else {
+                alert('Failed to sync');
+            }
+
+            props.setSyncApp(false);
         }
     }
 

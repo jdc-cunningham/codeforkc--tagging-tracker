@@ -1,6 +1,7 @@
 require('dotenv').config()
 const { getUserIdFromToken } = require('./../users/userFunctions');
 const { pool } = require('./../../utils/db/dbConnect');
+const { uploadToS3 } = require('./../../utils/s3/uploadTag');
 
 // import s3 stuff from module later
 const AWS = require('aws-sdk');
@@ -15,8 +16,8 @@ const addImageToDatabase = async (userId, imageData, imagePublicS3Url) => {
         // turn image into binary from base64
         const buff = new Buffer.from(imageData.src, 'base64');
         pool.query(
-            `INSERT INTO tags SET user_id = ?, address_id = ?, src = ?, thumbnail_src = ?, public_s3_url = ?, meta = ?`,
-            [userId, imageData.addressId, buff, "", imagePublicS3Url, JSON.stringify(imageData.meta)],
+            `INSERT INTO tags SET user_id = ?, address_id = ?, src = ?, thumbnail_src = ?, public_s3_url = ?, meta = ?, sync_id = ?`,
+            [userId, imageData.addressId, buff, "", imagePublicS3Url, JSON.stringify(imageData.meta), 0], // no sync id on uploads
             (err, res) => {
                 if (err) {
                     console.log(err);
@@ -27,19 +28,6 @@ const addImageToDatabase = async (userId, imageData, imagePublicS3Url) => {
                 }
             }
         );
-    });
-}
-
-const uploadToS3 = async (uploadParams) => {
-    return new Promise(resolve => {
-        s3.upload(uploadParams, (err, data) => {
-            if (err) {
-                console.log("Error", err);
-                resolve(false);
-            } if (data) {
-                resolve(data.Location);
-            }
-        });
     });
 }
 
@@ -55,25 +43,28 @@ const uploadTags = async (req, res) => {
                 break;
             }
 
-            // plain Buffer is depricated/need to specify size in case secret info released
-            const image = imagesToUpload[i];
-            const buf = new Buffer.from(image.src.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-            const uploadParams = {
-                Bucket: bucketName,
-                Key: image.fileName,
-                Body: buf,
-                ACL: 'public-read',
-                ContentEncoding: 'base64',
-                ContentType: 'image/jpeg'
-            };
-
+            
             // considerable this is a waste if first insert attempt fails, but saves subsequent requests
             const userId = await getUserIdFromToken(req.body.headers.Authorization.split('Bearer ')[1]);
             if (!userId) {
                 res.status(400).send('Failed to upload images, a'); // lol these debug lines
             }
 
-            const dataLocation = await uploadToS3(uploadParams);
+            // plain Buffer is depricated/need to specify size in case secret info released
+            // adding user id to filename, seems bad but need way to distinguish between files as it will overwrite/not save
+            // if matching file names(Key)
+            const image = imagesToUpload[i];
+            const buf = new Buffer.from(image.src.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+            const uploadParams = {
+                Bucket: bucketName,
+                Key: userId + '_' + image.fileName, // this could be bad since there can be spaces in file names
+                Body: buf,
+                ACL: 'public-read',
+                ContentEncoding: 'base64',
+                ContentType: 'image/jpeg'
+            };
+
+            const dataLocation = await uploadToS3(s3, uploadParams);
 
             if (dataLocation) {
                 const addedToDatabase = await addImageToDatabase(userId, imagesToUpload[i], dataLocation);

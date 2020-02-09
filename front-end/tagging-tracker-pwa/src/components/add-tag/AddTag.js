@@ -64,12 +64,10 @@ const AddTag = (props) => {
             ? process.env.REACT_APP_API_BASE_LOCAL
             : process.env.REACT_APP_API_BASE;
 		const postUrl = baseApiPath + '/upload-tag';
-        const userId = props.userId;
         
 		axios.post(postUrl, {
             headers: { Authorization: `Bearer ${props.token}` },
-            images: loadedPhotos,
-            userId
+            images: loadedPhotos
 		}).then((res) => {
             console.log(res);
             if (res.status === 200) {
@@ -85,8 +83,13 @@ const AddTag = (props) => {
             triggerFileUpload(false);
 		})
 		.catch((err) => {
-            console.log('err', err);
-            triggerFileUpload(false);
+            if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
+                alert('You have been logged out, please log back in to upload.');
+                window.location.href = "/login"; // flush app state
+            } else {
+                console.log('upload err', err);
+                triggerFileUpload(false);
+            }
 		});
 	}
 

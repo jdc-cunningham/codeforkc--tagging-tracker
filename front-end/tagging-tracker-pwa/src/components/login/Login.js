@@ -27,7 +27,6 @@ const Login = (props) => {
             password
         })
         .then((res) => {
-            console.log(res);
             if (typeof res.data.token !== "undefined" && res.data.token) {
                 props.updateToken(res.data.token);
             }

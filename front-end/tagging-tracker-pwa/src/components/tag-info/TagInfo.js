@@ -231,13 +231,16 @@ const TagInfo = (props) => {
 
             if (addressId && offlineStorage) {
                 offlineStorage.tagInfo.get(addressId, (tagInfo) => {
-                    setTagInfo(tagInfo.formData);
+                    if (tagInfo) {
+                        setTagInfo(tagInfo.formData);
+                    }
                 }).catch (function (err) {
                     alert('failed to load tagInfo');
+                    console.log('tag info', err);
                 });
             }
         }
-    }, []);
+    }, [tagInfo]);
 
     return(
         <div className="tagging-tracker__tag-info">

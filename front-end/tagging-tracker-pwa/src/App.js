@@ -178,6 +178,7 @@ const App = () => {
 							token={token}
 							syncApp={syncApp}
 							setSyncApp={setSyncApp}
+							offlineStorage={offlineStorage}
 						/>
 						: null
 					} />

@@ -36,10 +36,10 @@ connection.query('USE tagging_tracker', (error, results, fields) => {
 connection.query(
     'CREATE TABLE `users` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
-        ' `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
-        ' `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
-        ' `active` tinyint(4) NOT NULL,' +
-        ' PRIMARY KEY (`id`)' +
+        '`username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
+        '`password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
+        '`active` tinyint(4) NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
     (error, results, fields) => {
         if (error) {
@@ -59,6 +59,7 @@ connection.query(
         '`lng` decimal(11,8) NOT NULL,' +
         '`created` datetime NOT NULL,' +
         '`updated` datetime NOT NULL,' +
+        '`sync_id` int(11) NOT NULL,' +
         'PRIMARY KEY (`id`)' +
         ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
     (error, results, fields) => {
@@ -79,8 +80,9 @@ connection.query(
         '`thumbnail_src` blob NOT NULL,' +
         '`public_s3_url` varchar(2083) COLLATE utf8_unicode_ci NOT NULL,' +
         '`meta` text COLLATE utf8_unicode_ci NOT NULL,' +
+        '`sync_id` int(11) NOT NULL,' +
         'PRIMARY KEY (`id`)' +
-       ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
+        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
     (error, results, fields) => {
         if (error) {
             console.log('error creating table tags:', error.sqlMessage);
@@ -89,5 +91,56 @@ connection.query(
     }
 )
 
+// create owner info table
+connection.query(
+    'CREATE TABLE `owner_info` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`user_id` int(11) NOT NULL,' +
+        '`address_id` int(11) NOT NULL,' +
+        '`form_data` text COLLATE utf8_unicode_ci NOT NULL,' +
+        '`sync_id` int(11) NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
+        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
+    (error, results, fields) => {
+        if (error) {
+            console.log('error creating table owner_info:', error.sqlMessage);
+            return;
+        }
+    }
+)
+
+// create tag info table
+connection.query(
+    'CREATE TABLE `tag_info` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`user_id` int(11) NOT NULL,' +
+        '`address_id` int(11) NOT NULL,' +
+        '`form_data` text COLLATE utf8_unicode_ci NOT NULL,' +
+        '`sync_id` int(11) NOT NULL,' +
+        'PRIMARY KEY (`id`)' +
+        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
+    (error, results, fields) => {
+        if (error) {
+            console.log('error creating table tag_info:', error.sqlMessage);
+            return;
+        }
+    }
+)
+
+// create sync history table
+connection.query(
+    'CREATE TABLE `sync_history` (' +
+        '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`user_id` int(11) NOT NULL,' +
+        '`sync_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,' +
+        'PRIMARY KEY (`id`)' +
+        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
+    (error, results, fields) => {
+        if (error) {
+            console.log('error creating table sync_history:', error.sqlMessage);
+            return;
+        }
+    }
+)
 
 connection.end();

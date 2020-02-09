@@ -132,7 +132,7 @@ const OwnerInfo = (props) => {
 
     useEffect(() => {
         getOwnerInfo();
-    }, []);
+    }, [ownerInfo]);
 
     // TODO: fix the communication between navbar save and saving here so saving isn't based on onblur
     // eg. get all fields at once one time, not every time you change inputs
