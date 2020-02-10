@@ -153,7 +153,7 @@ const Addresses = (props) => {
 
             props.offlineStorage.addresses.toArray().then((addresses) => {
                 // format data
-                const addressesFormatted = addresses.splice(0, 5).map((address) => {
+                const addressesFormatted = addresses.splice(0, 15).map((address) => {
                     return {
                         address: address.address,
                         addressId: address.id

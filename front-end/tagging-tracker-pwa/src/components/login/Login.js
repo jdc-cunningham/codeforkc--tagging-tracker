@@ -12,6 +12,10 @@ const Login = (props) => {
     const [loginProcessing, setLoginProcessing] = useState(false);
 
     const login = () => {
+        const baseApiPath = window.location.href.indexOf('localhost') !== -1
+                ? process.env.REACT_APP_API_BASE_LOCAL
+                : process.env.REACT_APP_API_BASE;
+        const postUrl = baseApiPath + '/login-user';
         const username = usernameInput.current.value;
         const password = passwordInput.current.value;
 
@@ -22,7 +26,7 @@ const Login = (props) => {
 
         setLoginProcessing(true);
 
-        axios.post('/login-user', {
+        axios.post(postUrl, {
             username,
             password
         })

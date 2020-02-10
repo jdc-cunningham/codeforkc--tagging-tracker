@@ -41,7 +41,6 @@ const loginUser = (req, res) => {
 const _comparePasswords = (res, username, password, passwordHash) => {
     bcrypt.compare(password, passwordHash, (err, bres) => { // this is bad bres
         if (err || !bres) {
-            console.log('bcrypt compare', err);
             res.status(401).send('Failed to login');
         }
 

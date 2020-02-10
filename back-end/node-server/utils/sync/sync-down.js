@@ -13,7 +13,6 @@ const getRecentSyncId = (userId) => {
                     console.log('select sync id', err);
                     resolve(false);
                 } else {
-                    console.log(res);
                     if (res.length) {
                         resolve(res[0].id);
                     } else {
@@ -35,7 +34,6 @@ const getAddressesFromRecentSync = (syncId) => {
                     console.log('sync down get addresses', err);
                     resolve(false);
                 } else {
-                    console.log(res);
                     if (res.length) {
                         resolve(res);
                     } else {
@@ -65,7 +63,6 @@ const getTagsFromRecentSync = (syncId) => {
                                 name: tagMeta.name,
                                 address_id: tagRow.address_id,
                                 // this has to match how it was saved i.e. in sync-up.js or uplaodTags.js
-                                // the missing string in front i.e. data:image/jpeg;base64, is added to the client side
                                 src: "data:image/jpeg;base64," + new Buffer.from(tagRow.src, 'binary').toString('base64'),
                                 thumbnail_src: "",
                                 meta: tagRow.meta // stringify client side
@@ -108,7 +105,6 @@ const getTagInfoFromRecentSync = (syncId) => {
             [syncId],
             (err, res) => {
                 if (err) {
-                    console.log('sync down get tag info', err);
                     resolve(false);
                 } else {
                     if (res.length) {
@@ -123,8 +119,7 @@ const getTagInfoFromRecentSync = (syncId) => {
 }
 
 const syncDown = async (req, res) => {
-    // const userId = await getUserIdFromToken(props.token);
-    const userId = 1;
+    const userId = await getUserIdFromToken(req.token);
     const syncId = await getRecentSyncId(userId);
     if (!syncId) {
         res.status(200).send(false);

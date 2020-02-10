@@ -23,7 +23,6 @@ const addImageToDatabase = async (userId, imageData, imagePublicS3Url) => {
                     console.log(err);
                     resolve(false);
                 } else {
-                    console.log(res);
                     resolve(true);
                 }
             }

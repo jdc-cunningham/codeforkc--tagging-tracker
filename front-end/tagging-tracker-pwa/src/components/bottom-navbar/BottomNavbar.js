@@ -32,8 +32,6 @@ const BottomNavbar = (props) => {
 
     // this probably shouldn't be here but just an initializer
     const sync = async () => {
-        console.log(props);
-
         if (!props.appOnline) { // shouldn't be needed disabled buttons
             alert('Unable to sync, you are offline');
             return;

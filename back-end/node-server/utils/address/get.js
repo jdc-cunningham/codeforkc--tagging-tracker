@@ -9,7 +9,7 @@ const getRecentAddresses = (req, res) => {
         //     if (err) {
         //         res.sendStatus(403);
         //     } else {
-            console.log(req.body);
+            // console.log(req.body);
             // res.json({
             //     message: 'Post created...',
             //     authData

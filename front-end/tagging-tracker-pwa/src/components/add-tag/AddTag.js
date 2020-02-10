@@ -69,7 +69,6 @@ const AddTag = (props) => {
             headers: { Authorization: `Bearer ${props.token}` },
             images: loadedPhotos
 		}).then((res) => {
-            console.log(res);
             if (res.status === 200) {
                 saveToDevice(); // because don't want to bridge remote sync from upload here
             } else {

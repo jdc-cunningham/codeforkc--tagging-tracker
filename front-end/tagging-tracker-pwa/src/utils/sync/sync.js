@@ -39,7 +39,6 @@ export const syncUserData = async (props) => {
         }
     } else {
         // push up
-        console.log('sync up');
         return await syncUp(props);
     }
 }
@@ -47,6 +46,11 @@ export const syncUserData = async (props) => {
 const updateLocalAddresses = (props, remoteData) => {
     const offlineStorage = props.offlineStorage;
     return new Promise(resolve => {
+
+        if (!remoteData.addresses) {
+            resolve(true);
+        }
+
         remoteData.addresses.forEach((addressRow, index) => {
             offlineStorage.transaction('rw', offlineStorage.addresses, () => {
                 if (
@@ -77,6 +81,10 @@ const updateLocalAddresses = (props, remoteData) => {
 const updateLocalTags = (props, remoteData) => {
     const offlineStorage = props.offlineStorage;
     return new Promise(resolve => {
+        if (!remoteData.tags) {
+            resolve(true);
+        }
+
         remoteData.tags.forEach((tagRow, index) => {
             offlineStorage.transaction('rw', offlineStorage.tags, () => {
                 const tagMeta = JSON.parse(tagRow.meta);
@@ -108,6 +116,10 @@ const updateLocalTags = (props, remoteData) => {
 const updateLocalOwnerInfo = (props, remoteData) => {
     const offlineStorage = props.offlineStorage;
     return new Promise(resolve => {
+        if (!remoteData.ownerInfo) {
+            resolve(true);
+        }
+
         remoteData.tagInfo.forEach((tagInfoRow, index) => {
             offlineStorage.transaction('rw', offlineStorage.tagInfo, () => {
                 if (
@@ -135,17 +147,21 @@ const updateLocalOwnerInfo = (props, remoteData) => {
 const updateLocalTagInfo = (props, remoteData) => {
     const offlineStorage = props.offlineStorage;
     return new Promise(resolve => {
-        remoteData.ownerInfo.forEach((ownerInfoRow, index) => {
-            offlineStorage.transaction('rw', offlineStorage.ownerInfo, () => {
+        if (!remoteData.tagInfo) {
+            resolve(true);
+        }
+
+        remoteData.tagInfo.forEach((tagInfoRow, index) => {
+            offlineStorage.transaction('rw', offlineStorage.tagInfo, () => {
                 if (
-                    offlineStorage.ownerInfo.add({
-                        addressId: ownerInfoRow.address_id,
-                        formData: JSON.parse(ownerInfoRow.form_data)
+                    offlineStorage.tagInfo.add({
+                        addressId: tagInfoRow.address_id,
+                        formData: JSON.parse(tagInfoRow.form_data)
                     }).then((insertedId) => {
                         return true;
                     })
                 ) {
-                    if (index === remoteData.ownerInfo.length - 1) {
+                    if (index === remoteData.tagInfo.length - 1) {
                         resolve(true);
                     }
                 } else {
@@ -160,13 +176,13 @@ const updateLocalTagInfo = (props, remoteData) => {
 }
 
 export const updateLocalStorageFromSync = async (props, remoteData) => {
-    let updateErr = false;
-    updateErr = await updateLocalAddresses(props, remoteData);
-    updateErr = await updateLocalTags(props, remoteData);
-    updateErr = await updateLocalOwnerInfo(props, remoteData);
-    updateErr = await updateLocalTagInfo(props, remoteData);
+    let noUpdateErr = true;
+    noUpdateErr = await updateLocalAddresses(props, remoteData); // these if successful/not empty return true
+    noUpdateErr = await updateLocalTags(props, remoteData);
+    noUpdateErr = await updateLocalOwnerInfo(props, remoteData);
+    noUpdateErr = await updateLocalTagInfo(props, remoteData);
 
-    if (updateErr) {
+    if (noUpdateErr) {
         return true;
     } else {
         return false;

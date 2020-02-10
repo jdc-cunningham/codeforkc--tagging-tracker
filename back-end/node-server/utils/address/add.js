@@ -8,7 +8,7 @@ const addAddress = (req, res) => {
     //     if (err) {
     //         res.sendStatus(403);
     //     } else {
-            console.log(req.body);
+            // console.log(req.body);
             // res.json({
             //     message: 'Post created...',
             //     authData
@@ -52,7 +52,6 @@ const addAddress = (req, res) => {
                 [addressStr, lat, lng, created, updated],
                 (err, qres) => {
                     if (err) {
-                        console.log(err);
                         res.status(400).send('failed to create address');
                     } else {
                         res.status(201).send('address created');

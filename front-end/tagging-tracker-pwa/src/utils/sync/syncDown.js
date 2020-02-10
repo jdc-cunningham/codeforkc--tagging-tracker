@@ -10,7 +10,6 @@ export const syncDown = (props) => {
         axios.post(postUrl, {
             headers: { Authorization: `Bearer ${props.token}` }
         }).then((res) => {
-            console.log(res);
             if (res.status === 200) {
                 resolve(res.data);
             } else {
@@ -24,8 +23,7 @@ export const syncDown = (props) => {
         })
         .catch((err) => {
             console.log('sync err', err);
-            console.log(err.response);
-
+            
             if (typeof err.response !== "undefined" && typeof err.response.status !== "undefined" && typeof err.response.status === 403) {
                 resolve({msg: 403});
             }

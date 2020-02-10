@@ -62,7 +62,25 @@
 - [ ] fix double promises i.e. promise inside async, generally make sure these actually make sense/work
     - don't have to use async wrapper around promise i.e. remove async
 - [ ] sync pagination
+- [ ] the deployment stuff it's janky the deployment process regarding base paths and files to be deployed
 
 ### Extra
 - [ ] cache requested uploads when redirecting to upload for token
     - shouldn't be hard like saving locally
+
+### Finalize
+- [ ] update remote database API code
+- [ ] sync tables
+- [ ] make demo accounts
+- [ ] populate one account fully
+- [ ] persist node
+- [ ] misc testing eg. see if tag text search works, I think I put it in before
+- [ ] clean up(console logs, mark down files)
+- [ ] split repo so easier to deploy
+- [ ] check light house
+- [ ] throw err breaks server
+- [ ] file upload doesn't work in Safari
+- [ ] add to home screen doesn't show up in Safari still from what I was told
+- [ ] write console logs
+- [ ] systemd mysql not working or something not working
+- [ ] figure out how to empty Dexie on logout
