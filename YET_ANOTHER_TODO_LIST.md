@@ -86,3 +86,8 @@
 - [x] figure out how to empty Dexie on logout
     - use `Dexie.delete()` seems to work well, sync pulls down last sync data
 - [ ] how to clear js chunks, probably from service worker
+- [ ] responsive issues in ios eg. gap between base and bottom of navbar
+- [ ] stuff takes a while to load, try scaling down images(use thumbnails)
+    - generate client side probably since possible won't upload for a while
+    - consider adding global spinners per page when stuff is loading
+- [ ] I think `MariaDB` formatted the date time differently on retur/broke stuff hence that `indexOf ... join` fix
