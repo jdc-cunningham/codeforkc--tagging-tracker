@@ -8,6 +8,10 @@
     width: 100%;
     height: calc(100vh - 76px); // also a no-no
 
+    &.move-bottom-navbar-down {
+        overflow: hidden auto;
+    }
+
     #add-tag-file-input {
         display: none;
     }
