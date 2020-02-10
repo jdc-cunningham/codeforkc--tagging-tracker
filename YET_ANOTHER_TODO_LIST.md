@@ -83,4 +83,6 @@
 - [ ] add to home screen doesn't show up in Safari still from what I was told
 - [ ] write console logs
 - [ ] systemd mysql not working or something not working
-- [ ] figure out how to empty Dexie on logout
+- [x] figure out how to empty Dexie on logout
+    - use `Dexie.delete()` seems to work well, sync pulls down last sync data
+- [ ] how to clear js chunks, probably from service worker

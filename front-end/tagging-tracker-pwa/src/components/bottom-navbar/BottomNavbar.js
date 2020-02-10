@@ -8,7 +8,7 @@ import property from './../../assets/icons/svgs/property.svg';
 import textDocument from './../../assets/icons/svgs/text-document.svg';
 import addSquare from './../../assets/icons/svgs/add-square.svg';
 import ajaxLoaderGray from './../../assets/gifs/ajax-loader--gray.gif';
-import { syncUserData, updateLocalStorageFromSync } from '../../utils/sync/sync';
+import { syncUserData, deleteLocalData } from '../../utils/sync/sync';
 
 const BottomNavbar = (props) => {
     const syncBtn = useRef(null);
@@ -17,7 +17,11 @@ const BottomNavbar = (props) => {
     const uploadBtn = useRef(null);
     const history = useHistory();
 
-    const logout = () => {
+    const logout = async () => {
+        const localStorageCleared = await deleteLocalData(props.offlineStorage);
+        if (!localStorageCleared) {
+            alert('failed to clear local data');
+        }
         window.location.href = "/"; // token is wiped out as it's set by state not in storage
     }
 

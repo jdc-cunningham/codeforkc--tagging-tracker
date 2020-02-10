@@ -188,3 +188,18 @@ export const updateLocalStorageFromSync = async (props, remoteData) => {
         return false;
     }
 }
+
+// TODO: actually this probably shouldn't be here
+
+// this will only delete Dexie for now, need to figure out about caching static files/service workers
+// primarily this is for sync so you pull down after logging out
+export const deleteLocalData = (offlineStorage) => {
+    return new Promise(resolve => {
+        offlineStorage.delete().then(() => {
+            resolve(true);
+        })
+        .catch((err) => {
+            resolve(false);
+        })
+    });
+}
