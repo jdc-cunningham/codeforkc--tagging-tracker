@@ -142,9 +142,12 @@ const Navbar = (props) => {
         // add class to body
         // better to keep it here to avoid flash/reload jank
         const appBody = document.querySelector('.tagging-tracker__body');
+        const routePath = window.location.href.split('/')[3];
         if (appBody) {
-            if (props.location.pathname !== "/addresses") {
+            if (routePath !== "addresses" && routePath !== "add-tag") {
                 appBody.style.maxHeight = (window.innerHeight  - 104) + "px"; // this magic number is the navbar and bottom navbar
+            } else {
+                appBody.style.maxHeight = "100%";
             }
         }
 

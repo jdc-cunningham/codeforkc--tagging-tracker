@@ -11,16 +11,17 @@
         height: 300px;
         background-repeat: no-repeat;
         background-position: center center;
+        background-size: cover;
         border: 1px solid #aaa;
         margin: 0.5rem;
 
-        &.landscape {
-            background-size: 300px auto;
-        }
+        // &.landscape {
+        //     background-size: 300px auto;
+        // }
 
-        &.portrait {
-            background-size: auto 300px;
-        }
+        // &.portrait {
+        //     background-size: auto 300px;
+        // }
 
         @media screen and (max-width: 500px) {
             width: 150px;

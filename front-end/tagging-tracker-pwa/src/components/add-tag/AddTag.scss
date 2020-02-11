@@ -23,16 +23,16 @@
         border: 1px solid #aaa;
         background-repeat: no-repeat;
         background-position: center center;
-        background-size: contain; // this is easier than dealing with meta call
+        background-size: cover; // this is easier than dealing with meta call
         float: left; // oof something's wrong with this layout
 
-        &.portrait {
-            background-size: 300px auto;
-        }
+        // &.portrait {
+        //     background-size: 300px auto;
+        // }
 
-        &.landscape {
-            background-size: auto 300px;
-        }
+        // &.landscape {
+        //     background-size: auto 300px;
+        // }
 
         @media screen and (max-width: 500px) {
             width: 150px;
