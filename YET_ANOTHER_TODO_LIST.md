@@ -91,3 +91,9 @@
     - generate client side probably since possible won't upload for a while
     - consider adding global spinners per page when stuff is loading
 - [ ] I think `MariaDB` formatted the date time differently on retur/broke stuff hence that `indexOf ... join` fix
+
+### Post demo
+- [ ] fixes in slack about Tag Info form changes
+- [ ] add the canvas client side rescale and check/speed up sync/avoid large images if that matters
+- [ ] consider adding spinners for loading
+- [ ] add dither to logout

@@ -136,10 +136,11 @@ const Navbar = (props) => {
             searchAddressInput.current.focus();
         }
 
-        // FIX
+        // TODO - fix the layout so don't need this hack, though this may still be used overall
         // adjust body height based on route
         // this code shouldn't be here but due to how the app has soft routes no way to pull url from app
         // add class to body
+        // better to keep it here to avoid flash/reload jank
         const appBody = document.querySelector('.tagging-tracker__body');
         if (appBody) {
             if (props.location.pathname !== "/addresses") {
