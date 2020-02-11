@@ -37,6 +37,14 @@ const getSyncId = async (userId) => {
     });
 }
 
+const formatTimeStr = (timeStr) => {
+    if (timeStr.indexOf('T') !== -1) {
+        timeStr = timeStr.split('T').join(' ').split('.000Z').join('');
+    }
+
+    return timeStr;
+}
+
 // I think these are still safe i.e. using param = ?
 // https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js
 const insertAddresses = async (userId, syncId, addresses) => {
@@ -45,7 +53,7 @@ const insertAddresses = async (userId, syncId, addresses) => {
         `INSERT INTO addresses (user_id, address, lat, lng, created, updated, sync_id) VALUES ?`,
         [
             addresses.map(addressRow => (
-                [userId, addressRow.address, addressRow.lat, addressRow.lng, addressRow.created, addressRow.updated, syncId]
+                [userId, addressRow.address, addressRow.lat, addressRow.lng, formatTimeStr(addressRow.created), formatTimeStr(addressRow.updated), syncId]
             ))
         ],
         (err, qres) => {

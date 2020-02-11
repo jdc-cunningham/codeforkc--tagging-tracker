@@ -136,6 +136,17 @@ const Navbar = (props) => {
             searchAddressInput.current.focus();
         }
 
+        // FIX
+        // adjust body height based on route
+        // this code shouldn't be here but due to how the app has soft routes no way to pull url from app
+        // add class to body
+        const appBody = document.querySelector('.tagging-tracker__body');
+        if (appBody) {
+            if (props.location.pathname !== "/addresses") {
+                appBody.style.maxHeight = (window.innerHeight  - 104) + "px"; // this magic number is the navbar and bottom navbar
+            }
+        }
+
         // update online/offline status
         props.checkOnlineStatus();
     });

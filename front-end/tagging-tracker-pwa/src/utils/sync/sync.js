@@ -120,17 +120,17 @@ const updateLocalOwnerInfo = (props, remoteData) => {
             resolve(true);
         }
 
-        remoteData.tagInfo.forEach((tagInfoRow, index) => {
-            offlineStorage.transaction('rw', offlineStorage.tagInfo, () => {
+        remoteData.ownerInfo.forEach((ownerInfoRow, index) => {
+            offlineStorage.transaction('rw', offlineStorage.ownerInfo, () => {
                 if (
-                    offlineStorage.tagInfo.add({
-                        addressId: tagInfoRow.address_id,
-                        formData: JSON.parse(tagInfoRow.form_data)
+                    offlineStorage.ownerInfo.add({
+                        addressId: ownerInfoRow.address_id,
+                        formData: JSON.parse(ownerInfoRow.form_data)
                     }).then((insertedId) => {
                         return true;
                     })
                 ) {
-                    if (index === remoteData.tagInfo.length - 1) {
+                    if (index === remoteData.ownerInfo.length - 1) {
                         resolve(true);
                     }
                 } else {
