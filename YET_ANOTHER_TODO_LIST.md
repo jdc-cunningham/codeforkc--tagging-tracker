@@ -97,3 +97,16 @@
 - [ ] add the canvas client side rescale and check/speed up sync/avoid large images if that matters
 - [ ] consider adding spinners for loading
 - [ ] add dither to logout
+
+
+### Slack tasks
+- [ ] On Tag Info: For date of picture and date of abatement - is it possible to add a drop down calendar to select the date? If not, that's totally fine
+- [ ] On Tag Info: for vacant property and land bank property - change "Other" option to "Unknown"
+- [ ] On Tag Info: On Surface options - remove "Bare" from Bare Brick or Stone, Bare Concrete, Bare Wood
+- [ ] On Tag Info: Options for Need other code enforcement? - delete "Bare brick or stone" and "glass" and add "Trash"
+- [ ] On Tag Info: Add Type of Property with options for Commercial, Residential, Public
+
+### Speed improvements
+- [ ] use blob over base64 locally
+    - maybe means can pull directly from db as blog vs. converting back to base64
+- [ ] update worfklow so that local storage(Dexie-IndexedDB) is only accessed once or twice and load results into memory eg. state variables for fast access
