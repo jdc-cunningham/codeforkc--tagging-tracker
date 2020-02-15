@@ -45,6 +45,9 @@ const AddTag = (props) => {
             img.src = src;
 
             img.onload = () => {
+                if (img.width <= 300) {
+                    resolve(src);
+                }
                 scaleImage(resolve, img);
             };
 
