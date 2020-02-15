@@ -141,15 +141,15 @@ const Navbar = (props) => {
         // this code shouldn't be here but due to how the app has soft routes no way to pull url from app
         // add class to body
         // better to keep it here to avoid flash/reload jank
-        const appBody = document.querySelector('.tagging-tracker__body');
-        const routePath = window.location.href.split('/')[3];
-        if (appBody) {
-            if (routePath !== "addresses" && routePath !== "add-tag") {
-                appBody.style.maxHeight = (window.innerHeight  - 104) + "px"; // this magic number is the navbar and bottom navbar
-            } else {
-                appBody.style.maxHeight = "100%";
-            }
-        }
+        // const appBody = document.querySelector('.tagging-tracker__body');
+        // const routePath = window.location.href.split('/')[3];
+        // if (appBody) {
+        //     if (routePath !== "addresses" && routePath !== "add-tag") {
+        //         appBody.style.maxHeight = (window.innerHeight  - 104) + "px"; // this magic number is the navbar and bottom navbar
+        //     } else {
+        //         appBody.style.maxHeight = "100%";
+        //     }
+        // }
 
         // update online/offline status
         props.checkOnlineStatus();

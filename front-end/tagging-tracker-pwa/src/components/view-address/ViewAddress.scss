@@ -15,25 +15,10 @@
         border: 1px solid #aaa;
         margin: 0.5rem;
 
-        // &.landscape {
-        //     background-size: 300px auto;
-        // }
-
-        // &.portrait {
-        //     background-size: auto 300px;
-        // }
-
         @media screen and (max-width: 500px) {
             width: 150px;
             height: 150px;
-
-            &.landscape {
-                background-size: 150px auto;
-            }
-    
-            &.portrait {
-                background-size: auto 150px;
-            }
+            background-size: cover;
         }
     }
 }
