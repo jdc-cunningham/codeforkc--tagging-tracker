@@ -6,6 +6,7 @@ import backArrow from './../../assets/icons/svgs/chevron-blue.svg'; // rotated b
 
 const Navbar = (props) => {
     const searchAddressInput = useRef(null);
+    const [showSettings, setShowSettings] = useState(false);
 
     const searchAddresses = (searchStr) => {
         props.searchAddress(searchStr);
@@ -97,14 +98,32 @@ const Navbar = (props) => {
         }
     }
 
+    const toggleSettings = () => {
+        setShowSettings(!showSettings);
+    }
+
+    const generateSettingsMenu = (show) => {
+        if (!show) {
+            return null;
+        }
+
+        return <div className="navbar-top__settings-menu">
+            <button onClick={ props.updateSoftware } type="button">Update Software</button>{/* LOL */}
+        </div>;
+    }
+
     const renderNavbar = (routeLocation) => {
         switch(routeLocation.pathname) {
             case '/':
             case '/addresses':
                 return <>
                     <div className="tagging-tracker__navbar-top addresses">
-                        <button onClick={  () => {props.toggleAddressModal(true)}  } />
+                        <button className="add" onClick={  () => {props.toggleAddressModal(true)}  } />
                         <h2>Addresses</h2>
+                        <div className="navbar-top__settings">
+                            <button className="gear-icon" type="button" onClick={ toggleSettings }></button>
+                            { generateSettingsMenu(showSettings) }
+                        </div>
                     </div>
                     <input type="text" value={props.searchedAddress} placeholder="search" ref={ searchAddressInput } onChange={ (e) => { searchAddresses(e.target.value)} }></input>
                 </>;

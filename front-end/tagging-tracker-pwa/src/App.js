@@ -95,6 +95,11 @@ const App = () => {
 		}
 	}
 
+	const updateSoftware = () => {
+		checkForNewVersion();
+		window.location.reload();
+	}
+
 	useEffect(() => {
 		checkOnlineStatus();
 
@@ -117,7 +122,8 @@ const App = () => {
 						toggleModifyOwnerInfo={toggleModifyOwnerInfo}
 						modifyOwnerInfo={modifyOwnerInfo}
 						modifyTagInfo={modifyTagInfo}
-						toggleModifyTagInfo={toggleModifyTagInfo} /> } />
+						toggleModifyTagInfo={toggleModifyTagInfo}
+						updateSoftware={updateSoftware} /> } />
 				<div className={ bodyClass }>
 					<Switch>
 						<Route

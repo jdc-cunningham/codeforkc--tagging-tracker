@@ -22,6 +22,36 @@
         background-position: 0.5rem;
         background-repeat: no-repeat;
     }
+
+    .navbar-top__settings {
+        position: relative;
+        flex: 0;
+
+        button.gear-icon {
+            border: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-image: url('./../../assets/icons/svgs/black-gear.svg');
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-color: transparent;
+        }
+    }
+
+    .navbar-top__settings-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: auto;
+        max-width: 200px;
+        display: block;
+        overflow: hidden auto;
+
+        button {
+            white-space: nowrap;
+        }
+    }
 }
 
 .tagging-tracker__navbar-top {
@@ -30,7 +60,7 @@
 
 .tagging-tracker__navbar-top.addresses {
     @include flex-hor-row-ali-str;
-    button {
+    button.add {
         width: 1.5rem;
         height: 1.5rem;
         background-color: transparent;
