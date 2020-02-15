@@ -27,8 +27,16 @@ const AddTag = (props) => {
     const scaleImage = (resolve, img) => {
         // figure out canvas height based on desired resize dimensions
         const imgAspectRatio = (img.width / img.height >= 1) ? 'landscape' : 'portrait';
-        const newImageWidth = 300;
-        const newImageHeight = ((newImageWidth * img.height) / img.width); // round?
+        let newImageWidth = 300;
+        let newImageHeight = 300;
+
+        if (imgAspectRatio === 'landscape') {
+            const newImageWidth = 300;
+            newImageHeight = ((newImageWidth * img.height) / img.width); // round?
+        } else {
+            const newImageHeight = 300;
+            newImageWidth = ((newImageHeight * img.width) / img.height); // round?
+        }
         
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
