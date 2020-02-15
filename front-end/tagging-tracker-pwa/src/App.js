@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.scss';
 import Dexie from 'dexie';
-// import axios from 'axios';
+import axios from 'axios';
 
 // misc utils
 import { getDateTime } from './utils/date';
@@ -73,8 +73,37 @@ const App = () => {
 		setOfflineStorage(db);
 	};
 
-	const checkForNewVersion = () => {
-		// https://stackoverflow.com/questions/52221805/any-way-yet-to-auto-update-or-just-clear-the-cache-on-a-pwa-on-ios
+	// this is for making sure the remote side is not empty eg. in the middle of a build
+	// this does throw an Uncaught promise error, haven't figured out why but it doesn't break code
+	// does its job of preventing overwriting client code with nothing
+	const checkRemoteNotEmpty = () => {
+		return new Promise((resolve, reject) => {
+			const frontEndBasePath = window.location.href.indexOf('localhost') === -1
+				? process.env.REACT_APP_BASE
+				: false;
+
+			if (!frontEndBasePath) {
+				resolve(false);
+			} else {
+				axios.get(frontEndBasePath + '/?' + Date.now()) // this is just "cache busting" as the PWA caches requests
+					.then((response) => {
+						if (response.status === 200 && response.data) {
+							resolve(true);
+						} else {
+							resolve(false); // case of 403, 404
+						}
+					})
+					.catch((error) => {
+						console.log('remote cache clear test', error);
+						reject(new Error('no content'));
+					});
+			}
+		});
+	}
+
+	const checkForNewVersion = async () => {
+		// https://stackoverflow.com/questions/45467842/how-to-clear-cache-of-service-worker
+		// using the caches.delete() method
 		// check if checked within 5 minutes
 		// window.localStorage is primarily used here to avoid confusion from
 		// treating Dexie(IndexedDB) as localStorage by name
@@ -84,18 +113,17 @@ const App = () => {
 		if (!verChecked) {
 			window.localStorage.setItem('verChecked', Date.now());
 		} else if (Date.now() - verChecked > 300000) { // 5 minutes
-			// check for new code, this should be tied to a server response but not figured into build/release yet
-			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.getRegistrations().then(function (registrations) {
-					for (let registration of registrations) {
-						registration.update()
-					}
-				});
-			}
+			const hasRemoteContent = await checkRemoteNotEmpty();
+			if (!hasRemoteContent || !window.caches) return; // if no remote code, don't pull down or no cache
+			caches.keys().then(function(names) {
+				for (let name of names)
+					caches.delete(name);
+			});
 		}
 	}
 
 	const updateSoftware = () => {
+		window.localStorage.setItem('verChecked', Date.now() - 360000); // 6 mins in the past
 		checkForNewVersion();
 		window.location.reload();
 	}

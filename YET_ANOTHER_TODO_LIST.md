@@ -113,3 +113,6 @@
 
 ### More
 - [ ] cancelling camera file upload process leaves `Use Camera` button in unusable state, have to back out eg. hit `Cancel` and come back to be able to upload again
+- [ ] cache clearing works when done manually, the automatic way needs to be tested/determine when to run
+    - not sure currently if the time based version is working or not
+    - interesting it really works, should put in get request to make sure code exists

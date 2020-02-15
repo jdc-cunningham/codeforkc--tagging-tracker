@@ -117,40 +117,11 @@ const Addresses = (props) => {
         .catch(e => {
             alert('Failed to save address');
         });
-
-        // this is sync code, going to use Dexie to work offline primarily
-        // axios.post('/add-address', {
-        //     address: addressStr
-        // })
-        // .then((res) => {
-        //     if (res.status === 201) {
-        //     } else {
-        //         setAddAddressProcessing(false);
-        //     }
-        // })
-        // .catch((err) => {
-        //     alert('failed to save address'); // 401 goes through here too
-        //     setAddAddressProcessing(false);
-        // });
     }
 
     const loadRecentAddresses = () => {
         // returns last 10 addresses used by updated date sorted descending
         if (!recentAddresses.length && props.offlineStorage) {
-
-            // sync code
-            // axios.get('/get-recent-addresses')
-            //     .then((res) => {
-            //         if (res.status === 200) {
-            //             setRecentAddresses(res.data);
-            //         } else {
-            //             alert('Failed to load recent addresses');
-            //         }
-            //     })
-            //     .catch((err) => {
-            //         alert('failed to load recent addresses'); // 401 goes through here too
-            //     });
-
             props.offlineStorage.addresses.toArray().then((addresses) => {
                 // format data
                 const addressesFormatted = addresses.splice(0, 15).map((address) => {

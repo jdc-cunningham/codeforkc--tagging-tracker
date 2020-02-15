@@ -39,6 +39,7 @@ const AddTag = (props) => {
         }
         
         const canvas = document.createElement("canvas");
+        canvas.id = "resize-canvas";
         const ctx = canvas.getContext("2d");
         canvas.width = newImageWidth;
         canvas.height = newImageHeight;
@@ -77,6 +78,11 @@ const AddTag = (props) => {
             const loadedPhoto = loadedPhotos[i];
             const index = i;
             const thumbnailSrc = await createThumbnailSrc(loadedPhoto.src);
+            const oldCanvas = document.getElementById('resize-canvas');
+            if (oldCanvas) {
+                oldCanvas.remove();
+            }
+
             offlineStorage.transaction('rw', offlineStorage.tags, async() => {
                 if (
                     await offlineStorage.tags.add({
