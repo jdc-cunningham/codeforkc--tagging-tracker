@@ -23,7 +23,38 @@ const AddTag = (props) => {
     const [savingToDevice, setSavingToDevice] = useState(false);
     const history = useHistory();
 
-    const saveToDevice = () => {
+    // https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+    const scaleImage = (resolve, img) => {
+        // figure out canvas height based on desired resize dimensions
+        const imgAspectRatio = (img.width / img.height >= 1) ? 'landscape' : 'portrait';
+        const newImageWidth = 300;
+        const newImageHeight = ((newImageWidth * img.height) / img.width); // round?
+        
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = newImageWidth;
+        canvas.height = newImageHeight;
+        ctx.drawImage(img, 0, 0, newImageWidth, newImageHeight);
+        resolve(canvas.toDataURL("image/png"));
+        // fail case?
+    }
+
+    const createThumbnailSrc = (src) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+
+            img.onload = () => {
+                scaleImage(resolve, img);
+            };
+
+            img.onerror = (err) => {
+                reject(err);
+            }
+        });
+    }
+
+    const saveToDevice = async () => {
         setSavingToDevice(true);
 
         const offlineStorage = props.offlineStorage;
@@ -31,14 +62,17 @@ const AddTag = (props) => {
 
         // not going to add duplicate logic here because you can delete them somewhere else
         // the loaded photos are deleted after upload so duplicate issue doesn't happen unless the file is selected again
-        loadedPhotos.forEach((loadedPhoto, index) => {
+        for (let i = 0; i < loadedPhotos.length; i++) {
+            const loadedPhoto = loadedPhotos[i];
+            const index = i;
+            const thumbnailSrc = await createThumbnailSrc(loadedPhoto.src);
             offlineStorage.transaction('rw', offlineStorage.tags, async() => {
                 if (
                     await offlineStorage.tags.add({
                         addressId: address.addressId,
                         fileName: loadedPhoto.meta.name,
                         src: loadedPhoto.src,
-                        thumbnail_src: "",
+                        thumbnail_src: thumbnailSrc,
                         meta: loadedPhoto.meta
                     }).then((insertedId) => {
                         return true;
@@ -54,9 +88,10 @@ const AddTag = (props) => {
                 }
             })
             .catch(e => {
+                console.log('failed to save photos', e);
                 alert('Failed to save photos to device');
             });
-        });
+        }
     }
 
     const uploadImages = () => {

@@ -34,7 +34,7 @@ const ViewAddress = (props) => {
         if (Array.isArray(localImages)) {
             return localImages.map((image, index) => {
                 return <div key={ index } style={{
-                    backgroundImage: `url(${image.src})`
+                    backgroundImage: `url(${image.thumbnail_src})`
                 }} alt="address thumbnail" className={ "address__tag-image " + getImagePreviewAspectRatioClass(localImages[index]) } />
             });
         }
