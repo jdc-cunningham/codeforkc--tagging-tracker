@@ -151,9 +151,9 @@ const Navbar = (props) => {
 
     // focus
     useEffect(() => {
-        if (!props.showAddressModal && props.location.pathname === "/addresses") {
-            searchAddressInput.current.focus();
-        }
+        // if (!props.showAddressModal && props.location.pathname === "/addresses") {
+        //     searchAddressInput.current.focus();
+        // }
 
         // TODO - fix the layout so don't need this hack, though this may still be used overall
         // adjust body height based on route
