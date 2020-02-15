@@ -110,3 +110,6 @@
 - [ ] use blob over base64 locally
     - maybe means can pull directly from db as blog vs. converting back to base64
 - [ ] update worfklow so that local storage(Dexie-IndexedDB) is only accessed once or twice and load results into memory eg. state variables for fast access
+
+### More
+- [ ] cancelling camera file upload process leaves `Use Camera` button in unusable state, have to back out eg. hit `Cancel` and come back to be able to upload again

@@ -3,6 +3,7 @@ const { getUserIdFromToken } = require('../users/userFunctions');
 const { pool } = require('./../../utils/db/dbConnect');
 const { getDateTime } = require('./../../utils/datetime/functions');
 const { uploadToS3 } = require('./../../utils/s3/uploadTag');
+const { generateBuffer } = require('./sync-utils');
 
 // import s3 stuff from module later
 const AWS = require('aws-sdk');
@@ -82,7 +83,7 @@ const insertTags = async (userId, syncId, tags) => {
 
         // insert to s3
         // this should be part of the module
-        const buff = new Buffer.from(tagRow.src.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+        const buff = generateBuffer(tagRow.src);
         const uploadParams = {
             Bucket: bucketName,
             Key: userId + '_' + tagRow.fileName, // this could be bad since there can be spaces in file names, although public display doesn't matter i.e. S3
@@ -96,9 +97,11 @@ const insertTags = async (userId, syncId, tags) => {
 
         // insert
         // this structure does not exactly match Dexie i.e. Dexie has the extra fileName column used for deletion on client side
+        // create buffer for thumbnail src
+        const thumbnailBuff = generateBuffer(tagRow.thumbnail_src.replace(/^data:image\/\w+;base64,/, ""), 'base64');
         pool.query(
             `INSERT INTO tags SET user_id = ?, address_id = ?, src = ?, thumbnail_src = ?,  public_s3_url= ?, meta = ?, sync_id = ?`,
-            [userId, tagRow.addressId, buff, "", s3PublicUrl, JSON.stringify(tagRow.meta), syncId],
+            [userId, tagRow.addressId, buff, thumbnailBuff, s3PublicUrl, JSON.stringify(tagRow.meta), syncId],
             (err, qres) => {
                 if (err) {
                     console.log('insert tags', err);

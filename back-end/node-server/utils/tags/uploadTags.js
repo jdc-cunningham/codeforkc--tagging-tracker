@@ -15,6 +15,7 @@ const addImageToDatabase = async (userId, imageData, imagePublicS3Url) => {
     return new Promise(resolve => {
         // turn image into binary from base64
         const buff = new Buffer.from(imageData.src, 'base64');
+        // thumbnail_src not supplied here since sync/save to device does the canvas rescale(client side)
         pool.query(
             `INSERT INTO tags SET user_id = ?, address_id = ?, src = ?, thumbnail_src = ?, public_s3_url = ?, meta = ?, sync_id = ?`,
             [userId, imageData.addressId, buff, "", imagePublicS3Url, JSON.stringify(imageData.meta), 0], // no sync id on uploads

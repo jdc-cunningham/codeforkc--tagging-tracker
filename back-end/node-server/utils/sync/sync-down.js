@@ -2,6 +2,7 @@ require('dotenv').config()
 const { getUserIdFromToken } = require('../users/userFunctions');
 const { pool } = require('./../../utils/db/dbConnect');
 const { getDateTime } = require('./../../utils/datetime/functions');
+const { generateBase64FromBinaryBuffer } = require('./sync-utils');
 
 const getRecentSyncId = (userId) => {
     return new Promise(resolve => {
@@ -63,8 +64,8 @@ const getTagsFromRecentSync = (syncId) => {
                                 name: tagMeta.name,
                                 address_id: tagRow.address_id,
                                 // this has to match how it was saved i.e. in sync-up.js or uplaodTags.js
-                                src: "data:image/jpeg;base64," + new Buffer.from(tagRow.src, 'binary').toString('base64'),
-                                thumbnail_src: "",
+                                src: generateBase64FromBinaryBuffer(tagRow.src),
+                                thumbnail_src: generateBase64FromBinaryBuffer(tagRow.thumbnail_src),
                                 meta: tagRow.meta // stringify client side
                             };
                         }));

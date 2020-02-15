@@ -77,7 +77,7 @@ connection.query(
         '`user_id` int(11) NOT NULL,' +
         '`address_id` int(11) NOT NULL,' +
         '`src` mediumblob NOT NULL,' +
-        '`thumbnail_src` blob NOT NULL,' +
+        '`thumbnail_src` mediumblob NOT NULL,' +
         '`public_s3_url` varchar(2083) COLLATE utf8_unicode_ci NOT NULL,' +
         '`meta` text COLLATE utf8_unicode_ci NOT NULL,' +
         '`sync_id` int(11) NOT NULL,' +
