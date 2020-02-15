@@ -73,12 +73,36 @@ const App = () => {
 		setOfflineStorage(db);
 	};
 
+	const checkForNewVersion = () => {
+		// https://stackoverflow.com/questions/52221805/any-way-yet-to-auto-update-or-just-clear-the-cache-on-a-pwa-on-ios
+		// check if checked within 5 minutes
+		// window.localStorage is primarily used here to avoid confusion from
+		// treating Dexie(IndexedDB) as localStorage by name
+		// also using localStorage because App re-renders and wipes self state
+		// I didn't think this needed to be in Dexie
+		const verChecked = window.localStorage.getItem('verChecked');
+		if (!verChecked) {
+			window.localStorage.setItem('verChecked', Date.now());
+		} else if (Date.now() - verChecked > 300000) { // 5 minutes
+			// check for new code, this should be tied to a server response but not figured into build/release yet
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.getRegistrations().then(function (registrations) {
+					for (let registration of registrations) {
+						registration.update()
+					}
+				});
+			}
+		}
+	}
+
 	useEffect(() => {
 		checkOnlineStatus();
 
 		if (!offlineStorage) {
 			setupOfflineStorage();
 		}
+
+		checkForNewVersion();
 	});
 
 	return (
