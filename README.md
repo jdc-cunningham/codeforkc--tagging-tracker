@@ -1,3 +1,7 @@
+#### Edit: this repo is old
+view active repo [here](https://github.com/codeforkansascity/tagging-tracker-pwa)
+
+
 ### About
 The purpose of this app is to take pictures of graffiti and store them to the corresponding address to then be abated(removed). This app is intended to work primarily offline so it is using in-memory state management or local storage eg. `Dexie` an `IndexedDB` wrapper.
 
