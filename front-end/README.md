@@ -5,6 +5,9 @@ This app is built pretty much in 3 parts:
 * body
 * bottomNavbar
 
+### Just noting:
+This was a bad design, better to make entire screens, that are comprised of the sub-components, but the logic is tied to each screen, vs. the sub-component eg. top navbar. I ran into a few state/communication issues with the plan below. TL;DR 1 navbar vs. 10 different navbars based on route, but 10 different screens(with isolated logic).
+
 The router decides what to render inside the contents. Here's a crude annotation of example shared views. You can see this in `App.js`
 ![Shared Components](./app-parts.PNG)
 
